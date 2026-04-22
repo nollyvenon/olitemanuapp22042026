@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Traits\Versionable;
 
 class Voucher extends Model {
-    use HasUuids;
+    use HasUuids, Versionable;
 
-    protected $fillable = ['voucher_number', 'ledger_id', 'created_by', 'override_by', 'override_reason', 'type', 'status', 'amount', 'currency', 'reference', 'notes', 'transaction_date', 'posted_at', 'reversed_at', 'reversal_of'];
+    protected $fillable = ['voucher_number', 'ledger_id', 'created_by', 'override_by', 'override_reason', 'type', 'status', 'amount', 'currency', 'reference', 'notes', 'transaction_date', 'posted_at', 'reversed_at', 'reversal_of', 'version_number', 'parent_id', 'is_current'];
 
     protected $casts = ['amount' => 'decimal:2', 'transaction_date' => 'date'];
 

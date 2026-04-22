@@ -23,7 +23,10 @@
       "Bash(php -l app/Modules/GodAdmin/Http/Controllers/GodAdminController.php)",
       "Bash(php -l app/Modules/GodAdmin/Http/Middleware/IssueGodAdminMiddleware.php)",
       "Bash(php -l routes/api.php)",
-      "Bash(php -l app/Http/Kernel.php)"
+      "Bash(php -l app/Http/Kernel.php)",
+      "Bash(php -l app/Models/Order.php)",
+      "Bash(php -l app/Models/KycSubmission.php)",
+      "Bash(php -l app/Models/Voucher.php)"
     ],
     "additionalDirectories": [
       "c:\\Files\\DevelopedApps\\OMCLTA"
