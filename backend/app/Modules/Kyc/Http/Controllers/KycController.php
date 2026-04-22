@@ -35,6 +35,7 @@ class KycController {
                 'email' => 'required|email',
                 'identification_type' => 'required|string|max:50',
                 'identification_number' => 'required|string|max:100|unique:kyc_submissions',
+                'form_selection' => 'required|in:form_attached,no_form',
                 'identification_file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
                 'signed_form' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             ]);
@@ -45,6 +46,7 @@ class KycController {
             $validated['submitted_by'] = $request->authUser->sub;
             $validated['identification_file_path'] = $idPath;
             $validated['signed_form_path'] = $signedPath;
+            $validated['status'] = 'pending';
 
             $submission = KycSubmission::create($validated);
 

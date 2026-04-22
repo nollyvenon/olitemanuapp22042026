@@ -14,7 +14,8 @@
       "Bash(pnpm build *)",
       "Bash(taskkill /F /IM node.exe)",
       "Bash(curl -s http://localhost:3000/dashboard)",
-      "Bash(curl -s http://localhost:3000/dashboard/sales/orders)"
+      "Bash(curl -s http://localhost:3000/dashboard/sales/orders)",
+      "Bash(composer require *)"
     ],
     "additionalDirectories": [
       "c:\\Files\\DevelopedApps\\OMCLTA"

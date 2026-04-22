@@ -9,7 +9,12 @@ use App\Models\Voucher;
 use App\Models\KycSubmission;
 use App\Models\Territory;
 use App\Models\PriceListVersion;
+use App\Models\StockItem;
+use App\Models\StockCategory;
+use App\Models\LedgerAccount;
+use App\Models\Location;
 use App\Observers\AuditObserver;
+use App\Observers\DeleteGuardObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AuditServiceProvider extends ServiceProvider {
@@ -21,5 +26,11 @@ class AuditServiceProvider extends ServiceProvider {
         KycSubmission::observe(AuditObserver::class);
         Territory::observe(AuditObserver::class);
         PriceListVersion::observe(AuditObserver::class);
+
+        StockItem::observe(DeleteGuardObserver::class);
+        StockCategory::observe(DeleteGuardObserver::class);
+        LedgerAccount::observe(DeleteGuardObserver::class);
+        Group::observe(DeleteGuardObserver::class);
+        Location::observe(DeleteGuardObserver::class);
     }
 }

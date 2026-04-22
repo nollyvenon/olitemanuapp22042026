@@ -21,6 +21,7 @@ use App\Modules\Reports\Http\Controllers\ReportController;
 use App\Modules\Audit\Http\Controllers\AuditController;
 use App\Modules\Notifications\Http\Controllers\NotificationController;
 use App\Modules\MarketIntelligence\Http\Controllers\MarketIntelligenceController;
+use App\Modules\MarketIntelligence\Http\Controllers\MarketPlanController;
 use App\Modules\Reporting\Http\Controllers\InventoryReportController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +53,10 @@ Route::prefix('v1')->group(function () {
 
         Route::apiResource('customers', CustomerController::class);
         Route::apiResource('orders', OrderController::class);
+        Route::patch('orders/{id}/transition', [OrderController::class, 'transition']);
+        Route::post('orders/{id}/documents', [OrderController::class, 'uploadDocuments']);
+        Route::post('orders/{id}/authorize', [OrderController::class, 'authorize']);
+        Route::post('orders/{id}/override', [OrderController::class, 'override']);
         Route::post('invoices', [InvoiceController::class, 'store']);
         Route::get('invoices', [InvoiceController::class, 'index']);
         Route::get('invoices/{id}', [InvoiceController::class, 'show']);
@@ -106,6 +111,11 @@ Route::prefix('v1')->group(function () {
         Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
         Route::get('notification-preferences', [NotificationController::class, 'preferences']);
         Route::patch('notification-preferences/{type}', [NotificationController::class, 'updatePreference']);
+
+        Route::get('market/plans', [MarketPlanController::class, 'index']);
+        Route::post('market/plans', [MarketPlanController::class, 'store']);
+        Route::get('market/plans/{id}', [MarketPlanController::class, 'show']);
+        Route::post('market/plans/{id}/vet', [MarketPlanController::class, 'vet']);
 
         Route::get('market/trends', [MarketIntelligenceController::class, 'trends']);
         Route::get('market/competitors', [MarketIntelligenceController::class, 'competitors']);

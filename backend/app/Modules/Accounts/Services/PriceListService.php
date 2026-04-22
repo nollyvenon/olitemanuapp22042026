@@ -43,13 +43,21 @@ class PriceListService {
         });
     }
 
-    public function getPriceForItem(string $itemId, ?string $versionId = null): ?float {
+    public function getPriceForItem(string $itemId, ?string $versionId = null): float {
         $version = $versionId
             ? PriceListVersion::findOrFail($versionId)
-            : PriceListVersion::where('is_current', true)->first();
+            : PriceListVersion::where('is_current', true)->where('status', 'active')->first();
 
-        if (!$version) return null;
+        if (!$version) {
+            throw new \Exception('No active price list found. Cannot resolve price.', 422);
+        }
 
-        return (float) PriceListItem::where('version_id', $version->id)->where('item_id', $itemId)->value('price');
+        $price = PriceListItem::where('version_id', $version->id)->where('item_id', $itemId)->value('price');
+
+        if (!$price) {
+            throw new \Exception("Item {$itemId} not found in active price list", 422);
+        }
+
+        return (float) $price;
     }
 }

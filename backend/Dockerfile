@@ -6,9 +6,11 @@ RUN apk add --no-cache \
     composer \
     git \
     curl \
-    libssl-dev
+    libssl-dev \
+    linux-headers
 
 RUN docker-php-ext-install pdo_pgsql pgsql pcntl
+RUN pecl install swoole && docker-php-ext-enable swoole
 
 WORKDIR /app
 
@@ -22,4 +24,4 @@ RUN php artisan config:cache && php artisan route:cache
 
 EXPOSE 8000
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0"]
+CMD ["php", "artisan", "octane:start", "--server=swoole", "--host=0.0.0.0", "--port=8000"]
