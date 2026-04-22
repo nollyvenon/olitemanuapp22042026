@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OMCLTA — Production ERP System
 
-## Getting Started
+**Enterprise Resource Planning system** for manufacturing with strict financial integrity, regulatory audit trails, and multi-role workflows.
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Backend**: Laravel 11 + PostgreSQL + Redis
+- **Frontend**: Next.js App Router + TypeScript + Tailwind
+- **Queue**: BullMQ (Redis-backed)
+- **Authentication**: JWT (HS256) + Device Fingerprinting + GPS Validation
+- **Audit**: Immutable audit logs with before/after snapshots
+- **Deployment**: Docker + Docker Compose
+
+## Features
+
+### Authentication & Security
+- 🔐 JWT tokens (8hr access, 30day refresh)
+- 📍 GPS-based login enforcement with IP fallback
+- 🖥️ Device fingerprinting via SubtleCrypto
+- 🛡️ RBAC with DAG group inheritance
+- 🔍 Immutable audit logging on all actions
+
+### Core Modules
+1. **AUTH** - Users, groups, permissions, sessions
+2. **SALES** - Customers, orders, invoices
+3. **INVENTORY** - Categories, items, stock ledger, movements
+4. **ACCOUNTS** - Ledgers, vouchers, price lists, territories
+5. **KYC** - Customer onboarding, approval workflow
+6. **REPORTING** - Inventory (opening/inwards/outwards/closing), sales, ledger
+7. **AUDIT** - Full action trail with user/timestamp/before/after
+8. **NOTIFICATIONS** - Event-driven real-time alerts
+9. **MARKET INTELLIGENCE** - Trends, competitor analysis, customer segments
+
+## Folder Structure
+
+```
+omclta/
+├── backend/                          # Laravel API
+│   ├── app/
+│   │   ├── Models/                  # Eloquent models
+│   │   ├── Modules/                 # Modular structure
+│   │   │   ├── Auth/
+│   │   │   ├── Sales/
+│   │   │   ├── Inventory/
+│   │   │   ├── Accounts/
+│   │   │   ├── Kyc/
+│   │   │   ├── Reporting/
+│   │   │   ├── Audit/
+│   │   │   ├── Notifications/
+│   │   │   └── MarketIntelligence/
+│   │   ├── Observers/               # Model observers for audit
+│   │   ├── Events/                  # Broadcasting events
+│   │   └── Listeners/               # Event listeners
+│   ├── database/
+│   │   ├── migrations/              # Schema (10 files)
+│   │   └── seeders/
+│   ├── config/
+│   │   ├── cache.php               # Redis caching
+│   │   ├── queue.php               # BullMQ/Redis queues
+│   │   └── auth.php                # JWT config
+│   ├── routes/api.php              # All API routes (v1)
+│   ├── .env.example                # Environment template
+│   └── Dockerfile
+├── frontend/                        # Next.js 15 app
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── (auth)/login/
+│   │   │   ├── (dashboard)/
+│   │   │   ├── admin/
+│   │   │   └── api/
+│   │   ├── components/
+│   │   ├── store/
+│   │   ├── hooks/
+│   │   └── lib/
+│   ├── .env.example
+│   └── Dockerfile
+├── docker-compose.yml
+├── DEPLOYMENT.md
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Quick Start
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Setup
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+docker-compose up -d
+docker-compose exec backend php artisan migrate --seed
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Access
+API: http://localhost:8000
+App: http://localhost:3000
+```
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+See [DEPLOYMENT.md](DEPLOYMENT.md) for production setup.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+Proprietary — Onyx Group Studios
