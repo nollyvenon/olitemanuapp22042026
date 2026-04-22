@@ -11,7 +11,10 @@
       "Bash(pnpm add *)",
       "Bash(pnpm tsc *)",
       "Bash(pnpm dev *)",
-      "Bash(pnpm build *)"
+      "Bash(pnpm build *)",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(curl -s http://localhost:3000/dashboard)",
+      "Bash(curl -s http://localhost:3000/dashboard/sales/orders)"
     ]
   }
 }

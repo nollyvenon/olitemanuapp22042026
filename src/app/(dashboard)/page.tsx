@@ -1,98 +1,62 @@
 'use client';
 
-import {
-  ShoppingCart,
-  Package,
-  Users,
-  UserCheck,
-} from 'lucide-react';
-import { PageHeader } from '@/components/shared/PageHeader';
-import { KpiCard } from '@/components/dashboard/KpiCard';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { KpiSection } from '@/components/dashboard/KpiSection';
+import { AnalyticsSection } from '@/components/dashboard/AnalyticsSection';
+import { RecentTransactions } from '@/components/dashboard/RecentTransactions';
+import { AlertsSection } from '@/components/dashboard/AlertsSection';
+import { QuickActions } from '@/components/dashboard/QuickActions';
 
 export default function DashboardPage() {
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Dashboard"
-        description="Welcome to Olite Manufacturing ERP"
-      />
-
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-        <KpiCard
-          title="Sales Orders"
-          value={1243}
-          icon={ShoppingCart}
-          change={12}
-          iconColor="text-blue-500"
-        />
-        <KpiCard
-          title="Stock Items"
-          value={856}
-          icon={Package}
-          change={-2}
-          iconColor="text-amber-500"
-        />
-        <KpiCard
-          title="Active Debtors"
-          value={342}
-          icon={Users}
-          change={8}
-          iconColor="text-purple-500"
-        />
-        <KpiCard
-          title="KYC Pending"
-          value={47}
-          icon={UserCheck}
-          change={-5}
-          iconColor="text-green-500"
-        />
+      {/* Page header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold" style={{ color: '#0f1111' }}>Operations Dashboard</h1>
+          <p className="text-sm mt-0.5" style={{ color: '#555555' }}>Real-time manufacturing overview</p>
+        </div>
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded text-xs font-medium" style={{ background: '#e8f8f5', color: '#067d62', border: '1px solid #067d62' }}>
+          <span className="w-2 h-2 rounded-full bg-[#067d62] animate-pulse" />
+          Live
+        </div>
       </div>
 
-      <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">System Status</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">API Connection</span>
-                <span className="text-sm font-medium text-green-600">Connected</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Database</span>
-                <span className="text-sm font-medium text-green-600">Healthy</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Queue Service</span>
-                <span className="text-sm font-medium text-green-600">Running</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      {/* KPI Section */}
+      <KpiSection />
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Quick Links</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <a href="/dashboard/sales/orders" className="block text-sm text-primary hover:underline">
-                → Create Sales Order
-              </a>
-              <a href="/dashboard/inventory/items" className="block text-sm text-primary hover:underline">
-                → View Inventory
-              </a>
-              <a href="/dashboard/kyc/applications" className="block text-sm text-primary hover:underline">
-                → Review KYC Applications
-              </a>
-              <a href="/dashboard/accounts/debtors" className="block text-sm text-primary hover:underline">
-                → View Debtors
-              </a>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Analytics Section */}
+      <AnalyticsSection />
+
+      {/* Alerts */}
+      <AlertsSection />
+
+      {/* Recent Transactions */}
+      <RecentTransactions />
+
+      {/* Bottom row */}
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
+        <div className="lg:col-span-1">
+          <QuickActions />
+        </div>
+
+        <div className="lg:col-span-2 bg-white rounded-lg overflow-hidden" style={{ border: '1px solid #d5d9d9' }}>
+          <div className="px-5 py-3 font-semibold text-sm" style={{ background: '#232f3e', color: '#FF9900' }}>System Health</div>
+          <div className="p-5 grid grid-cols-2 gap-3">
+            {[
+              { label: 'API Server', status: 'Online' },
+              { label: 'Database', status: 'Healthy' },
+              { label: 'Queue Worker', status: 'Running' },
+              { label: 'Scheduler', status: 'Active' },
+              { label: 'Storage', status: '68% used' },
+              { label: 'Cache', status: 'Warm' },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center justify-between p-3 rounded" style={{ background: '#f4f6f8' }}>
+                <span className="text-sm" style={{ color: '#555555' }}>{item.label}</span>
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: '#e8f8f5', color: '#067d62' }}>{item.status}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

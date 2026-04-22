@@ -7,7 +7,6 @@ import { useUIStore } from '@/store/ui.store';
 import { usePermission } from '@/hooks/usePermission';
 import { cn } from '@/lib/utils';
 import { NAV_GROUPS } from './nav-config';
-import { Button } from '@/components/ui/button';
 
 export function AppSidebar() {
   const pathname = usePathname();
@@ -22,42 +21,32 @@ export function AppSidebar() {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 h-screen z-50 flex flex-col',
-        'bg-[oklch(0.16_0_0)] text-[oklch(0.65_0_0)]',
-        'border-r border-[oklch(0.22_0_0)]',
-        'transition-all duration-300 ease-in-out',
+        'fixed left-0 top-0 h-screen z-50 flex flex-col transition-all duration-300 ease-in-out',
         sidebarCollapsed ? 'w-14' : 'w-64'
       )}
+      style={{ background: 'linear-gradient(180deg, #131921 0%, #1a2332 60%, #131921 100%)', borderRight: '1px solid #2d3748' }}
     >
       {/* Logo */}
-      <div
-        className={cn(
-          'flex items-center h-16 px-4 border-b border-[oklch(0.22_0_0)] shrink-0'
-        )}
-      >
+      <div className="flex items-center h-16 px-4 shrink-0" style={{ borderBottom: '1px solid #FF9900', background: '#0f1111' }}>
         <Link href="/dashboard" className="flex items-center gap-3 min-w-0">
-          <div className="w-8 h-8 rounded-lg bg-[oklch(0.508_0.226_260)] flex items-center justify-center shrink-0">
-            <span className="text-white font-bold text-sm">OL</span>
+          <div className="w-8 h-8 rounded flex items-center justify-center shrink-0" style={{ background: '#FF9900' }}>
+            <span className="font-black text-sm" style={{ color: '#0f1111' }}>OL</span>
           </div>
           {!sidebarCollapsed && (
             <div className="min-w-0">
-              <p className="font-bold text-white text-sm leading-tight truncate">
-                Olite ERP
-              </p>
-              <p className="text-xs text-[oklch(0.65_0_0)] truncate">
-                Manufacturing
-              </p>
+              <p className="font-bold text-sm leading-tight truncate" style={{ color: '#FF9900' }}>OLITE ERP</p>
+              <p className="text-xs truncate" style={{ color: '#aab7c4' }}>Manufacturing</p>
             </div>
           )}
         </Link>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-1">
+      <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
         {visibleGroups.map((group, idx) => (
-          <div key={idx} className="space-y-1">
+          <div key={idx} className="mb-2">
             {group.label && !sidebarCollapsed && (
-              <p className="px-3 py-2 text-xs font-semibold text-[oklch(0.65_0_0)] uppercase tracking-wider">
+              <p className="px-3 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: '#637083' }}>
                 {group.label}
               </p>
             )}
@@ -67,16 +56,16 @@ export function AppSidebar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={cn(
-                    'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
-                    'hover:bg-[oklch(0.22_0_0)]',
-                    isActive
-                      ? 'bg-[oklch(0.508_0.226_260)] text-white'
-                      : 'text-[oklch(0.65_0_0)] hover:text-white'
-                  )}
+                  className={cn('flex items-center gap-3 px-3 py-2 rounded text-sm font-medium transition-all')}
+                  style={isActive
+                    ? { background: '#FF9900', color: '#0f1111' }
+                    : { color: '#d5d9d9' }
+                  }
+                  onMouseEnter={e => { if (!isActive) { (e.currentTarget as HTMLElement).style.background = '#37475a'; (e.currentTarget as HTMLElement).style.color = '#ffffff'; } }}
+                  onMouseLeave={e => { if (!isActive) { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = '#d5d9d9'; } }}
                   title={sidebarCollapsed ? item.label : undefined}
                 >
-                  <item.icon className="w-5 h-5 shrink-0" />
+                  <item.icon className="w-4 h-4 shrink-0" />
                   {!sidebarCollapsed && <span className="truncate">{item.label}</span>}
                 </Link>
               );
@@ -86,21 +75,15 @@ export function AppSidebar() {
       </nav>
 
       {/* Collapse toggle */}
-      <Button
+      <button
         onClick={toggleSidebar}
-        variant="ghost"
-        size="icon"
-        className={cn(
-          'h-10 mx-2 mb-4 rounded-lg',
-          'text-[oklch(0.65_0_0)] hover:bg-[oklch(0.22_0_0)]',
-          'hover:text-white transition-colors'
-        )}
-        title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        className="flex items-center justify-center h-10 mx-2 mb-4 rounded transition-colors"
+        style={{ color: '#637083' }}
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#37475a'; (e.currentTarget as HTMLElement).style.color = '#fff'; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.color = '#637083'; }}
       >
-        <ChevronLeft
-          className={cn('w-4 h-4 transition-transform', sidebarCollapsed && 'rotate-180')}
-        />
-      </Button>
+        <ChevronLeft className={cn('w-4 h-4 transition-transform', sidebarCollapsed && 'rotate-180')} />
+      </button>
     </aside>
   );
 }
