@@ -2,21 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+
 class Permission extends Model {
-    use HasFactory;
-
-    protected $keyType = 'string';
-    public $incrementing = false;
-
-    protected $fillable = ['name', 'slug', 'module', 'resource', 'action', 'description'];
+    use HasUuids;
     public $timestamps = false;
 
-    public function roles(): BelongsToMany {
-        return $this->belongsToMany(Role::class, 'role_permissions', 'permission_id', 'role_id')
-            ->withPivot('assigned_by', 'assigned_at')->withTimestamps();
+    protected $fillable = ['name', 'module', 'description'];
+
+    public function groups(): BelongsToMany {
+        return $this->belongsToMany(Group::class, 'group_permissions', 'permission_id', 'group_id');
     }
 }

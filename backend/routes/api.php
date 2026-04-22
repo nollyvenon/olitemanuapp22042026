@@ -1,40 +1,46 @@
 <?php
 
+use App\Modules\Auth\Http\Controllers\AuthController;
+use App\Modules\Auth\Http\Controllers\GroupController;
+use App\Modules\Auth\Http\Controllers\LocationController;
+use App\Modules\Auth\Http\Controllers\PermissionController;
+use App\Modules\Auth\Http\Controllers\UserController;
+use App\Modules\Sales\Http\Controllers\CustomerController;
+use App\Modules\Sales\Http\Controllers\InvoiceController;
+use App\Modules\Sales\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthController;
 
 Route::prefix('v1')->group(function () {
-
-    // Public auth routes
     Route::prefix('auth')->group(function () {
-        Route::post('/login', [AuthController::class, 'login']);
-        Route::post('/refresh', [AuthController::class, 'refresh']);
-        Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
-        Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+        Route::post('login', [AuthController::class, 'login']);
+        Route::post('password/request-reset', [AuthController::class, 'requestReset']);
+        Route::post('password/reset', [AuthController::class, 'resetPassword']);
+
+        Route::middleware('jwt')->group(function () {
+            Route::post('logout', [AuthController::class, 'logout']);
+            Route::post('refresh', [AuthController::class, 'refresh']);
+        });
     });
 
-    // Protected routes
-    Route::middleware(['auth:api'])->group(function () {
+    Route::middleware('jwt')->group(function () {
+        Route::apiResource('users', UserController::class);
+        Route::post('users/{id}/groups', [UserController::class, 'assignGroups']);
+        Route::post('users/{id}/locations', [UserController::class, 'assignLocations']);
 
-        Route::prefix('auth')->group(function () {
-            Route::get('/me', [AuthController::class, 'me']);
-            Route::patch('/me', [AuthController::class, 'updateMe']);
-            Route::post('/logout', [AuthController::class, 'logout']);
-            Route::delete('/logout-all', [AuthController::class, 'logoutAll']);
-            Route::post('/change-password', [AuthController::class, 'changePassword']);
-            Route::post('/verify-email', [AuthController::class, 'verifyEmail']);
-            Route::post('/admin/reset-password', [AuthController::class, 'adminResetPassword']);
-        });
+        Route::apiResource('groups', GroupController::class);
+        Route::post('groups/{id}/permissions', [GroupController::class, 'attachPermissions']);
+        Route::delete('groups/{id}/permissions/{pid}', [GroupController::class, 'detachPermission']);
+        Route::post('groups/{id}/inherit', [GroupController::class, 'setInheritance']);
 
-        // Module routes
-        Route::prefix('users')->group(base_path('routes/modules/users.php'));
-        Route::prefix('sales')->group(base_path('routes/modules/sales.php'));
-        Route::prefix('accounts')->group(base_path('routes/modules/accounts.php'));
-        Route::prefix('inventory')->group(base_path('routes/modules/inventory.php'));
-        Route::prefix('kyc')->group(base_path('routes/modules/kyc.php'));
-        Route::prefix('market')->group(base_path('routes/modules/market.php'));
-        Route::prefix('reports')->group(base_path('routes/modules/reports.php'));
-        Route::prefix('notifications')->group(base_path('routes/modules/notifications.php'));
-        Route::prefix('audit')->group(base_path('routes/modules/audit.php'));
+        Route::get('permissions', [PermissionController::class, 'index']);
+        Route::get('locations', [LocationController::class, 'index']);
+        Route::post('locations', [LocationController::class, 'store']);
+
+        Route::apiResource('customers', CustomerController::class);
+        Route::apiResource('orders', OrderController::class);
+        Route::post('invoices', [InvoiceController::class, 'store']);
+        Route::get('invoices', [InvoiceController::class, 'index']);
+        Route::get('invoices/{id}', [InvoiceController::class, 'show']);
+        Route::patch('invoices/{id}/status', [InvoiceController::class, 'updateStatus']);
     });
 });

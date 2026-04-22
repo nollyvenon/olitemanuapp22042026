@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+
 class Role extends Model {
+    use HasUuids;
     use HasFactory, SoftDeletes;
 
-    protected $keyType = 'string';
-    public $incrementing = false;
 
     protected $fillable = ['name', 'slug', 'description', 'is_system'];
 

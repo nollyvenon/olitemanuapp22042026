@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+
 class Product extends Model
+    use HasUuids;
 {
     use HasFactory, SoftDeletes;
 
-    protected $keyType = 'string';
-    public $incrementing = false;
 
     protected $fillable = [
         'sku',

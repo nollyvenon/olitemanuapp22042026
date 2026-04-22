@@ -7,17 +7,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-class AuditLog extends Model {
+class Session extends Model {
     use HasUuids;
-    public $timestamps = false;
 
     protected $fillable = [
-        'user_id', 'acting_on_behalf_of', 'action_type', 'entity_type', 'entity_id',
-        'before_snapshot', 'after_snapshot', 'metadata', 'device_id',
-        'ip_address', 'location_lat', 'location_long', 'created_at'
+        'user_id', 'device_id', 'access_token_hash', 'refresh_token_hash',
+        'ip_address', 'location_lat', 'location_long', 'ip_city', 'ip_country',
+        'gps_source', 'issued_at', 'expires_at', 'revoked_at', 'is_active'
     ];
 
-    protected $casts = ['before_snapshot' => 'json', 'after_snapshot' => 'json', 'metadata' => 'json'];
+    protected $casts = ['is_active' => 'boolean'];
 
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);

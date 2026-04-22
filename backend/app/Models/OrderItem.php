@@ -2,41 +2,19 @@
 
 namespace App\Models;
 
-use App\Models\Sales\Order;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class OrderItem extends Model
-{
-    use HasFactory;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-    protected $keyType = 'string';
-    public $incrementing = false;
+class OrderItem extends Model {
+    use HasUuids;
 
-    protected $fillable = [
-        'order_id',
-        'product_id',
-        'quantity',
-        'unit_price',
-        'line_total',
-        'notes',
-    ];
+    protected $fillable = ['order_id', 'product_name', 'sku', 'quantity', 'unit_price', 'total_price', 'notes'];
 
-    protected $casts = [
-        'unit_price' => 'decimal:2',
-        'line_total' => 'decimal:2',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
+    protected $casts = ['unit_price' => 'decimal:2', 'total_price' => 'decimal:2'];
 
-    public function order(): BelongsTo
-    {
+    public function order(): BelongsTo {
         return $this->belongsTo(Order::class);
-    }
-
-    public function product(): BelongsTo
-    {
-        return $this->belongsTo(Product::class);
     }
 }

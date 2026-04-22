@@ -1,35 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ColumnDef, SortingState } from '@tanstack/react-table';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { DataTable } from '@/components/data-table/DataTable';
 import { Button } from '@/components/ui/button';
 import { PermissionGuard } from '@/components/shared/PermissionGuard';
+import { AuthGuard } from '@/components/AuthGuard';
+import { useAuthStore } from '@/store/auth.store';
 
 interface User {
   id: string;
   name: string;
   email: string;
-  role: string;
-  department: string;
-  last_login: string;
-  status: string;
+  is_active: boolean;
+  groups: Array<{ id: string; name: string }>;
 }
-
-const USERS: User[] = [
-  { id: '1',  name: 'James Okafor',    email: 'j.okafor@olite.com',    role: 'Admin',          department: 'Management',   last_login: '2026-04-22', status: 'active' },
-  { id: '2',  name: 'Sarah Mensah',    email: 's.mensah@olite.com',    role: 'Sales Manager',  department: 'Sales',         last_login: '2026-04-22', status: 'active' },
-  { id: '3',  name: 'Emeka Bello',     email: 'e.bello@olite.com',     role: 'Accountant',     department: 'Finance',       last_login: '2026-04-21', status: 'active' },
-  { id: '4',  name: 'Tunde Adeyemi',   email: 't.adeyemi@olite.com',   role: 'Store Manager',  department: 'Inventory',     last_login: '2026-04-22', status: 'active' },
-  { id: '5',  name: 'Fatima Aliyu',    email: 'f.aliyu@olite.com',     role: 'Store Manager',  department: 'Inventory',     last_login: '2026-04-20', status: 'active' },
-  { id: '6',  name: 'Chidi Okonkwo',   email: 'c.okonkwo@olite.com',   role: 'Store Clerk',    department: 'Inventory',     last_login: '2026-04-19', status: 'active' },
-  { id: '7',  name: 'Ibrahim Musa',    email: 'i.musa@olite.com',      role: 'Store Clerk',    department: 'Inventory',     last_login: '2026-04-18', status: 'active' },
-  { id: '8',  name: 'Remi Olawale',    email: 'r.olawale@olite.com',   role: 'Sales Rep',      department: 'Sales',         last_login: '2026-04-17', status: 'active' },
-  { id: '9',  name: 'Ngozi Eze',       email: 'n.eze@olite.com',       role: 'KYC Officer',    department: 'Compliance',    last_login: '2026-04-16', status: 'active' },
-  { id: '10', name: 'Dayo Adebayo',    email: 'd.adebayo@olite.com',   role: 'Sales Rep',      department: 'Sales',         last_login: '2026-03-20', status: 'inactive' },
-];
 
 const fmtDate = (s: string) => new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
@@ -44,26 +31,46 @@ const columns: ColumnDef<User>[] = [
   },
   { accessorKey: 'name',       header: 'Name',        cell: i => <span className="font-medium text-sm" style={{ color: '#0f1111' }}>{String(i.getValue())}</span> },
   { accessorKey: 'email',      header: 'Email',       cell: i => <span className="text-xs" style={{ color: '#767676' }}>{String(i.getValue())}</span> },
-  { accessorKey: 'role',       header: 'Role',        cell: i => <span className="text-sm" style={{ color: '#555555' }}>{String(i.getValue())}</span> },
-  { accessorKey: 'department', header: 'Department',  cell: i => <span className="text-xs px-2 py-0.5 rounded" style={{ background: '#e8f0fe', color: '#146eb4' }}>{String(i.getValue())}</span> },
-  { accessorKey: 'last_login', header: 'Last Login',  cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{fmtDate(String(i.getValue()))}</span> },
-  { accessorKey: 'status',     header: 'Status',      cell: i => <StatusBadge status={String(i.getValue())} /> },
+  {
+    id: 'groups',
+    header: 'Groups',
+    cell: ({ row }) => (
+      <span className="text-xs">{row.original.groups?.map((g: any) => g.name).join(', ') || 'N/A'}</span>
+    ),
+  },
+  { accessorKey: 'is_active',  header: 'Status',      cell: i => <StatusBadge status={String(i.getValue()) === 'true' ? 'active' : 'inactive'} /> },
 ];
 
 export default function UsersPage() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
   const [sorting, setSorting] = useState<SortingState>([{ id: 'name', desc: false }]);
+  const { accessToken } = useAuthStore();
+
+  useEffect(() => {
+    if (!accessToken) return;
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+      .then(r => r.json())
+      .then(setUsers)
+      .finally(() => setLoading(false));
+  }, [accessToken]);
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Users"
-        description="Manage system users and access"
-        actions={
-          <PermissionGuard permission="admin.*">
-            <Button style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold hover:opacity-90">+ Invite User</Button>
-          </PermissionGuard>
-        }
-      />
-      <DataTable columns={columns} data={USERS} sorting={sorting} onSortingChange={setSorting} />
-    </div>
+    <AuthGuard requiredPermissions={['users.read']}>
+      <div className="space-y-6">
+        <PageHeader
+          title="Users"
+          description="Manage system users and access"
+          actions={
+            <PermissionGuard permission="users.create">
+              <Button style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold hover:opacity-90">+ Invite User</Button>
+            </PermissionGuard>
+          }
+        />
+        {loading ? <div>Loading...</div> : <DataTable columns={columns} data={users} sorting={sorting} onSortingChange={setSorting} />}
+      </div>
+    </AuthGuard>
   );
 }

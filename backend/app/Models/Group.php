@@ -2,36 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Group extends Model {
-    use HasFactory, SoftDeletes;
+    use HasUuids;
+    public $timestamps = true;
 
-    protected $keyType = 'string';
-    public $incrementing = false;
+    protected $fillable = ['name', 'description', 'is_active'];
 
-    protected $fillable = ['name', 'slug', 'description', 'parent_id', 'is_system'];
-
-    public function parent(): BelongsTo {
-        return $this->belongsTo(Group::class, 'parent_id');
-    }
-
-    public function children(): HasMany {
-        return $this->hasMany(Group::class, 'parent_id');
-    }
-
-    public function roles(): BelongsToMany {
-        return $this->belongsToMany(Role::class, 'group_roles', 'group_id', 'role_id')
-            ->withPivot('assigned_by', 'assigned_at')->withTimestamps();
+    public function permissions(): BelongsToMany {
+        return $this->belongsToMany(Permission::class, 'group_permissions', 'group_id', 'permission_id');
     }
 
     public function users(): BelongsToMany {
         return $this->belongsToMany(User::class, 'user_groups', 'group_id', 'user_id')
-            ->withPivot('assigned_by', 'assigned_at')->withTimestamps();
+            ->withPivot('assigned_by', 'assigned_at');
+    }
+
+    public function locations(): BelongsToMany {
+        return $this->belongsToMany(Location::class, 'group_locations', 'group_id', 'location_id');
+    }
+
+    public function parentGroups(): BelongsToMany {
+        return $this->belongsToMany(Group::class, 'group_inheritance', 'child_group_id', 'parent_group_id');
+    }
+
+    public function childGroups(): BelongsToMany {
+        return $this->belongsToMany(Group::class, 'group_inheritance', 'parent_group_id', 'child_group_id');
     }
 }
