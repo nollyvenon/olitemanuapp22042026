@@ -16,6 +16,11 @@ use App\Modules\Accounts\Http\Controllers\LedgerController;
 use App\Modules\Accounts\Http\Controllers\VoucherController;
 use App\Modules\Accounts\Http\Controllers\PriceListController;
 use App\Modules\Accounts\Http\Controllers\TerritoryController;
+use App\Modules\Kyc\Http\Controllers\KycController;
+use App\Modules\Reports\Http\Controllers\ReportController;
+use App\Modules\Audit\Http\Controllers\AuditController;
+use App\Modules\Notifications\Http\Controllers\NotificationController;
+use App\Modules\MarketIntelligence\Http\Controllers\MarketIntelligenceController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -77,5 +82,30 @@ Route::prefix('v1')->group(function () {
         Route::post('price-lists/{id}/activate', [PriceListController::class, 'activate']);
 
         Route::apiResource('territories', TerritoryController::class)->except(['destroy']);
+
+        Route::get('kyc', [KycController::class, 'index']);
+        Route::post('kyc', [KycController::class, 'store']);
+        Route::get('kyc/{id}', [KycController::class, 'show']);
+        Route::post('kyc/{id}/approve', [KycController::class, 'approve']);
+        Route::post('kyc/{id}/reject', [KycController::class, 'reject']);
+
+        Route::get('reports', [ReportController::class, 'index']);
+        Route::post('reports', [ReportController::class, 'store']);
+        Route::get('reports/{id}', [ReportController::class, 'show']);
+        Route::post('reports/{id}/generate', [ReportController::class, 'generate']);
+
+        Route::get('audit-logs', [AuditController::class, 'index']);
+        Route::get('audit-logs/{id}', [AuditController::class, 'show']);
+
+        Route::get('notifications', [NotificationController::class, 'index']);
+        Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+        Route::get('notification-preferences', [NotificationController::class, 'preferences']);
+        Route::patch('notification-preferences/{type}', [NotificationController::class, 'updatePreference']);
+
+        Route::get('market/trends', [MarketIntelligenceController::class, 'trends']);
+        Route::get('market/competitors', [MarketIntelligenceController::class, 'competitors']);
+        Route::patch('market/competitors/{id}', [MarketIntelligenceController::class, 'updateCompetitor']);
+        Route::get('market/customer-insights', [MarketIntelligenceController::class, 'customerInsights']);
+        Route::post('market/refresh-insights/{customerId}', [MarketIntelligenceController::class, 'refreshInsights']);
     });
 });
