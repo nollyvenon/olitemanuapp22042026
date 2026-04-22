@@ -12,6 +12,10 @@ use App\Modules\Inventory\Http\Controllers\StockCategoryController;
 use App\Modules\Inventory\Http\Controllers\StockItemController;
 use App\Modules\Inventory\Http\Controllers\StockJournalController;
 use App\Modules\Inventory\Http\Controllers\StockLedgerController;
+use App\Modules\Accounts\Http\Controllers\LedgerController;
+use App\Modules\Accounts\Http\Controllers\VoucherController;
+use App\Modules\Accounts\Http\Controllers\PriceListController;
+use App\Modules\Accounts\Http\Controllers\TerritoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -57,5 +61,21 @@ Route::prefix('v1')->group(function () {
         Route::post('stock/journals/add', [StockJournalController::class, 'add']);
         Route::post('stock/journals/transfer', [StockJournalController::class, 'transfer']);
         Route::post('stock/journals/remove', [StockJournalController::class, 'remove']);
+
+        Route::apiResource('ledgers', LedgerController::class)->except(['destroy']);
+        Route::get('ledgers/{id}/statement', [LedgerController::class, 'statement']);
+
+        Route::get('vouchers', [VoucherController::class, 'index']);
+        Route::post('vouchers', [VoucherController::class, 'store']);
+        Route::get('vouchers/{id}', [VoucherController::class, 'show']);
+        Route::post('vouchers/{id}/reverse', [VoucherController::class, 'reverse']);
+
+        Route::get('price-lists', [PriceListController::class, 'index']);
+        Route::post('price-lists', [PriceListController::class, 'upload']);
+        Route::get('price-lists/price', [PriceListController::class, 'price']);
+        Route::get('price-lists/{id}', [PriceListController::class, 'show']);
+        Route::post('price-lists/{id}/activate', [PriceListController::class, 'activate']);
+
+        Route::apiResource('territories', TerritoryController::class)->except(['destroy']);
     });
 });
