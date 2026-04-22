@@ -8,6 +8,10 @@ use App\Modules\Auth\Http\Controllers\UserController;
 use App\Modules\Sales\Http\Controllers\CustomerController;
 use App\Modules\Sales\Http\Controllers\InvoiceController;
 use App\Modules\Sales\Http\Controllers\OrderController;
+use App\Modules\Inventory\Http\Controllers\StockCategoryController;
+use App\Modules\Inventory\Http\Controllers\StockItemController;
+use App\Modules\Inventory\Http\Controllers\StockJournalController;
+use App\Modules\Inventory\Http\Controllers\StockLedgerController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -42,5 +46,16 @@ Route::prefix('v1')->group(function () {
         Route::get('invoices', [InvoiceController::class, 'index']);
         Route::get('invoices/{id}', [InvoiceController::class, 'show']);
         Route::patch('invoices/{id}/status', [InvoiceController::class, 'updateStatus']);
+
+        Route::apiResource('stock/categories', StockCategoryController::class);
+        Route::post('stock/categories/{id}/groups', [StockCategoryController::class, 'storeGroup']);
+        Route::delete('stock/categories/{id}/groups/{gid}', [StockCategoryController::class, 'destroyGroup']);
+        Route::apiResource('stock/items', StockItemController::class);
+        Route::get('stock/ledger', [StockLedgerController::class, 'index']);
+        Route::get('stock/ledger/{itemId}/balance', [StockLedgerController::class, 'itemBalance']);
+        Route::get('stock/journals', [StockJournalController::class, 'index']);
+        Route::post('stock/journals/add', [StockJournalController::class, 'add']);
+        Route::post('stock/journals/transfer', [StockJournalController::class, 'transfer']);
+        Route::post('stock/journals/remove', [StockJournalController::class, 'remove']);
     });
 });
