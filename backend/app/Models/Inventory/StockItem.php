@@ -1,0 +1,1 @@
+<?php namespace App\Models\Inventory; use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\SoftDeletes; class StockItem extends Model { use SoftDeletes; protected $keyType='string'; public $incrementing=false; protected $fillable=['*']; }

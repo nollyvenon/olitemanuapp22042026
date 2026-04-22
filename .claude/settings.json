@@ -15,6 +15,9 @@
       "Bash(taskkill /F /IM node.exe)",
       "Bash(curl -s http://localhost:3000/dashboard)",
       "Bash(curl -s http://localhost:3000/dashboard/sales/orders)"
+    ],
+    "additionalDirectories": [
+      "c:\\Files\\DevelopedApps\\OMCLTA"
     ]
   }
 }

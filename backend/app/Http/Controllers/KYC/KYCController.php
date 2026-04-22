@@ -1,0 +1,1 @@
+<?php namespace App\Http\Controllers\KYC; use App\Http\Controllers\Controller; use App\Services\KYC\KYCService; use Illuminate\Http\JsonResponse; class KYCController extends Controller { public function __construct(private KYCService $service) {} public function store($req): JsonResponse { return response()->json($this->service->create($req->all())); } }

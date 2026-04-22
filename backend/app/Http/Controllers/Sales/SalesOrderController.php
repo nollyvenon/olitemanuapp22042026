@@ -1,0 +1,1 @@
+<?php namespace App\Http\Controllers\Sales; use App\Http\Controllers\Controller; use App\Services\Sales\OrderService; use Illuminate\Http\JsonResponse; class SalesOrderController extends Controller { public function __construct(private OrderService $service) {} public function store($req): JsonResponse { return response()->json($this->service->create($req->all())); } }

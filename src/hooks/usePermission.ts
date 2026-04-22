@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useAuthStore } from '@/store/auth.store';
 
 export function usePermission() {
-  const { hasPermission, hasRole } = useAuthStore();
+  const { hasPermission } = useAuthStore();
 
   const can = useCallback(
     (permission: string): boolean => {
@@ -25,12 +25,5 @@ export function usePermission() {
     [hasPermission]
   );
 
-  const is = useCallback(
-    (role: string): boolean => {
-      return hasRole(role);
-    },
-    [hasRole]
-  );
-
-  return { can, canAny, canAll, is };
+  return { can, canAny, canAll };
 }

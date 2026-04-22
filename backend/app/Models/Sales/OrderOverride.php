@@ -1,0 +1,1 @@
+<?php namespace App\Models\Sales; use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\SoftDeletes; class OrderOverride extends Model { use SoftDeletes; protected $keyType='string'; public $incrementing=false; protected $fillable=['*']; }

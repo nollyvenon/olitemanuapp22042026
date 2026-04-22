@@ -1,0 +1,1 @@
+<?php namespace App\Http\Middleware; use Closure; class LocationEnforcement { public function handle($req, Closure $next) { $lat = $req->input('latitude'); $long = $req->input('longitude'); if (!$lat || !$long) return response()->json(['error' => 'Location required'], 400); return $next($req); } }

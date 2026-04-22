@@ -1,0 +1,22 @@
+{
+    "name": "hp/api",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Hp\\Api\\": "src/",
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "John Azuka",
+            "email": "gooption@yahoo.com"
+        }
+    ],
+    "require": {
+        "laravel/framework": "^13.5",
+        "laravel/octane": "^2.17",
+        "spiral/roadrunner-http": "^4.1",
+        "spiral/roadrunner-cli": "^2.7"
+    }
+}

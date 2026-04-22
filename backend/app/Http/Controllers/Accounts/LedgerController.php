@@ -1,0 +1,1 @@
+<?php namespace App\Http\Controllers\Accounts; use App\Http\Controllers\Controller; use App\Services\Accounts\LedgerService; use Illuminate\Http\JsonResponse; class LedgerController extends Controller { public function __construct(private LedgerService $service) {} public function create($req): JsonResponse { return response()->json($this->service->createLedger($req->all())); } }

@@ -1,0 +1,1 @@
+<?php namespace App\Models\Market; use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\SoftDeletes; class MarketPlanning extends Model { use SoftDeletes; protected $keyType='string'; public $incrementing=false; protected $fillable=['*']; }
