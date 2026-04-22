@@ -97,6 +97,10 @@ Route::prefix('v1')->group(function () {
 
         Route::get('audit-logs', [AuditController::class, 'index']);
         Route::get('audit-logs/{id}', [AuditController::class, 'show']);
+        Route::get('audit-logs/entity/{entityType}/{entityId}', [AuditController::class, 'entityAuditTrail']);
+        Route::get('audit-logs/user/{userId}', [AuditController::class, 'userActions']);
+        Route::get('audit-statistics', [AuditController::class, 'statistics']);
+        Route::post('audit-logs/export', [AuditController::class, 'export']);
 
         Route::get('notifications', [NotificationController::class, 'index']);
         Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
