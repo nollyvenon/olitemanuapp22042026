@@ -5,7 +5,13 @@
       "Bash(cmd /c \"dir /a C:\\\\Files\\\\DevelopedApps\\\\olitemanuapp_21042026\")",
       "Bash(cmd /c \"dir /s /a C:\\\\Files\\\\DevelopedApps\\\\olitemanuapp_21042026\")",
       "Read(//c/Files/DevelopedApps//**)",
-      "Bash(pnpm create *)"
+      "Bash(pnpm create *)",
+      "Bash(pnpm install *)",
+      "Bash(pnpm dlx *)",
+      "Bash(pnpm add *)",
+      "Bash(pnpm tsc *)",
+      "Bash(pnpm dev *)",
+      "Bash(pnpm build *)"
     ]
   }
 }
