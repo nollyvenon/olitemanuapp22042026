@@ -2,31 +2,20 @@
 
 namespace App\Providers;
 
-use App\Listeners\AuditEventListener;
+use App\Events\VoucherPosted;
+use App\Events\KycApproved;
+use App\Events\OrderStatusChanged;
+use App\Listeners\SendVoucherNotification;
+use App\Listeners\SendKycNotification;
+use App\Listeners\SendOrderNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
-class EventServiceProvider extends ServiceProvider
-{
+class EventServiceProvider extends ServiceProvider {
     protected $listen = [
-        \App\Events\UserLoggedIn::class => [
-            AuditEventListener::class,
-        ],
-        \App\Events\StockLevelChanged::class => [
-            AuditEventListener::class,
-        ],
+        VoucherPosted::class => [SendVoucherNotification::class],
+        KycApproved::class => [SendKycNotification::class],
+        OrderStatusChanged::class => [SendOrderNotification::class],
     ];
 
-    protected $subscribe = [
-        AuditEventListener::class,
-    ];
-
-    public function boot(): void
-    {
-        //
-    }
-
-    public function shouldDiscoverEvents(): bool
-    {
-        return false;
-    }
+    public function boot(): void {}
 }

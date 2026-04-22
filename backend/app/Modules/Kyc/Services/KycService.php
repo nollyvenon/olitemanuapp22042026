@@ -2,6 +2,7 @@
 
 namespace App\Modules\Kyc\Services;
 
+use App\Events\KycApproved;
 use App\Models\KycSubmission;
 use App\Models\Customer;
 use App\Models\LedgerAccount;
@@ -39,6 +40,8 @@ class KycService {
             } else {
                 $submission->customer->update(['kyc_verified' => true]);
             }
+
+            KycApproved::dispatch($submission, $userId);
 
             return $submission;
         });

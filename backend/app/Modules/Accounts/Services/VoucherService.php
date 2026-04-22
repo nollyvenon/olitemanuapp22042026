@@ -2,6 +2,7 @@
 
 namespace App\Modules\Accounts\Services;
 
+use App\Events\VoucherPosted;
 use App\Models\LedgerAccount;
 use App\Models\LedgerEntry;
 use App\Models\Voucher;
@@ -42,6 +43,8 @@ class VoucherService {
             LedgerEntry::create(['voucher_id' => $voucher->id, 'ledger_id' => $ledger->id, 'side' => $debitSide, 'amount' => $data['amount'], 'description' => $data['notes'] ?? $data['type'], 'created_at' => now()]);
 
             $this->updateBalance($ledger, $data['amount'], $data['type']);
+
+            VoucherPosted::dispatch($voucher, $userId);
 
             return $voucher;
         });

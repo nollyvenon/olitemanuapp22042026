@@ -2,6 +2,7 @@
 
 namespace App\Modules\Sales\Http\Controllers;
 
+use App\Events\OrderStatusChanged;
 use App\Models\Order;
 use App\Modules\Audit\Services\AuditService;
 use Illuminate\Http\JsonResponse;
@@ -82,7 +83,12 @@ class OrderController {
                 'notes' => 'nullable|string',
             ]);
 
+            $oldStatus = $order->status;
             $order->update($validated);
+
+            if ($oldStatus !== $validated['status']) {
+                OrderStatusChanged::dispatch($order, $oldStatus, $validated['status']);
+            }
 
             $this->auditService->log([
                 'user_id' => $request->authUser->sub,
