@@ -23,6 +23,7 @@ use App\Modules\Notifications\Http\Controllers\NotificationController;
 use App\Modules\MarketIntelligence\Http\Controllers\MarketIntelligenceController;
 use App\Modules\MarketIntelligence\Http\Controllers\MarketPlanController;
 use App\Modules\Reporting\Http\Controllers\InventoryReportController;
+use App\Modules\GodAdmin\Http\Controllers\GodAdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -128,5 +129,23 @@ Route::prefix('v1')->group(function () {
         Route::get('inventory-reports/outwards', [InventoryReportController::class, 'outwards']);
         Route::get('inventory-reports/closing', [InventoryReportController::class, 'closing']);
         Route::post('inventory-reports/export', [InventoryReportController::class, 'exportReport']);
+
+        Route::prefix('god-admin')->middleware('god_admin')->group(function () {
+            Route::post('override', [GodAdminController::class, 'override']);
+            Route::post('confirmations/{id}/confirm', [GodAdminController::class, 'confirmAction']);
+
+            Route::post('impersonate', [GodAdminController::class, 'impersonate']);
+            Route::post('force-transition', [GodAdminController::class, 'forceStateTransition']);
+
+            Route::post('suspend-user/{id}', [GodAdminController::class, 'suspendUser']);
+            Route::post('unsuspend-user/{id}', [GodAdminController::class, 'unsuspendUser']);
+
+            Route::post('override-price', [GodAdminController::class, 'overridePriceOnOrder']);
+            Route::post('override-inventory', [GodAdminController::class, 'overrideInventoryBalance']);
+
+            Route::get('version-history/{entityType}/{entityId}', [GodAdminController::class, 'viewVersionHistory']);
+            Route::get('audit-log', [GodAdminController::class, 'viewAuditLog']);
+            Route::post('export-log', [GodAdminController::class, 'exportAuditLog']);
+        });
     });
 });

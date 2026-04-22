@@ -15,7 +15,15 @@
       "Bash(taskkill /F /IM node.exe)",
       "Bash(curl -s http://localhost:3000/dashboard)",
       "Bash(curl -s http://localhost:3000/dashboard/sales/orders)",
-      "Bash(composer require *)"
+      "Bash(composer require *)",
+      "Bash(php -l config/octane.php)",
+      "Bash(php -l app/Models/GodModeAction.php)",
+      "Bash(php -l app/Models/GodModeConfirmation.php)",
+      "Bash(php -l app/Modules/GodAdmin/Services/GodAdminService.php)",
+      "Bash(php -l app/Modules/GodAdmin/Http/Controllers/GodAdminController.php)",
+      "Bash(php -l app/Modules/GodAdmin/Http/Middleware/IssueGodAdminMiddleware.php)",
+      "Bash(php -l routes/api.php)",
+      "Bash(php -l app/Http/Kernel.php)"
     ],
     "additionalDirectories": [
       "c:\\Files\\DevelopedApps\\OMCLTA"

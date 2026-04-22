@@ -2133,3 +2133,44 @@ DETAIL:  Key (name)=(Super Admin) already exists. at C:/Files/DevelopedApps/olit
 #35 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/artisan(6): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
 #36 {main}
 "} 
+[2026-04-22 22:45:59] production.ERROR: syntax error, unexpected single-quoted string "),", expecting ")" {"exception":"[object] (ParseError(code: 0): syntax error, unexpected single-quoted string \"),\", expecting \")\" at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/config/octane.php:7)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php(115): Illuminate/Foundation/Bootstrap/LoadConfiguration->Illuminate/Foundation/Bootstrap/{closure}()
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php(96): Illuminate/Foundation/Bootstrap/LoadConfiguration->loadConfigurationFile(Object(Illuminate/Config/Repository), 'octane', 'C://Files//Develo...', Array)
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php(55): Illuminate/Foundation/Bootstrap/LoadConfiguration->loadConfigurationFiles(Object(Illuminate/Foundation/Application), Object(Illuminate/Config/Repository))
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(342): Illuminate/Foundation/Bootstrap/LoadConfiguration->bootstrap(Object(Illuminate/Foundation/Application))
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(494): Illuminate/Foundation/Application->bootstrapWith(Array)
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(196): Illuminate/Foundation/Console/Kernel->bootstrap()
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/artisan(6): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#7 {main}
+"} 
+[2026-04-22 22:46:00] production.ERROR: syntax error, unexpected single-quoted string "),", expecting ")" {"exception":"[object] (ParseError(code: 0): syntax error, unexpected single-quoted string \"),\", expecting \")\" at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/config/octane.php:7)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php(115): Illuminate/Foundation/Bootstrap/LoadConfiguration->Illuminate/Foundation/Bootstrap/{closure}()
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php(96): Illuminate/Foundation/Bootstrap/LoadConfiguration->loadConfigurationFile(Object(Illuminate/Config/Repository), 'octane', 'C://Files//Develo...', Array)
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php(55): Illuminate/Foundation/Bootstrap/LoadConfiguration->loadConfigurationFiles(Object(Illuminate/Foundation/Application), Object(Illuminate/Config/Repository))
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(342): Illuminate/Foundation/Bootstrap/LoadConfiguration->bootstrap(Object(Illuminate/Foundation/Application))
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(494): Illuminate/Foundation/Application->bootstrapWith(Array)
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(196): Illuminate/Foundation/Console/Kernel->bootstrap()
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/artisan(6): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#7 {main}
+"} 
+[2026-04-22 22:46:00] production.ERROR: syntax error, unexpected single-quoted string "),", expecting ")" {"exception":"[object] (ParseError(code: 0): syntax error, unexpected single-quoted string \"),\", expecting \")\" at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/config/octane.php:7)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php(115): Illuminate/Foundation/Bootstrap/LoadConfiguration->Illuminate/Foundation/Bootstrap/{closure}()
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php(96): Illuminate/Foundation/Bootstrap/LoadConfiguration->loadConfigurationFile(Object(Illuminate/Config/Repository), 'octane', 'C://Files//Develo...', Array)
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/LoadConfiguration.php(55): Illuminate/Foundation/Bootstrap/LoadConfiguration->loadConfigurationFiles(Object(Illuminate/Foundation/Application), Object(Illuminate/Config/Repository))
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(342): Illuminate/Foundation/Bootstrap/LoadConfiguration->bootstrap(Object(Illuminate/Foundation/Application))
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(494): Illuminate/Foundation/Application->bootstrapWith(Array)
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(196): Illuminate/Foundation/Console/Kernel->bootstrap()
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/artisan(6): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#7 {main}
+"} 
+[2026-04-22 22:47:25] local.ERROR: Command "tinker" is not defined. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"tinker\" is not defined. at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/symfony/console/Application.php:759)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/symfony/console/Application.php(298): Symfony/Component/Console/Application->find('tinker')
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/symfony/console/Application.php(195): Symfony/Component/Console/Application->doRun(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony/Component/Console/Application->run(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/artisan(6): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#4 {main}
+"} 

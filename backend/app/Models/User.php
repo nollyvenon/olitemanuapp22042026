@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class User extends Model {
     use HasUuids;
 
-    protected $fillable = ['name', 'email', 'password_hash', 'is_active', 'is_sub_admin', 'force_password_reset', 'created_by'];
+    protected $fillable = ['name', 'email', 'password_hash', 'is_active', 'is_sub_admin', 'is_god_admin', 'force_password_reset', 'created_by'];
     protected $hidden = ['password_hash'];
     protected $appends = ['permissions'];
 
@@ -39,6 +39,14 @@ class User extends Model {
 
     public function createdBy(): BelongsTo {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function godModeActions(): HasMany {
+        return $this->hasMany(GodModeAction::class, 'god_admin_id');
+    }
+
+    public function godModeConfirmations(): HasMany {
+        return $this->hasMany(GodModeConfirmation::class, 'god_admin_id');
     }
 
     public function getPermissionsAttribute(): array {
