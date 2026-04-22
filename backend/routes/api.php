@@ -21,6 +21,7 @@ use App\Modules\Reports\Http\Controllers\ReportController;
 use App\Modules\Audit\Http\Controllers\AuditController;
 use App\Modules\Notifications\Http\Controllers\NotificationController;
 use App\Modules\MarketIntelligence\Http\Controllers\MarketIntelligenceController;
+use App\Modules\Reporting\Http\Controllers\InventoryReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -107,5 +108,11 @@ Route::prefix('v1')->group(function () {
         Route::patch('market/competitors/{id}', [MarketIntelligenceController::class, 'updateCompetitor']);
         Route::get('market/customer-insights', [MarketIntelligenceController::class, 'customerInsights']);
         Route::post('market/refresh-insights/{customerId}', [MarketIntelligenceController::class, 'refreshInsights']);
+
+        Route::get('inventory-reports/opening', [InventoryReportController::class, 'opening']);
+        Route::get('inventory-reports/inwards', [InventoryReportController::class, 'inwards']);
+        Route::get('inventory-reports/outwards', [InventoryReportController::class, 'outwards']);
+        Route::get('inventory-reports/closing', [InventoryReportController::class, 'closing']);
+        Route::post('inventory-reports/export', [InventoryReportController::class, 'exportReport']);
     });
 });
