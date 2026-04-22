@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd /c \"dir /s /b C:\\\\Files\\\\DevelopedApps\\\\olitemanuapp_21042026\")",
+      "Bash(cmd /c \"dir /a C:\\\\Files\\\\DevelopedApps\\\\olitemanuapp_21042026\")",
+      "Bash(cmd /c \"dir /s /a C:\\\\Files\\\\DevelopedApps\\\\olitemanuapp_21042026\")",
+      "Read(//c/Files/DevelopedApps//**)",
+      "Bash(pnpm create *)"
+    ]
+  }
+}
