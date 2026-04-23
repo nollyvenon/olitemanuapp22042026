@@ -17,4 +17,10 @@ $app->singleton(
     Illuminate\Foundation\Exceptions\Handler::class,
 );
 
+// Load and register service providers
+$config = require dirname(__DIR__) . '/config/app.php';
+foreach ($config['providers'] as $provider) {
+    $app->register($provider);
+}
+
 return $app;

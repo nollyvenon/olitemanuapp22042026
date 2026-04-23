@@ -37,3 +37,4 @@ backup_*.sql
 # redis_data/
 node_modules
 .next
+backend/storage/framework/views
