@@ -57,19 +57,6 @@ services:
       - ./backend:/app
     command: php artisan serve --host=0.0.0.0
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    environment:
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000/api/v1}
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend
-    volumes:
-      - ./frontend:/app
-
 volumes:
   postgres_data:
   redis_data:
