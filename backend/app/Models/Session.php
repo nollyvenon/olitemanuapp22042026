@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class Session extends Model {
     use HasUuids;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'user_id', 'device_id', 'access_token_hash', 'refresh_token_hash',
         'ip_address', 'location_lat', 'location_long', 'ip_city', 'ip_country',

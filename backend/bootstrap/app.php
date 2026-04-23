@@ -17,7 +17,21 @@ $app->singleton(
     Illuminate\Foundation\Exceptions\Handler::class,
 );
 
-// Load and register service providers
+// Register config repository early
+$app->singleton('config', function ($app) {
+    return new Illuminate\Config\Repository();
+});
+
+// Load all config files into the repository
+$configPath = dirname(__DIR__) . '/config';
+if (is_dir($configPath)) {
+    foreach (glob($configPath . '/*.php') as $file) {
+        $configKey = basename($file, '.php');
+        $app['config'][$configKey] = require $file;
+    }
+}
+
+// Register service providers
 $config = require dirname(__DIR__) . '/config/app.php';
 foreach ($config['providers'] as $provider) {
     $app->register($provider);

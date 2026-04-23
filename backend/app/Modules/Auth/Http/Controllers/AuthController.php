@@ -15,7 +15,8 @@ class AuthController {
             $result = $this->authService->login($request->validated());
             return response()->json($result, 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode() ?: 500);
+            $status = is_int($e->getCode()) && $e->getCode() > 0 ? $e->getCode() : 500;
+            return response()->json(['error' => $e->getMessage()], $status);
         }
     }
 

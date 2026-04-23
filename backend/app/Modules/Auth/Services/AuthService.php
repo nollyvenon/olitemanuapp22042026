@@ -18,8 +18,12 @@ class AuthService {
     public function login(array $validated): array {
         $user = User::where('email', $validated['email'])->first();
 
-        if (!$user || !Hash::check($validated['password'], $user->password_hash)) {
-            throw new \Exception('Invalid credentials', 401);
+        if (!$user) {
+            throw new \Exception('Email not found', 401);
+        }
+
+        if (!Hash::check($validated['password'], $user->password_hash)) {
+            throw new \Exception('Wrong password', 401);
         }
 
         if (!$user->is_active) {
@@ -31,8 +35,8 @@ class AuthService {
         }
 
         $device = $this->deviceService->resolveDevice(
-            $validated['device_fingerprint'],
-            $validated['user_agent'],
+            $validated['device_fingerprint'] ?? null,
+            $validated['user_agent'] ?? null,
             $user
         );
 
@@ -52,7 +56,7 @@ class AuthService {
             'location_long' => $location['long'],
             'ip_city' => $location['city'] ?? null,
             'ip_country' => $location['country'] ?? null,
-            'gps_source' => $validated['gps_source'],
+            'gps_source' => $validated['gps_source'] ?? 'ip_fallback',
             'expires_at' => now()->addHours(8),
             'is_active' => true,
         ]);
@@ -78,7 +82,7 @@ class AuthService {
     }
 
     private function resolveLocation(array $validated): array {
-        if ($validated['gps_source'] === 'gps' && isset($validated['latitude']) && isset($validated['longitude'])) {
+        if (($validated['gps_source'] ?? null) === 'gps' && isset($validated['latitude']) && isset($validated['longitude'])) {
             return [
                 'lat' => $validated['latitude'],
                 'long' => $validated['longitude'],

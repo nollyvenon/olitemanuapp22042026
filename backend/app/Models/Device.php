@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class Device extends Model {
     use HasUuids;
 
+    protected $table = 'device_registry';
     protected $fillable = ['user_id', 'fingerprint', 'user_agent', 'os', 'browser', 'first_seen_at', 'last_seen_at', 'is_trusted'];
 
     public function user(): BelongsTo {

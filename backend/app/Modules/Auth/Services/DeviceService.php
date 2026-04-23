@@ -7,9 +7,15 @@ use App\Models\User;
 use Jenssegers\Agent\Agent;
 
 class DeviceService {
-    public function resolveDevice(string $fingerprint, string $userAgent, User $user): Device {
+    public function resolveDevice(?string $fingerprint, ?string $userAgent, User $user): Device {
         $agent = new Agent();
-        $agent->setUserAgent($userAgent);
+        if ($userAgent) {
+            $agent->setUserAgent($userAgent);
+        }
+
+        if (!$fingerprint) {
+            $fingerprint = $this->generateFingerprint($userAgent);
+        }
 
         $device = Device::firstOrCreate(
             ['user_id' => $user->id, 'fingerprint' => $fingerprint],
@@ -24,5 +30,9 @@ class DeviceService {
         $device->update(['last_seen_at' => now()]);
 
         return $device;
+    }
+
+    private function generateFingerprint(?string $userAgent): string {
+        return hash('sha256', ($userAgent ?? 'unknown') . request()->ip() . now()->toDateString());
     }
 }

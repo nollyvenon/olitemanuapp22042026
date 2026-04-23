@@ -16,11 +16,11 @@ class LoginRequest extends FormRequest
         return [
             'email' => 'required|email|exists:users,email',
             'password' => 'required|string|min:8',
-            'device_fingerprint' => 'required|string|max:255',
-            'user_agent' => 'required|string',
+            'device_fingerprint' => 'nullable|string|max:255',
+            'user_agent' => 'nullable|string',
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',
-            'gps_source' => 'required|in:gps,ip_fallback,manual',
+            'gps_source' => 'nullable|in:gps,ip_fallback,manual',
         ];
     }
 }
