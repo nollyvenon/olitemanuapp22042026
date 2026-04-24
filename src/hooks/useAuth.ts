@@ -12,9 +12,19 @@ export function useAuth() {
       try {
         const api = getApiClient();
         const { data } = await api.post('/auth/login', { email, password, ...meta });
+        console.log('[Auth] Login response:', {
+          hasAccessToken: !!data.access_token,
+          hasRefreshToken: !!data.refresh_token,
+          accessTokenLength: data.access_token?.length,
+          refreshTokenLength: data.refresh_token?.length,
+          accessTokenPrefix: data.access_token?.substring(0, 50) + '...',
+        });
         setTokens(data.access_token, data.refresh_token);
         setUser(data.user as AuthUser);
         return true;
+      } catch (err) {
+        console.error('[Auth] Login failed:', err);
+        throw err;
       } finally {
         setLoading(false);
       }

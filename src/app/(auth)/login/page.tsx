@@ -57,7 +57,7 @@ export default function LoginPage() {
         user_agent: navigator.userAgent,
         ...locationRef.current,
       });
-      router.push('/overview');
+      router.push('/dashboard/overview');
     } catch (error) {
       setGlobalError(error instanceof Error ? error.message : 'Failed to log in.');
     } finally {

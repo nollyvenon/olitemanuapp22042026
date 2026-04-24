@@ -32,11 +32,24 @@ class AuthController {
 
     public function refresh(Request $request): JsonResponse {
         try {
+            \Log::info('[Auth] Refresh request received', [
+                'has_auth_header' => $request->hasHeader('Authorization'),
+                'auth_header' => $request->header('Authorization') ? 'Bearer ...' : 'missing',
+                'all_headers' => array_keys($request->headers->all()),
+            ]);
+
             $token = $this->extractToken($request);
+            \Log::info('[Auth] Token extracted successfully', ['token_length' => strlen($token)]);
+
             $result = $this->authService->refresh($token);
+            \Log::info('[Auth] Token refresh successful');
             return response()->json($result, 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 401);
+            \Log::error('[Auth] Refresh failed', [
+                'error' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ]);
+            return response()->json(['error' => $e->getMessage(), 'debug' => 'Check server logs'], 401);
         }
     }
 
@@ -50,9 +63,15 @@ class AuthController {
 
     private function extractToken(Request $request): string {
         $header = $request->header('Authorization');
+        \Log::info('[Auth] extractToken called', [
+            'has_header' => !!$header,
+            'header_starts_with_bearer' => $header ? str_starts_with($header, 'Bearer ') : false,
+            'header_preview' => $header ? substr($header, 0, 20) . '...' : 'null',
+        ]);
+
         if ($header && str_starts_with($header, 'Bearer ')) {
             return substr($header, 7);
         }
-        throw new \Exception('Token not found', 401);
+        throw new \Exception('Token not found in Authorization header', 401);
     }
 }

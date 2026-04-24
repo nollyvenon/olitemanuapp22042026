@@ -1,33 +1,62 @@
 'use client';
 
-import { useAuthStore } from '@/store/auth.store';
+import { KpiSection } from '@/components/dashboard/KpiSection';
+import { AnalyticsSection } from '@/components/dashboard/AnalyticsSection';
+import { RecentTransactions } from '@/components/dashboard/RecentTransactions';
+import { AlertsSection } from '@/components/dashboard/AlertsSection';
+import { QuickActions } from '@/components/dashboard/QuickActions';
 
 export default function DashboardPage() {
-  const { user } = useAuthStore();
-
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-gray-600 mt-2">Welcome to OMCLTA</p>
+      {/* Page header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold" style={{ color: '#0f1111' }}>Operations Dashboard</h1>
+          <p className="text-sm mt-0.5" style={{ color: '#555555' }}>Real-time manufacturing overview</p>
+        </div>
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded text-xs font-medium" style={{ background: '#e8f8f5', color: '#067d62', border: '1px solid #067d62' }}>
+          <span className="w-2 h-2 rounded-full bg-[#067d62] animate-pulse" />
+          Live
+        </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-2xl font-bold mb-4">Welcome, {user?.name}!</h2>
-        <dl className="space-y-3">
-          <div>
-            <dt className="font-semibold text-gray-700">Email</dt>
-            <dd className="text-gray-600">{user?.email}</dd>
+      {/* KPI Section */}
+      <KpiSection />
+
+      {/* Analytics Section */}
+      <AnalyticsSection />
+
+      {/* Alerts */}
+      <AlertsSection />
+
+      {/* Recent Transactions */}
+      <RecentTransactions />
+
+      {/* Bottom row */}
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
+        <div className="lg:col-span-1">
+          <QuickActions />
+        </div>
+
+        <div className="lg:col-span-2 bg-white rounded-lg overflow-hidden" style={{ border: '1px solid #d5d9d9' }}>
+          <div className="px-5 py-3 font-semibold text-sm" style={{ background: '#232f3e', color: '#FF9900' }}>System Health</div>
+          <div className="p-5 grid grid-cols-2 gap-3">
+            {[
+              { label: 'API Server', status: 'Online' },
+              { label: 'Database', status: 'Healthy' },
+              { label: 'Queue Worker', status: 'Running' },
+              { label: 'Scheduler', status: 'Active' },
+              { label: 'Storage', status: '68% used' },
+              { label: 'Cache', status: 'Warm' },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center justify-between p-3 rounded" style={{ background: '#f4f6f8' }}>
+                <span className="text-sm" style={{ color: '#555555' }}>{item.label}</span>
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: '#e8f8f5', color: '#067d62' }}>{item.status}</span>
+              </div>
+            ))}
           </div>
-          <div>
-            <dt className="font-semibold text-gray-700">Permissions</dt>
-            <dd className="text-gray-600">{user?.permissions?.join(', ') || 'None'}</dd>
-          </div>
-          <div>
-            <dt className="font-semibold text-gray-700">Groups</dt>
-            <dd className="text-gray-600">{user?.groups?.map((g: any) => g.name).join(', ') || 'None'}</dd>
-          </div>
-        </dl>
+        </div>
       </div>
     </div>
   );

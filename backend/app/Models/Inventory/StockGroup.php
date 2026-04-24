@@ -1,1 +1,1 @@
-<?php namespace App\Models\Inventory; use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\SoftDeletes; class StockGroup extends Model { use SoftDeletes; protected $keyType='string'; public $incrementing=false; protected $fillable=['*']; }
+<?php namespace App\Models\Inventory; use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\SoftDeletes; use Illuminate\Database\Eloquent\Concerns\HasUuids; class StockGroup extends Model { use SoftDeletes, HasUuids; protected $fillable=['*']; }

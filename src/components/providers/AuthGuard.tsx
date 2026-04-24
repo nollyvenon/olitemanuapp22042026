@@ -7,15 +7,15 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuthStore();
+  const { isAuthenticated, isLoading, isHydrated } = useAuthStore();
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (isHydrated && !isAuthenticated) {
       router.push('/login');
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, isHydrated, router]);
 
-  if (isLoading || !isAuthenticated) {
+  if (!isHydrated || isLoading || !isAuthenticated) {
     return (
       <div className="flex h-screen items-center justify-center bg-background">
         <div className="w-full max-w-2xl space-y-4 p-8">

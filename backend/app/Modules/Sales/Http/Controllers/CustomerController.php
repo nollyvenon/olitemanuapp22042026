@@ -33,10 +33,11 @@ class CustomerController {
                 'country' => 'nullable|string',
             ]);
 
-            $customer = Customer::create([...$validated, 'created_by' => $request->authUser->sub]);
+            $authUser = $request->attributes->get('authUser');
+            $customer = Customer::create([...$validated, 'created_by' => $authUser?->sub ?? $authUser['sub'] ?? null]);
 
             $this->auditService->log([
-                'user_id' => $request->authUser->sub,
+                'user_id' => $authUser?->sub ?? $authUser['sub'] ?? null,
                 'action_type' => 'CREATE',
                 'entity_type' => 'customers',
                 'entity_id' => $customer->id,
@@ -68,8 +69,9 @@ class CustomerController {
 
             $customer->update($validated);
 
+            $authUser = $request->attributes->get('authUser');
             $this->auditService->log([
-                'user_id' => $request->authUser->sub,
+                'user_id' => $authUser?->sub ?? $authUser['sub'] ?? null,
                 'action_type' => 'UPDATE',
                 'entity_type' => 'customers',
                 'entity_id' => $id,

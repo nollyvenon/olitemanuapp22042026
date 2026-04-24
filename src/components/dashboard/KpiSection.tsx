@@ -1,6 +1,6 @@
 'use client';
 
-import { DollarSign, TrendingUp, FileText, Package } from 'lucide-react';
+import { DollarSign, TrendingUp, FileText, Package, Users, AlertCircle } from 'lucide-react';
 import { KpiCard } from './KpiCard';
 
 const KPI_DATA = [
@@ -44,6 +44,26 @@ const KPI_DATA = [
     href: '/dashboard/inventory/items',
     subLabel: '856 SKUs across 4 stores',
   },
+  {
+    title: 'Active Customers',
+    value: 247,
+    format: 'number' as const,
+    change: 5.8,
+    icon: Users,
+    accentColor: '#8d6e63',
+    href: '/dashboard/customers',
+    subLabel: '18 new this month',
+  },
+  {
+    title: 'Low Stock Items',
+    value: 24,
+    format: 'number' as const,
+    change: -12.3,
+    icon: AlertCircle,
+    accentColor: '#c45500',
+    href: '/dashboard/inventory/items',
+    subLabel: 'Below reorder level',
+  },
 ];
 
 interface KpiSectionProps {
@@ -65,7 +85,7 @@ export function KpiSection({ isLoading }: KpiSectionProps) {
         </span>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         {KPI_DATA.map((kpi) => (
           <KpiCard key={kpi.title} {...kpi} isLoading={isLoading} />
         ))}

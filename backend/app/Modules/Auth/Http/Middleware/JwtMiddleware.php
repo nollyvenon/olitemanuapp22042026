@@ -15,14 +15,35 @@ class JwtMiddleware
         $token = $this->extractToken($request);
 
         if (!$token) {
+            \Log::error('[JWT] Token not provided', [
+                'url' => $request->url(),
+                'headers' => $request->headers->all(),
+            ]);
             return response()->json(['error' => 'Token not provided'], 401);
         }
 
         try {
+            \Log::info('[JWT] Attempting to decode token', [
+                'tokenPrefix' => substr($token, 0, 20) . '...',
+                'tokenLength' => strlen($token),
+            ]);
             $decoded = $this->jwtService->decode($token);
-            $request->attributes->set('authUser', $decoded);
+            \Log::info('[JWT] Token decoded successfully', [
+                'sub' => $decoded->sub ?? 'unknown',
+                'type' => $decoded->type ?? 'unknown',
+            ]);
+            $authUser = (object)$decoded;
+            $request->attributes->set('authUser', $authUser);
+            $request->authUser = $authUser;
             return $next($request);
         } catch (\Exception $e) {
+            \Log::error('[JWT] Token validation failed', [
+                'error' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'tokenPrefix' => substr($token, 0, 20) . '...',
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
             return response()->json(['error' => 'Invalid token: ' . $e->getMessage()], 401);
         }
     }

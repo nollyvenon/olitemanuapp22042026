@@ -16,9 +16,16 @@ function createApiClient(): AxiosInstance {
 
   // Request interceptor: inject Bearer token
   client.interceptors.request.use((config) => {
-    const { accessToken } = useAuthStore.getState();
+    const { accessToken, isAuthenticated } = useAuthStore.getState();
+    console.log(`[API] ${config.method?.toUpperCase()} ${config.url}`, {
+      hasToken: !!accessToken,
+      isAuthenticated,
+      tokenPrefix: accessToken ? accessToken.substring(0, 20) + '...' : 'none',
+    });
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
+    } else {
+      console.warn(`[API] No access token found for ${config.url}`);
     }
     return config;
   });
@@ -30,28 +37,47 @@ function createApiClient(): AxiosInstance {
       const originalRequest = error.config;
       if (!originalRequest) return Promise.reject(error);
 
+      console.log(`[API] Response error:`, {
+        status: error.response?.status,
+        url: originalRequest.url,
+        hasRetry: '_retry' in originalRequest,
+      });
+
       // If 401 and not yet retried
-      if (error.response?.status === 401 && !('_retry' in originalRequest)) {
+      /*if (error.response?.status === 401 && !('_retry' in originalRequest)) {
         (originalRequest as any)._retry = true;
+        console.log('[API] Attempting token refresh...');
 
         try {
           // Prevent multiple refresh calls
           if (!refreshPromise) {
-            const { refreshToken } = useAuthStore.getState();
+            const { refreshToken, isAuthenticated } = useAuthStore.getState();
+            console.log('[API] Refresh state:', { hasRefreshToken: !!refreshToken, isAuthenticated });
+
             if (!refreshToken) {
-              throw new Error('No refresh token');
+              throw new Error('No refresh token available');
             }
 
             refreshPromise = (async () => {
-              const { data } = await axios.post(
-                `${API_BASE_URL}/auth/refresh`,
-                { refresh_token: refreshToken },
-                { headers: { 'Content-Type': 'application/json' } }
-              );
-              const newAccessToken = data.access_token;
-              const { setTokens } = useAuthStore.getState();
-              setTokens(newAccessToken, data.refresh_token || refreshToken);
-              return newAccessToken;
+              try {
+                console.log('[API] Sending refresh request...');
+                const { data } = await axios.post(
+                  `${API_BASE_URL}/auth/refresh`,
+                  {},
+                  { headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${refreshToken}`
+                  } }
+                );
+                console.log('[API] Refresh successful');
+                const newAccessToken = data.access_token;
+                const { setTokens } = useAuthStore.getState();
+                setTokens(newAccessToken, data.refresh_token || refreshToken);
+                return newAccessToken;
+              } catch (err) {
+                console.error('[API] Refresh failed:', err);
+                throw err;
+              }
             })();
           }
 
@@ -59,16 +85,18 @@ function createApiClient(): AxiosInstance {
           refreshPromise = null;
 
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          console.log('[API] Retrying original request...');
           return client(originalRequest);
         } catch (refreshError) {
           // Refresh failed - logout
+          console.error('[API] Token refresh failed, logging out:', refreshError);
           useAuthStore.getState().logout();
           if (typeof window !== 'undefined') {
             window.location.href = '/login';
           }
           return Promise.reject(refreshError);
         }
-      }
+      }*/
 
       return Promise.reject(error);
     }

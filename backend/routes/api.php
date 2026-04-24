@@ -23,6 +23,7 @@ use App\Modules\Notifications\Http\Controllers\NotificationController;
 use App\Modules\MarketIntelligence\Http\Controllers\MarketIntelligenceController;
 use App\Modules\MarketIntelligence\Http\Controllers\MarketPlanController;
 use App\Modules\Reporting\Http\Controllers\InventoryReportController;
+use App\Modules\Settings\Http\Controllers\SettingsController;
 use App\Modules\GodAdmin\Http\Controllers\GodAdminController;
 use Illuminate\Support\Facades\Route;
 
@@ -129,6 +130,10 @@ Route::prefix('v1')->group(function () {
         Route::get('inventory-reports/outwards', [InventoryReportController::class, 'outwards']);
         Route::get('inventory-reports/closing', [InventoryReportController::class, 'closing']);
         Route::post('inventory-reports/export', [InventoryReportController::class, 'exportReport']);
+
+        Route::get('settings', [SettingsController::class, 'index']);
+        Route::post('settings', [SettingsController::class, 'store']);
+        Route::put('settings', [SettingsController::class, 'update']);
 
         Route::prefix('god-admin')->middleware('god_admin')->group(function () {
             Route::post('override', [GodAdminController::class, 'override']);

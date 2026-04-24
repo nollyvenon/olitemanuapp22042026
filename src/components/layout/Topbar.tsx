@@ -39,13 +39,11 @@ export function Topbar() {
         </button>
 
         <DropdownMenu>
-          <DropdownMenuTrigger>
-            <button className="flex items-center gap-2 px-3 py-1.5 rounded hover:bg-[#37475a] transition-colors">
-              <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: '#FF9900', color: '#0f1111' }}>
-                {initials}
-              </div>
-              {user?.name && <span className="hidden sm:block text-sm font-medium text-white max-w-[120px] truncate">{user.name}</span>}
-            </button>
+          <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1.5 rounded hover:bg-[#37475a] transition-colors">
+            <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: '#FF9900', color: '#0f1111' }}>
+              {initials}
+            </div>
+            {user?.name && <span className="hidden sm:block text-sm font-medium text-white max-w-[120px] truncate">{user.name}</span>}
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56" style={{ background: '#232f3e', border: '1px solid #37475a' }}>
             <div className="px-2 py-2">

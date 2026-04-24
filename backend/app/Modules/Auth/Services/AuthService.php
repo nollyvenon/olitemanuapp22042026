@@ -135,32 +135,43 @@ class AuthService {
     }
 
     public function refresh(string $token): array {
-        try {
-            $decoded = $this->jwtService->decode($token);
+        $decoded = $this->jwtService->decode($token);
 
-            if ($decoded->type !== 'refresh') {
-                throw new \Exception('Invalid token type', 401);
-            }
-
-            $user = User::findOrFail($decoded->sub);
-
-            if (!$user->is_active) {
-                throw new \Exception('Account is inactive', 403);
-            }
-
-            $device = app(\App\Models\Device::class)->find($decoded->device_id);
-            $location = ['lat' => $decoded->locations[0]['lat'] ?? 0, 'long' => $decoded->locations[0]['long'] ?? 0];
-
-            $newPayload = $this->buildPayload($user, $device, $location);
-            $accessToken = $this->jwtService->generateAccessToken($newPayload);
-
-            return [
-                'access_token' => $accessToken,
-                'refresh_token' => $token,
-                'user' => $user->toArray(),
-            ];
-        } catch (\Exception $e) {
-            throw new \Exception('Token refresh failed: ' . $e->getMessage(), 401);
+        if ($decoded->type !== 'refresh') {
+            throw new \Exception('Invalid token type', 401);
         }
+
+        $user = User::findOrFail($decoded->sub);
+
+        if (!$user->is_active) {
+            throw new \Exception('Account is inactive', 403);
+        }
+
+        $device = app(\App\Models\Device::class)->find($decoded->device_id ?? null);
+
+        if (!$device) {
+            throw new \Exception('Device not found', 401);
+        }
+
+        // Safely extract location from decoded token
+        // JWT::decode() returns nested objects as stdClass, so use object notation
+        $decodedLocations = $decoded->locations ?? [];
+        $firstLocation = is_array($decodedLocations) && count($decodedLocations) > 0 ? $decodedLocations[0] : null;
+        $location = [
+            'lat' => $firstLocation->lat ?? 0,
+            'long' => $firstLocation->long ?? 0,
+            'city' => $firstLocation->city ?? null,
+            'country' => $firstLocation->country ?? null,
+            'source' => 'refresh',
+        ];
+
+        $newPayload = $this->buildPayload($user, $device, $location);
+        $accessToken = $this->jwtService->generateAccessToken($newPayload);
+
+        return [
+            'access_token' => $accessToken,
+            'refresh_token' => $token,
+            'user' => $user->toArray(),
+        ];
     }
 }

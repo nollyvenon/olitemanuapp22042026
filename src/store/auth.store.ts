@@ -32,6 +32,7 @@ interface AuthState {
   deviceId: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+  isHydrated: boolean;
 
   setTokens: (accessToken: string, refreshToken: string) => void;
   setUser: (user: AuthUser) => void;
@@ -39,6 +40,7 @@ interface AuthState {
   setLoading: (isLoading: boolean) => void;
   logout: () => void;
   hasPermission: (permission: string) => boolean;
+  setHydrated: (hydrated: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -50,24 +52,40 @@ export const useAuthStore = create<AuthState>()(
       deviceId: null,
       isLoading: false,
       isAuthenticated: false,
+      isHydrated: false,
 
-      setTokens: (accessToken, refreshToken) =>
-        set({ accessToken, refreshToken, isAuthenticated: true }),
+      setTokens: (accessToken, refreshToken) => {
+        console.log('[AuthStore] setTokens called', {
+          hasAccessToken: !!accessToken,
+          hasRefreshToken: !!refreshToken,
+          accessTokenLength: accessToken?.length,
+        });
+        set({ accessToken, refreshToken, isAuthenticated: true });
+      },
 
-      setUser: (user) => set({ user }),
+      setUser: (user) => {
+        console.log('[AuthStore] setUser called', { userId: user?.id });
+        set({ user });
+      },
 
       setDeviceId: (deviceId) => set({ deviceId }),
 
-      setLoading: (isLoading) => set({ isLoading }),
+      setLoading: (isLoading) => {
+        console.log('[AuthStore] setLoading', isLoading);
+        set({ isLoading });
+      },
 
-      logout: () =>
+      logout: () => {
+        console.log('[AuthStore] logout called');
+        console.trace('logout stacktrace');
         set({
           accessToken: null,
           refreshToken: null,
           user: null,
           deviceId: null,
           isAuthenticated: false,
-        }),
+        });
+      },
 
       hasPermission: (permission: string): boolean => {
         const { user } = get();
@@ -80,6 +98,11 @@ export const useAuthStore = create<AuthState>()(
           )
         );
       },
+
+      setHydrated: (hydrated: boolean) => {
+        console.log('[AuthStore] setHydrated', hydrated);
+        set({ isHydrated: hydrated });
+      },
     }),
     {
       name: 'omclta-auth',
@@ -91,6 +114,17 @@ export const useAuthStore = create<AuthState>()(
         deviceId: state.deviceId,
         isAuthenticated: state.isAuthenticated,
       }),
+      onRehydrateStorage: () => {
+        return (state) => {
+          if (state) {
+            console.log('[AuthStore] Hydration complete', {
+              hasAccessToken: !!state.accessToken,
+              isAuthenticated: state.isAuthenticated,
+            });
+            state.setHydrated(true);
+          }
+        };
+      },
     }
   )
 );
