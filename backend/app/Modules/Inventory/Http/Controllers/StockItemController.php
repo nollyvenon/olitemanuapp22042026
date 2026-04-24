@@ -13,7 +13,7 @@ class StockItemController {
         return response()->json(StockItem::create([...$v, 'created_by' => $request->authUser->sub]), 201);
     }
     public function show(string $id): JsonResponse {
-        return response()->json(StockItem::with('ledgers.location')->findOrFail($id));
+        return response()->json(StockItem::with('group', 'ledgers.location')->findOrFail($id));
     }
     public function update(Request $request, string $id): JsonResponse {
         $item = StockItem::findOrFail($id);

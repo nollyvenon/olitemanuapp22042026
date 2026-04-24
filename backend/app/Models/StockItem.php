@@ -6,6 +6,9 @@ class StockItem extends Model {
     protected $fillable = ['group_id', 'sku', 'name', 'description', 'unit_cost', 'reorder_level', 'unit', 'is_active', 'created_by'];
     protected $casts = ['unit_cost' => 'decimal:2', 'reorder_level' => 'decimal:2'];
     public function group() { return $this->belongsTo(StockGroup::class); }
-    public function ledgers() { return $this->hasMany(StockLedger::class); }
-    public function journals() { return $this->hasMany(StockJournal::class); }
+    public function ledgers() { return $this->hasMany(StockLedger::class, 'item_id'); }
+    public function journals() { return $this->hasMany(StockJournal::class, 'item_id'); }
+    public function getTotalStock() {
+        return $this->ledgers->sum('quantity');
+    }
 }

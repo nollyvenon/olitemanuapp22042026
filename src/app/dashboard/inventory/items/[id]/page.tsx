@@ -13,9 +13,15 @@ interface InventoryItem {
   sku: string;
   name: string;
   unit?: string;
-  unit_cost?: number;
+  unit_cost?: number | string;
   reorder_level?: number;
   is_active?: boolean;
+  group?: {
+    id: string;
+    name: string;
+    category_id?: string;
+  };
+  category_name?: string;
 }
 
 interface StockBalance {
@@ -40,12 +46,25 @@ export default function ItemDetailPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const [itemRes, balanceRes] = await Promise.all([
+        const [itemRes, balanceRes, catsRes] = await Promise.all([
           api.get(`/stock/items/${id}`),
           api.get(`/stock/ledger/${id}/balance`),
+          api.get(`/stock/categories`),
         ]);
         const itemData = itemRes.data.data || itemRes.data;
-        setItem(itemData);
+
+        // Find category name from groups
+        const catsList = Array.isArray(catsRes.data) ? catsRes.data : catsRes.data.data ?? [];
+        let categoryName = '';
+        catsList.forEach((cat: any) => {
+          if (cat.groups && Array.isArray(cat.groups)) {
+            const matchingGroup = cat.groups.find((g: any) => g.id === itemData.group_id);
+            if (matchingGroup) categoryName = cat.name;
+          }
+        });
+
+        const itemWithCategory = { ...itemData, category_name: categoryName };
+        setItem(itemWithCategory);
         setForm({ name: itemData.name, unit_cost: String(itemData.unit_cost || ''), reorder_level: String(itemData.reorder_level || '') });
         const balancesList = Array.isArray(balanceRes.data) ? balanceRes.data : balanceRes.data.data || [];
         setBalances(balancesList);
@@ -94,19 +113,27 @@ export default function ItemDetailPage() {
         <h2 className="font-bold">Item Information</h2>
         {!editing ? (
           <>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-4 gap-4">
+              <div>
+                <p className="text-xs text-gray-600 font-semibold">Category</p>
+                <p className="text-sm font-medium mt-1">{item.category_name || '—'}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-600 font-semibold">Group</p>
+                <p className="text-sm font-medium mt-1">{item.group?.name || '—'}</p>
+              </div>
               <div>
                 <p className="text-xs text-gray-600 font-semibold">Unit</p>
                 <p className="text-sm font-medium mt-1">{item.unit || '—'}</p>
               </div>
               <div>
                 <p className="text-xs text-gray-600 font-semibold">Unit Cost</p>
-                <p className="text-sm font-medium mt-1">${item.unit_cost?.toFixed(2) || '0.00'}</p>
+                <p className="text-sm font-medium mt-1">${typeof item.unit_cost === 'string' ? parseFloat(item.unit_cost).toFixed(2) : (item.unit_cost?.toFixed(2) || '0.00')}</p>
               </div>
-              <div>
-                <p className="text-xs text-gray-600 font-semibold">Reorder Level</p>
-                <p className="text-sm font-medium mt-1">{item.reorder_level || '—'}</p>
-              </div>
+            </div>
+            <div>
+              <p className="text-xs text-gray-600 font-semibold">Reorder Level</p>
+              <p className="text-sm font-medium mt-1">{item.reorder_level || '—'}</p>
             </div>
             <Button onClick={() => setEditing(true)} variant="outline" className="w-full">
               Edit

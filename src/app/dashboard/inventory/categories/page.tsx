@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import type { ColumnDef, SortingState } from '@tanstack/react-table';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { DataTable } from '@/components/data-table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -11,20 +12,36 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { PermissionGuard } from '@/components/shared/PermissionGuard';
 import { getApiClient } from '@/lib/api-client';
 
-interface Category {
+interface StockGroup {
   id: string;
   name: string;
   description?: string;
 }
 
+interface Category {
+  id: string;
+  name: string;
+  description?: string;
+  groups?: StockGroup[];
+}
+
 const columns: ColumnDef<Category>[] = [
   { accessorKey: 'name', header: 'Name', cell: i => <span className="font-medium text-sm">{String(i.getValue())}</span> },
   { accessorKey: 'description', header: 'Description', cell: i => <span className="text-sm text-gray-600">{String(i.getValue() || '—')}</span> },
+  {
+    id: 'groups',
+    header: 'Groups',
+    cell: i => {
+      const cat = i.row.original;
+      return <span className="text-sm">{cat.groups?.length || 0} groups</span>;
+    }
+  },
 ];
 
 export default function CategoriesPage() {
   const api = getApiClient();
   const [categories, setCategories] = useState<Category[]>([]);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -78,7 +95,41 @@ export default function CategoriesPage() {
           </PermissionGuard>
         }
       />
-      <DataTable columns={columns} data={categories} sorting={sorting} onSortingChange={setSorting} />
+
+      <div className="border rounded-lg overflow-hidden">
+        {categories.map(cat => (
+          <div key={cat.id}>
+            <div
+              className="flex items-center gap-3 p-4 border-b bg-gray-50 cursor-pointer hover:bg-gray-100"
+              onClick={() => setExpandedId(expandedId === cat.id ? null : cat.id)}
+            >
+              <div className="w-6 h-6 flex items-center justify-center">
+                {cat.groups && cat.groups.length > 0 && (
+                  expandedId === cat.id ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />
+                )}
+              </div>
+              <div className="flex-1">
+                <p className="font-medium text-sm">{cat.name}</p>
+                <p className="text-xs text-gray-600">{cat.description || '—'}</p>
+              </div>
+              <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">{cat.groups?.length || 0} groups</span>
+            </div>
+
+            {expandedId === cat.id && cat.groups && cat.groups.length > 0 && (
+              <div className="bg-white">
+                {cat.groups.map(group => (
+                  <div key={group.id} className="flex items-center gap-3 p-4 pl-12 border-b text-sm hover:bg-gray-50">
+                    <div className="flex-1">
+                      <p className="font-medium">{group.name}</p>
+                      <p className="text-xs text-gray-600">{group.description || '—'}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>

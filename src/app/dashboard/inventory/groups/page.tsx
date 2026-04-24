@@ -14,11 +14,10 @@ import { getApiClient } from '@/lib/api-client';
 
 interface ItemGroup {
   id: string;
-  code: string;
   name: string;
-  category: string;
-  item_count: number;
-  status: string;
+  description?: string;
+  category_id?: string;
+  category_name?: string;
 }
 
 interface Category {
@@ -27,11 +26,9 @@ interface Category {
 }
 
 const columns: ColumnDef<ItemGroup>[] = [
-  { accessorKey: 'code',       header: 'Code',       cell: i => <span className="font-mono text-xs font-semibold" style={{ color: '#146eb4' }}>{String(i.getValue())}</span> },
-  { accessorKey: 'name',       header: 'Group Name', cell: i => <span className="font-medium text-sm" style={{ color: '#0f1111' }}>{String(i.getValue())}</span> },
-  { accessorKey: 'category',   header: 'Category',   cell: i => <span className="text-sm" style={{ color: '#555555' }}>{String(i.getValue())}</span> },
-  { accessorKey: 'item_count', header: 'Items',      cell: i => <span className="font-bold tabular-nums">{String(i.getValue())}</span> },
-  { accessorKey: 'status',     header: 'Status',     cell: i => <StatusBadge status={String(i.getValue())} /> },
+  { accessorKey: 'category_name', header: 'Category',   cell: i => <span className="text-sm" style={{ color: '#555555' }}>{String(i.getValue())}</span> },
+  { accessorKey: 'name',          header: 'Group Name', cell: i => <span className="font-medium text-sm" style={{ color: '#0f1111' }}>{String(i.getValue())}</span> },
+  { accessorKey: 'description',   header: 'Description', cell: i => <span className="text-sm text-gray-600">{String(i.getValue() || '—')}</span> },
 ];
 
 export default function GroupsPage() {
@@ -51,13 +48,17 @@ export default function GroupsPage() {
         const catsList = Array.isArray(catsRes.data) ? catsRes.data : catsRes.data.data ?? [];
         setCategories(catsList);
 
-        // Extract groups from categories
+        // Extract groups from categories and add category name
         const allGroups: ItemGroup[] = [];
         catsList.forEach((cat: any) => {
           if (cat.groups && Array.isArray(cat.groups)) {
-            allGroups.push(...cat.groups);
+            allGroups.push(...cat.groups.map((g: any) => {
+              console.log('[Groups] Group data:', { group: g, categoryName: cat.name, categoryId: cat.id });
+              return { ...g, category_name: cat.name, category_id: cat.id };
+            }));
           }
         });
+        console.log('[Groups] Final groups:', allGroups);
         setGroups(allGroups);
       } catch (err) {
         console.error('Failed to load groups', err);
@@ -77,8 +78,14 @@ export default function GroupsPage() {
       setOpen(false);
       setForm({ name: '', category_id: '', description: '' });
       const { data } = await api.get('/stock/categories');
-      const groupsList = Array.isArray(data) ? data : data.data ?? [];
-      setGroups(groupsList);
+      const catsList = Array.isArray(data) ? data : data.data ?? [];
+      const allGroups: ItemGroup[] = [];
+      catsList.forEach((cat: any) => {
+        if (cat.groups && Array.isArray(cat.groups)) {
+          allGroups.push(...cat.groups.map((g: any) => ({ ...g, category_name: cat.name, category_id: cat.id })));
+        }
+      });
+      setGroups(allGroups);
     } catch (err) {
       console.error('Failed to create group', err);
     } finally {
