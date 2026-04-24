@@ -1,9 +1,10 @@
 export async function generateDeviceFingerprint(): Promise<string> {
+  const nav = navigator as any;
   const components = [
     navigator.userAgent,
     navigator.language,
     navigator.hardwareConcurrency?.toString() || '',
-    navigator.deviceMemory?.toString() || '',
+    nav.deviceMemory?.toString() || '',
     navigator.maxTouchPoints?.toString() || '',
     screen.width + 'x' + screen.height,
     screen.colorDepth.toString(),

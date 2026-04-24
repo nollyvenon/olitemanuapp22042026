@@ -3,13 +3,13 @@ export async function apiCall(
   options: RequestInit = {},
   token?: string
 ): Promise<Response> {
-  const headers: HeadersInit = {
+  const headers = new Headers({
     'Content-Type': 'application/json',
-    ...options.headers,
-  };
+    ...(options.headers ? (options.headers instanceof Headers ? Object.fromEntries(options.headers) : options.headers) : {}),
+  } as Record<string, string>);
 
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers.set('Authorization', `Bearer ${token}`);
   }
 
   const url = `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`;

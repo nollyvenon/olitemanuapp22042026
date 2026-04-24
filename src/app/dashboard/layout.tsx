@@ -32,7 +32,7 @@ export default function DashboardLayout({
   };
 
   const navItems = [
-    { label: 'Dashboard', href: '/dashboard', icon: '📊', permission: null },
+    { label: 'Dashboard', href: '/dashboard', icon: '📊', permission: undefined },
     { label: 'Sales Orders', href: '/dashboard/sales', icon: '📈', permission: 'sales.' },
     { label: 'Inventory', href: '/dashboard/inventory', icon: '📦', permission: 'inventory.' },
     { label: 'Accounts', href: '/dashboard/accounts', icon: '💰', permission: 'accounts.' },
@@ -47,20 +47,16 @@ export default function DashboardLayout({
           <h1 className="text-2xl font-bold text-gray-900">OMCLTA</h1>
         </div>
         <nav className="p-4 space-y-1">
-          {navItems.map((item) => {
-            if (!hasPermission(item.permission)) return null;
-
-            return (
-              <button
-                key={item.href}
-                onClick={() => router.push(item.href)}
-                className="w-full text-left px-4 py-2 rounded-md text-gray-700 hover:bg-gray-100 flex items-center gap-3 transition-colors"
-              >
-                <span>{item.icon}</span>
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
+          {navItems.filter(item => hasPermission(item.permission)).map((item) => (
+            <button
+              key={item.href}
+              onClick={() => router.push(item.href)}
+              className="w-full text-left px-4 py-2 rounded-md text-gray-700 hover:bg-gray-100 flex items-center gap-3 transition-colors"
+            >
+              <span>{item.icon}</span>
+              <span>{item.label}</span>
+            </button>
+          ))}
         </nav>
         <div className="absolute bottom-4 left-4 right-4 w-56">
           <button

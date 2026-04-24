@@ -74,4 +74,29 @@ class TerritoryController {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function destroy(Request $request, string $id): JsonResponse {
+        try {
+            $territory = Territory::with('ledgers')->findOrFail($id);
+
+            if ($territory->ledgers()->exists()) {
+                return response()->json(['error' => 'Cannot delete territory with linked ledger accounts'], 422);
+            }
+
+            $before = $territory->toArray();
+            $territory->delete();
+
+            $this->auditService->log([
+                'user_id' => $request->authUser->sub,
+                'action_type' => 'DELETE',
+                'entity_type' => 'territories',
+                'entity_id' => $id,
+                'before_snapshot' => $before,
+            ]);
+
+            return response()->noContent();
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }

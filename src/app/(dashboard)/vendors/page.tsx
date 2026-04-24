@@ -1,14 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button-system';
-import { Card } from '@/components/ui/card-system';
-import { useApi } from '@/hooks/useApi';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { getApiClient } from '@/lib/api-client';
 import Link from 'next/link';
 
 export default function VendorsPage() {
   const [vendors, setVendors] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const api = useApi();
+  const api = getApiClient();
 
   useEffect(() => {
     const load = async () => {

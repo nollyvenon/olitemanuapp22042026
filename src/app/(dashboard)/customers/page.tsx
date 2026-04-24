@@ -3,11 +3,11 @@
 // @ts-nocheck
 import { useState, useEffect } from 'react';
 // @ts-nocheck
-import { Button } from '@/components/ui/button-system';
+import { Button } from '@/components/ui/button';
 // @ts-nocheck
-import { Card } from '@/components/ui/card-system';
+import { Card } from '@/components/ui/card';
 // @ts-nocheck
-import { useApi } from '@/hooks/useApi';
+import { getApiClient } from '@/lib/api-client';
 // @ts-nocheck
 import Link from 'next/link';
 // @ts-nocheck
@@ -19,7 +19,7 @@ export default function CustomersPage() {
 // @ts-nocheck
   const [loading, setLoading] = useState(true);
 // @ts-nocheck
-  const api = useApi();
+  const api = getApiClient();
 // @ts-nocheck
 
 // @ts-nocheck

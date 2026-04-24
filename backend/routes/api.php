@@ -88,7 +88,7 @@ Route::prefix('v1')->group(function () {
         Route::get('price-lists/{id}', [PriceListController::class, 'show']);
         Route::post('price-lists/{id}/activate', [PriceListController::class, 'activate']);
 
-        Route::apiResource('territories', TerritoryController::class)->except(['destroy']);
+        Route::apiResource('territories', TerritoryController::class);
 
         Route::get('kyc', [KycController::class, 'index']);
         Route::post('kyc', [KycController::class, 'store']);

@@ -1,9 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button-system';
-import { Card } from '@/components/ui/card-system';
-import { Input } from '@/components/ui/input-system';
-import { useApi } from '@/hooks/useApi';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { getApiClient } from '@/lib/api-client';
 import Link from 'next/link';
 
 export default function MovementsPage() {
@@ -17,7 +17,7 @@ export default function MovementsPage() {
     item_id: '',
     store_center_id: '',
   });
-  const api = useApi();
+  const api = getApiClient();
 
   useEffect(() => {
     const load = async () => {

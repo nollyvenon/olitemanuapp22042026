@@ -7,13 +7,13 @@ import { useState, useEffect } from 'react';
 // @ts-nocheck
 import { useForm } from 'react-hook-form';
 // @ts-nocheck
-import { Button } from '@/components/ui/button-system';
+import { Button } from '@/components/ui/button';
 // @ts-nocheck
-import { Input } from '@/components/ui/input-system';
+import { Input } from '@/components/ui/input';
 // @ts-nocheck
-import { Card } from '@/components/ui/card-system';
+import { Card } from '@/components/ui/card';
 // @ts-nocheck
-import { useApi } from '@/hooks/useApi';
+import { getApiClient } from '@/lib/api-client';
 // @ts-nocheck
 
 // @ts-nocheck
@@ -35,7 +35,7 @@ export function StockMovementForm({ type, onSuccess }: StockMovementFormProps) {
 // @ts-nocheck
   const [centers, setCenters] = useState<any[]>([]);
 // @ts-nocheck
-  const api = useApi();
+  const api = getApiClient();
 // @ts-nocheck
   const { register, handleSubmit } = useForm();
 // @ts-nocheck

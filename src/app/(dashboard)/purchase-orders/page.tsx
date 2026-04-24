@@ -1,6 +1,6 @@
 'use client';
-import { Button } from '@/components/ui/button-system';
-import { Card } from '@/components/ui/card-system';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 export default function PurchaseOrdersPage() {
 

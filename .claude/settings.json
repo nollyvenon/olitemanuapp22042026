@@ -70,7 +70,11 @@
       "Bash(curl -v -X POST http://localhost:8000/api/v1/auth/login -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{\"email\":\"superadmin@omclta.com\",\"password\":\"Admin@123456\",\"device_fingerprint\":null,\"user_agent\":null,\"latitude\":null,\"longitude\":null,\"gps_source\":null}')",
       "Bash(cd c:\\\\\\\\Files\\\\\\\\DevelopedApps\\\\\\\\olitemanuapp_21042026\\\\\\\\backend)",
       "Read(//mnt/c/Files/DevelopedApps/olitemanuapp_21042026/**)",
-      "PowerShell(\"Removed duplicate migration\")"
+      "PowerShell(\"Removed duplicate migration\")",
+      "Bash(xargs sed *)",
+      "Bash(npm start *)",
+      "Bash(lsof -ti:3000)",
+      "Bash(curl -s http://localhost:8000)"
     ],
     "additionalDirectories": [
       "c:\\Files\\DevelopedApps\\OMCLTA",

@@ -1,16 +1,16 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button-system';
-import { Card } from '@/components/ui/card-system';
-import { Input } from '@/components/ui/input-system';
-import { useApi } from '@/hooks/useApi';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { getApiClient } from '@/lib/api-client';
 import Link from 'next/link';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const api = useApi();
+  const api = getApiClient();
 
   useEffect(() => {
     const load = async () => {

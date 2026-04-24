@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card-system';
-import { Button } from '@/components/ui/button-system';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs-system';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface Plan {
   id: string;

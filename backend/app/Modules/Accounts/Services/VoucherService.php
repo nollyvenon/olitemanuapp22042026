@@ -41,6 +41,7 @@ class VoucherService {
             [$debitSide, $creditSide] = $this->resolveSides($data['type'], $ledger->type);
 
             LedgerEntry::create(['voucher_id' => $voucher->id, 'ledger_id' => $ledger->id, 'side' => $debitSide, 'amount' => $data['amount'], 'description' => $data['notes'] ?? $data['type'], 'created_at' => now()]);
+            LedgerEntry::create(['voucher_id' => $voucher->id, 'ledger_id' => $ledger->id, 'side' => $creditSide, 'amount' => $data['amount'], 'description' => $data['notes'] ?? $data['type'], 'created_at' => now()]);
 
             $this->updateBalance($ledger, $data['amount'], $data['type']);
 
