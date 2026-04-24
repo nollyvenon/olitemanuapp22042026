@@ -33,10 +33,12 @@ class AuthSeeder extends Seeder {
             ['name' => 'groups.create', 'module' => 'auth'],
             ['name' => 'groups.update', 'module' => 'auth'],
             ['name' => 'admin.*', 'module' => 'admin'],
+            ['name' => 'sales.*', 'module' => 'sales'],
             ['name' => 'sales.orders.*', 'module' => 'sales'],
             ['name' => 'sales.invoices.read', 'module' => 'sales'],
             ['name' => 'inventory.*', 'module' => 'inventory'],
             ['name' => 'accounts.*', 'module' => 'accounts'],
+            ['name' => 'reports.*', 'module' => 'reports'],
             ['name' => 'kyc.*', 'module' => 'kyc'],
         ];
         foreach ($perms as $perm) {
@@ -45,31 +47,40 @@ class AuthSeeder extends Seeder {
     }
 
     private function seedGroups(): void {
-        $superAdmin = Group::create(['name' => 'Super Admin', 'description' => 'Full system access', 'is_active' => true]);
-        $superAdmin->permissions()->attach(Permission::where('name', 'admin.*')->first()?->id);
+        $p = fn(string $name) => Permission::where('name', $name)->first()?->id;
 
-        $salesMgr = Group::create(['name' => 'Sales Manager', 'description' => 'Sales management', 'is_active' => true]);
-        $salesMgr->permissions()->attach([Permission::where('name', 'sales.orders.*')->first()?->id, Permission::where('name', 'sales.invoices.read')->first()?->id]);
+        $superAdmin = Group::firstOrCreate(['name' => 'Super Admin'], ['description' => 'Full system access', 'is_active' => true]);
+        $superAdmin->permissions()->sync(Permission::pluck('id')->toArray());
 
-        Group::create(['name' => 'Sales Officer', 'description' => 'Sales operations', 'is_active' => true]);
-        Group::create(['name' => 'Store Manager', 'description' => 'Inventory management', 'is_active' => true]);
-        Group::create(['name' => 'Accountant', 'description' => 'Accounting', 'is_active' => true]);
-        Group::create(['name' => 'KYC Officer', 'description' => 'KYC verification', 'is_active' => true]);
+        $salesMgr = Group::firstOrCreate(['name' => 'Sales Manager'], ['description' => 'Sales management', 'is_active' => true]);
+        $salesMgr->permissions()->sync(array_filter([$p('sales.*'), $p('sales.orders.*'), $p('sales.invoices.read')]));
+
+        $salesOfficer = Group::firstOrCreate(['name' => 'Sales Officer'], ['description' => 'Sales operations', 'is_active' => true]);
+        $salesOfficer->permissions()->sync(array_filter([$p('sales.*')]));
+
+        $storeMgr = Group::firstOrCreate(['name' => 'Store Manager'], ['description' => 'Inventory management', 'is_active' => true]);
+        $storeMgr->permissions()->sync(array_filter([$p('inventory.*')]));
+
+        $accountant = Group::firstOrCreate(['name' => 'Accountant'], ['description' => 'Accounting', 'is_active' => true]);
+        $accountant->permissions()->sync(array_filter([$p('accounts.*')]));
+
+        $kycOfficer = Group::firstOrCreate(['name' => 'KYC Officer'], ['description' => 'KYC verification', 'is_active' => true]);
+        $kycOfficer->permissions()->sync(array_filter([$p('kyc.*')]));
     }
 
     private function seedUsers(): void {
         $locations = Location::all();
 
-        $admin = User::create(['name' => 'System Admin', 'email' => 'superadmin@omclta.com', 'password_hash' => Hash::make('Admin@123456'), 'is_active' => true]);
-        $admin->groups()->attach(Group::where('name', 'Super Admin')->first()?->id);
-        $admin->locations()->attach($locations->pluck('id'));
+        $admin = User::firstOrCreate(['email' => 'superadmin@omclta.com'], ['name' => 'System Admin', 'password_hash' => Hash::make('Admin@123456'), 'is_active' => true]);
+        $admin->groups()->sync([Group::where('name', 'Super Admin')->first()?->id]);
+        $admin->locations()->sync($locations->pluck('id'));
 
-        $salesMgr = User::create(['name' => 'Sales Manager', 'email' => 'sales.manager@omclta.com', 'password_hash' => Hash::make('SalesMgr@123'), 'is_active' => true]);
-        $salesMgr->groups()->attach(Group::where('name', 'Sales Manager')->first()?->id);
-        $salesMgr->locations()->attach($locations->first()?->id);
+        $salesMgr = User::firstOrCreate(['email' => 'sales.manager@omclta.com'], ['name' => 'Sales Manager', 'password_hash' => Hash::make('SalesMgr@123'), 'is_active' => true]);
+        $salesMgr->groups()->sync([Group::where('name', 'Sales Manager')->first()?->id]);
+        $salesMgr->locations()->sync($locations->first()?->id);
 
-        $storeOps = User::create(['name' => 'Store Manager', 'email' => 'storemanager@omclta.com', 'password_hash' => Hash::make('StoreMgr@123'), 'is_active' => true]);
-        $storeOps->groups()->attach(Group::where('name', 'Store Manager')->first()?->id);
-        $storeOps->locations()->attach($locations->first()?->id);
+        $storeOps = User::firstOrCreate(['email' => 'storemanager@omclta.com'], ['name' => 'Store Manager', 'password_hash' => Hash::make('StoreMgr@123'), 'is_active' => true]);
+        $storeOps->groups()->sync([Group::where('name', 'Store Manager')->first()?->id]);
+        $storeOps->locations()->sync($locations->first()?->id);
     }
 }

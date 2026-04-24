@@ -73,6 +73,7 @@ class AuthService {
             'after_snapshot' => ['device_id' => $device->id, 'session_id' => $session->id],
         ]);
 
+        $user->load('groups', 'locations');
         return [
             'access_token' => $accessToken,
             'refresh_token' => $refreshToken,

@@ -22,6 +22,7 @@ import {
   ScrollText,
   UserCog,
   Group,
+  User,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -40,26 +41,26 @@ export interface NavGroup {
 
 export const NAV_GROUPS: NavGroup[] = [
   {
-    items: [{ label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard }],
+    items: [{ label: 'Dashboard', href: '/overview', icon: LayoutDashboard }],
   },
   {
     label: 'Sales',
     items: [
       {
         label: 'Orders',
-        href: '/dashboard/sales/orders',
+        href: '/sales/orders',
         icon: ShoppingCart,
         permission: 'sales.orders.read',
       },
       {
         label: 'Invoices',
-        href: '/dashboard/sales/invoices',
+        href: '/sales/invoices',
         icon: FileText,
         permission: 'sales.invoices.read',
       },
       {
         label: 'Approved Orders',
-        href: '/dashboard/sales/approved-orders',
+        href: '/sales/approved-orders',
         icon: CheckSquare,
         permission: 'sales.orders.read',
       },
@@ -70,37 +71,37 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       {
         label: 'Items',
-        href: '/dashboard/inventory/items',
+        href: '/inventory/items',
         icon: Package,
         permission: 'inventory.products.read',
       },
       {
         label: 'Categories',
-        href: '/dashboard/inventory/categories',
+        href: '/inventory/categories',
         icon: Tag,
         permission: 'inventory.products.read',
       },
       {
         label: 'Groups',
-        href: '/dashboard/inventory/groups',
+        href: '/inventory/groups',
         icon: Layers,
         permission: 'inventory.products.read',
       },
       {
         label: 'Store Centers',
-        href: '/dashboard/inventory/store-centers',
+        href: '/inventory/store-centers',
         icon: Warehouse,
         permission: 'inventory.products.read',
       },
       {
         label: 'Journals',
-        href: '/dashboard/inventory/journals',
+        href: '/inventory/journals',
         icon: BookOpen,
         permission: 'inventory.stock.movement',
       },
       {
         label: 'Stock Movements',
-        href: '/dashboard/inventory/stock-movements',
+        href: '/inventory/stock-movements',
         icon: ArrowLeftRight,
         permission: 'inventory.stock.movement',
       },
@@ -111,25 +112,25 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       {
         label: 'Debtors',
-        href: '/dashboard/accounts/debtors',
+        href: '/accounts/debtors',
         icon: Users,
         permission: 'accounts.ledger.read',
       },
       {
         label: 'Creditors',
-        href: '/dashboard/accounts/creditors',
+        href: '/accounts/creditors',
         icon: CreditCard,
         permission: 'accounts.ledger.read',
       },
       {
         label: 'Vouchers',
-        href: '/dashboard/accounts/vouchers',
+        href: '/accounts/vouchers',
         icon: Receipt,
         permission: 'accounts.voucher.read',
       },
       {
         label: 'Price Lists',
-        href: '/dashboard/accounts/price-lists',
+        href: '/accounts/price-lists',
         icon: DollarSign,
         permission: 'accounts.ledger.read',
       },
@@ -140,25 +141,25 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       {
         label: 'Applications',
-        href: '/dashboard/kyc/applications',
+        href: '/kyc/applications',
         icon: UserCheck,
         permission: 'kyc.read',
       },
       {
         label: 'Pending',
-        href: '/dashboard/kyc/pending',
+        href: '/kyc/pending',
         icon: UserCheck,
         permission: 'kyc.read',
       },
       {
         label: 'Approved',
-        href: '/dashboard/kyc/approved',
+        href: '/kyc/approved',
         icon: CheckSquare,
         permission: 'kyc.read',
       },
       {
         label: 'Rejected',
-        href: '/dashboard/kyc/rejected',
+        href: '/kyc/rejected',
         icon: Shield,
         permission: 'kyc.read',
       },
@@ -169,25 +170,25 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       {
         label: 'Overview',
-        href: '/dashboard/reports',
+        href: '/reports',
         icon: BarChart2,
         permission: 'reports.inventory',
       },
       {
         label: 'Inventory',
-        href: '/dashboard/reports/inventory',
+        href: '/reports/inventory',
         icon: FileBarChart,
         permission: 'reports.inventory',
       },
       {
         label: 'Movements',
-        href: '/dashboard/reports/movements',
+        href: '/reports/movements',
         icon: TrendingUp,
         permission: 'reports.inventory',
       },
       {
         label: 'Aging',
-        href: '/dashboard/reports/aging',
+        href: '/reports/aging',
         icon: TrendingUp,
         permission: 'reports.accounts',
       },
@@ -198,25 +199,25 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       {
         label: 'Users',
-        href: '/dashboard/admin/users',
+        href: '/admin/users',
         icon: UserCog,
         permission: 'admin.*',
       },
       {
         label: 'Roles',
-        href: '/dashboard/admin/roles',
+        href: '/admin/roles',
         icon: Shield,
         permission: 'admin.*',
       },
       {
         label: 'Groups',
-        href: '/dashboard/admin/groups',
+        href: '/admin/groups',
         icon: Group,
         permission: 'admin.*',
       },
       {
         label: 'Settings',
-        href: '/dashboard/admin/settings',
+        href: '/admin/settings',
         icon: Settings,
         permission: 'admin.*',
       },
@@ -226,9 +227,14 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       {
         label: 'Audit Logs',
-        href: '/dashboard/audit-logs',
+        href: '/audit-logs',
         icon: ScrollText,
         permission: 'audit.read',
+      },
+      {
+        label: 'My Profile',
+        href: '/profile',
+        icon: User,
       },
     ],
   },

@@ -10,28 +10,41 @@ class UserController
 {
     public function index(): JsonResponse
     {
-        $users = User::all();
+        $users = User::with('groups', 'locations')->get();
         return response()->json($users);
     }
 
     public function store(Request $request): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:8',
-            'group_ids' => 'required|array',
-            'location_ids' => 'required|array',
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|string|min:8',
+                'group_ids' => 'nullable|array',
+                'location_ids' => 'nullable|array',
+            ]);
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password_hash' => bcrypt($validated['password']),
-            'is_active' => true,
-        ]);
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password_hash' => bcrypt($validated['password']),
+                'is_active' => true,
+            ]);
 
-        return response()->json($user, 201);
+            if (!empty($validated['group_ids'])) {
+                $user->groups()->sync($validated['group_ids']);
+            }
+
+            if (!empty($validated['location_ids'])) {
+                $user->locations()->sync($validated['location_ids']);
+            }
+
+            $user->load('groups', 'locations');
+            return response()->json($user, 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     public function show(string $id): JsonResponse
@@ -48,9 +61,19 @@ class UserController
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|unique:users,email,' . $id,
             'is_active' => 'sometimes|boolean',
+            'group_ids' => 'sometimes|array|min:1',
         ]);
 
+        $groupIds = $validated['group_ids'] ?? null;
+        unset($validated['group_ids']);
+
         $user->update($validated);
+
+        if ($groupIds !== null) {
+            $user->groups()->sync($groupIds);
+        }
+
+        $user->load('groups', 'locations');
         return response()->json($user);
     }
 
@@ -58,24 +81,24 @@ class UserController
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return response()->json(['message' => 'User deleted']);
+        return response()->noContent();
     }
 
     public function assignGroups(Request $request, string $id): JsonResponse
     {
         $user = User::findOrFail($id);
-        $request->validate(['group_ids' => 'required|array']);
+        $validated = $request->validate(['group_ids' => 'required|array|min:1']);
 
-        // Sync groups (implementation depends on pivot table setup)
-        return response()->json(['message' => 'Groups assigned']);
+        $user->groups()->sync($validated['group_ids']);
+        return response()->json($user->load('groups'), 200);
     }
 
     public function assignLocations(Request $request, string $id): JsonResponse
     {
         $user = User::findOrFail($id);
-        $request->validate(['location_ids' => 'required|array']);
+        $validated = $request->validate(['location_ids' => 'required|array|min:1']);
 
-        // Sync locations (implementation depends on pivot table setup)
-        return response()->json(['message' => 'Locations assigned']);
+        $user->locations()->sync($validated['location_ids']);
+        return response()->json($user->load('locations'), 200);
     }
 }

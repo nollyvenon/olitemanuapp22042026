@@ -125,7 +125,15 @@ export default function LoginPage() {
       // Success
       console.log('Login successful!');
       setTokens(data.access_token, data.refresh_token);
-      setUser(data.user);
+      setUser({
+        id: data.user.id,
+        name: data.user.name,
+        email: data.user.email,
+        isActive: data.user.is_active,
+        groups: data.user.groups || [],
+        permissions: data.user.permissions || [],
+        locations: data.user.locations || [],
+      });
       setDeviceId(data.device_id);
       router.push('/dashboard');
     } catch (err) {

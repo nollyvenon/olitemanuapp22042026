@@ -10,7 +10,7 @@ class GroupController
 {
     public function index(): JsonResponse
     {
-        $groups = Group::all();
+        $groups = Group::withCount('users')->with('permissions')->get();
         return response()->json($groups);
     }
 
@@ -47,25 +47,32 @@ class GroupController
     public function attachPermissions(Request $request, string $id): JsonResponse
     {
         $group = Group::findOrFail($id);
-        $request->validate(['permission_ids' => 'required|array']);
+        $validated = $request->validate(['permission_ids' => 'required|array|min:1']);
 
-        // Sync permissions
-        return response()->json(['message' => 'Permissions attached']);
+        $group->permissions()->sync($validated['permission_ids']);
+        return response()->json($group->load('permissions'), 200);
     }
 
     public function detachPermission(string $id, string $pid): JsonResponse
     {
         $group = Group::findOrFail($id);
-        // Remove permission
-        return response()->json(['message' => 'Permission detached']);
+        $group->permissions()->detach($pid);
+        return response()->json(['message' => 'Permission removed'], 200);
     }
 
     public function setInheritance(Request $request, string $id): JsonResponse
     {
         $group = Group::findOrFail($id);
-        $request->validate(['parent_group_ids' => 'required|array']);
+        $validated = $request->validate(['parent_group_ids' => 'nullable|array']);
 
-        // Set inheritance
-        return response()->json(['message' => 'Inheritance set']);
+        $group->parentGroups()->sync($validated['parent_group_ids'] ?? []);
+        return response()->json($group->load('parentGroups'), 200);
+    }
+
+    public function destroy(string $id): JsonResponse
+    {
+        $group = Group::findOrFail($id);
+        $group->delete();
+        return response()->noContent();
     }
 }

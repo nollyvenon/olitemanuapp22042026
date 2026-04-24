@@ -72,6 +72,7 @@ export const useAuthStore = create<AuthState>()(
       hasPermission: (permission: string): boolean => {
         const { user } = get();
         if (!user?.permissions) return false;
+        if (user.permissions.includes('admin.*')) return true;
         return (
           user.permissions.includes(permission) ||
           user.permissions.some(

@@ -51,7 +51,7 @@ class User extends Model {
 
     public function getPermissionsAttribute(): array {
         $groupService = app(\App\Modules\Auth\Services\GroupService::class);
-        $groupIds = $this->groups()->pluck('groups.id')->toArray();
+        $groupIds = $this->groups->pluck('id')->toArray();
         return $groupService->getEffectivePermissions($groupIds);
     }
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { LogOut, Menu, Bell } from 'lucide-react';
+import { LogOut, Menu, Bell, User } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 import { useUIStore } from '@/store/ui.store';
 import {
@@ -52,6 +52,11 @@ export function Topbar() {
               <p className="text-sm font-medium text-white">{user?.name}</p>
               <p className="text-xs" style={{ color: '#aab7c4' }}>{user?.email}</p>
             </div>
+            <DropdownMenuSeparator style={{ background: '#37475a' }} />
+            <DropdownMenuItem onClick={() => router.push('/profile')} className="text-white hover:bg-[#37475a] cursor-pointer">
+              <User className="mr-2 h-4 w-4 text-[#FF9900]" />
+              My Profile
+            </DropdownMenuItem>
             <DropdownMenuSeparator style={{ background: '#37475a' }} />
             <DropdownMenuItem onClick={handleLogout} className="text-white hover:bg-[#37475a] cursor-pointer">
               <LogOut className="mr-2 h-4 w-4 text-[#FF9900]" />
