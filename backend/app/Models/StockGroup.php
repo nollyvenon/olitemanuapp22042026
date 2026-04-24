@@ -1,22 +1,7 @@
-<?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+<?php namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-
 class StockGroup extends Model {
-    use HasUuids;
-
     protected $fillable = ['category_id', 'name', 'description', 'created_by'];
-
-    public function category(): BelongsTo {
-        return $this->belongsTo(StockCategory::class, 'category_id');
-    }
-
-    public function items(): HasMany {
-        return $this->hasMany(StockItem::class, 'group_id');
-    }
+    public function category() { return $this->belongsTo(StockCategory::class); }
+    public function items() { return $this->hasMany(StockItem::class, 'group_id'); }
 }

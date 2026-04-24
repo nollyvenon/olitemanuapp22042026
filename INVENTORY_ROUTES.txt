@@ -1,0 +1,12 @@
+// Add to backend/routes/api.php inside jwt middleware group:
+use App\Modules\Inventory\Http\Controllers\StockItemController;
+use App\Modules\Inventory\Http\Controllers\StoreCenterController;
+use App\Modules\Inventory\Http\Controllers\StockJournalController;
+
+Route::apiResource('inventory/items', StockItemController::class);
+Route::apiResource('inventory/store-centers', StoreCenterController::class);
+Route::get('inventory/journals', [StockJournalController::class, 'index']);
+Route::post('inventory/journals/add-stock', [StockJournalController::class, 'addStock']);
+Route::post('inventory/journals/transfer', [StockJournalController::class, 'transfer']);
+Route::post('inventory/journals/{id}/post', [StockJournalController::class, 'postJournal']);
+Route::post('inventory/journals/{id}/reverse', [StockJournalController::class, 'reverseJournal']);

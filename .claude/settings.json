@@ -69,10 +69,12 @@
       "Bash(pkill -f \"php artisan serve\")",
       "Bash(curl -v -X POST http://localhost:8000/api/v1/auth/login -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{\"email\":\"superadmin@omclta.com\",\"password\":\"Admin@123456\",\"device_fingerprint\":null,\"user_agent\":null,\"latitude\":null,\"longitude\":null,\"gps_source\":null}')",
       "Bash(cd c:\\\\\\\\Files\\\\\\\\DevelopedApps\\\\\\\\olitemanuapp_21042026\\\\\\\\backend)",
-      "Read(//mnt/c/Files/DevelopedApps/olitemanuapp_21042026/**)"
+      "Read(//mnt/c/Files/DevelopedApps/olitemanuapp_21042026/**)",
+      "PowerShell(\"Removed duplicate migration\")"
     ],
     "additionalDirectories": [
-      "c:\\Files\\DevelopedApps\\OMCLTA"
+      "c:\\Files\\DevelopedApps\\OMCLTA",
+      "\\tmp"
     ]
   }
 }

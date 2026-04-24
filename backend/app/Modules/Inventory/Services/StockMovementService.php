@@ -1,101 +1,59 @@
-<?php
-
-namespace App\Modules\Inventory\Services;
-
-use App\Models\StockItem;
+<?php namespace App\Modules\Inventory\Services;
 use App\Models\StockJournal;
-use App\Models\StockLedger;
+use App\Models\StockJournalItem;
+use App\Models\StockBalance;
+use App\Models\StockItem;
 use Illuminate\Support\Facades\DB;
 
 class StockMovementService {
-    public function addStock(string $itemId, string $locationId, float $quantity, string $userId, array $meta = []): StockJournal {
-        if ($quantity <= 0) {
-            throw new \InvalidArgumentException('Quantity must be positive');
-        }
-
-        return DB::transaction(function () use ($itemId, $locationId, $quantity, $userId, $meta) {
-            $this->upsertLedger($itemId, $locationId, $quantity);
-
-            return StockJournal::create([
-                'item_id' => $itemId,
-                'to_location' => $locationId,
-                'quantity' => $quantity,
-                'type' => $meta['type'] ?? 'add',
-                'reference_type' => $meta['reference_type'] ?? null,
-                'reference_id' => $meta['reference_id'] ?? null,
-                'notes' => $meta['notes'] ?? null,
-                'created_by' => $userId,
-                'created_at' => now(),
-            ]);
-        });
-    }
-
-    public function removeStock(string $itemId, string $locationId, float $quantity, string $userId, array $meta = []): StockJournal {
-        if ($quantity <= 0) {
-            throw new \InvalidArgumentException('Quantity must be positive');
-        }
-
-        return DB::transaction(function () use ($itemId, $locationId, $quantity, $userId, $meta) {
-            $ledger = StockLedger::where('item_id', $itemId)->where('location_id', $locationId)->lockForUpdate()->first();
-
-            if (!$ledger || $ledger->quantity < $quantity) {
-                $item = StockItem::find($itemId);
-                throw new \Exception("Insufficient stock for {$item?->name} at this location", 422);
+    public function addStock(array $data): StockJournal {
+        return DB::transaction(function () use ($data) {
+            $journal = StockJournal::create(['store_center_id' => $data['store_center_id'], 'type' => 'add', 'status' => 'draft', 'notes' => $data['notes'] ?? null, 'created_by' => $data['created_by']]);
+            foreach ($data['items'] as $item) {
+                StockJournalItem::create(['journal_id' => $journal->id, 'item_id' => $item['item_id'], 'quantity' => $item['quantity'], 'unit_cost' => $item['unit_cost'] ?? 0]);
             }
-
-            $ledger->decrement('quantity', $quantity);
-
-            return StockJournal::create([
-                'item_id' => $itemId,
-                'from_location' => $locationId,
-                'quantity' => $quantity,
-                'type' => $meta['type'] ?? 'remove',
-                'reference_type' => $meta['reference_type'] ?? null,
-                'reference_id' => $meta['reference_id'] ?? null,
-                'notes' => $meta['notes'] ?? null,
-                'created_by' => $userId,
-                'created_at' => now(),
-            ]);
+            return $journal;
         });
     }
 
-    public function transferStock(string $itemId, string $fromLocationId, string $toLocationId, float $quantity, string $userId, ?string $notes = null): StockJournal {
-        if ($quantity <= 0) {
-            throw new \InvalidArgumentException('Quantity must be positive');
-        }
+    public function transferStock(array $data): StockJournal {
+        return DB::transaction(function () use ($data) {
+            $fromBalance = StockBalance::where('item_id', $data['item_id'])->where('store_center_id', $data['from_store_id'])->first();
+            if (!$fromBalance || $fromBalance->quantity < $data['quantity']) throw new \Exception('Insufficient stock', 422);
+            $journal = StockJournal::create(['store_center_id' => $data['to_store_id'], 'from_store_id' => $data['from_store_id'], 'type' => 'transfer', 'status' => 'posted', 'notes' => $data['notes'] ?? null, 'created_by' => $data['created_by'], 'posted_by' => $data['created_by'], 'posted_at' => now()]);
+            StockJournalItem::create(['journal_id' => $journal->id, 'item_id' => $data['item_id'], 'quantity' => $data['quantity']]);
+            $fromBalance->decrement('quantity', $data['quantity']);
+            StockBalance::updateOrCreate(['item_id' => $data['item_id'], 'store_center_id' => $data['to_store_id']], ['quantity' => DB::raw("COALESCE(quantity, 0) + {$data['quantity']}")]);
+            return $journal;
+        });
+    }
 
-        if ($fromLocationId === $toLocationId) {
-            throw new \InvalidArgumentException('Source and destination locations must differ');
-        }
-
-        return DB::transaction(function () use ($itemId, $fromLocationId, $toLocationId, $quantity, $userId, $notes) {
-            $fromLedger = StockLedger::where('item_id', $itemId)->where('location_id', $fromLocationId)->lockForUpdate()->first();
-
-            if (!$fromLedger || $fromLedger->quantity < $quantity) {
-                $item = StockItem::find($itemId);
-                throw new \Exception("Insufficient stock for {$item?->name} at source location", 422);
+    public function postJournal(string $journalId, string $userId): StockJournal {
+        return DB::transaction(function () use ($journalId, $userId) {
+            $journal = StockJournal::findOrFail($journalId);
+            if ($journal->status !== 'draft') throw new \Exception('Only draft journals can be posted', 422);
+            foreach ($journal->items as $item) {
+                if ($journal->from_store_id) {
+                    $fromBalance = StockBalance::where('item_id', $item->item_id)->where('store_center_id', $journal->from_store_id)->first();
+                    if (!$fromBalance || $fromBalance->quantity < $item->quantity) throw new \Exception('Insufficient stock', 422);
+                    $fromBalance->decrement('quantity', $item->quantity);
+                }
+                $balance = StockBalance::firstOrCreate(['item_id' => $item->item_id, 'store_center_id' => $journal->store_center_id], ['quantity' => 0]);
+                $balance->increment('quantity', $item->quantity);
             }
-
-            $fromLedger->decrement('quantity', $quantity);
-            $this->upsertLedger($itemId, $toLocationId, $quantity);
-
-            return StockJournal::create([
-                'item_id' => $itemId,
-                'from_location' => $fromLocationId,
-                'to_location' => $toLocationId,
-                'quantity' => $quantity,
-                'type' => 'transfer',
-                'notes' => $notes,
-                'created_by' => $userId,
-                'created_at' => now(),
-            ]);
+            return $journal->update(['status' => 'posted', 'posted_by' => $userId, 'posted_at' => now()]) ? $journal->refresh() : $journal;
         });
     }
 
-    private function upsertLedger(string $itemId, string $locationId, float $delta): void {
-        StockLedger::updateOrCreate(
-            ['item_id' => $itemId, 'location_id' => $locationId],
-            ['quantity' => DB::raw("COALESCE(quantity, 0) + {$delta}")]
-        );
+    public function reverseJournal(string $journalId): StockJournal {
+        return DB::transaction(function () use ($journalId) {
+            $journal = StockJournal::findOrFail($journalId);
+            if ($journal->status !== 'posted') throw new \Exception('Only posted journals can be reversed', 422);
+            foreach ($journal->items as $item) {
+                StockBalance::where('item_id', $item->item_id)->where('store_center_id', $journal->store_center_id)->decrement('quantity', $item->quantity);
+                if ($journal->from_store_id) StockBalance::firstOrCreate(['item_id' => $item->item_id, 'store_center_id' => $journal->from_store_id], ['quantity' => 0])->increment('quantity', $item->quantity);
+            }
+            return $journal->update(['status' => 'reversed']) ? $journal->refresh() : $journal;
+        });
     }
 }
