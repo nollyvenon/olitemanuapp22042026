@@ -1,36 +1,36 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card-system';
-import { useApi } from '@/hooks/useApi';
+import { Card } from '@/components/ui/card';
+import { getApiClient } from '@/lib/api-client';
 
 export default function OverviewPage() {
   const [stats, setStats] = useState({ orders: 0, inventory: 0, ledgers: 0, kyc: 0 });
   const [loading, setLoading] = useState(true);
-  const api = useApi();
 
   useEffect(() => {
     const load = async () => {
       try {
+        const api = getApiClient();
         const [ordersRes, itemsRes, ledgersRes, kycRes] = await Promise.all([
-          api.get('/api/v1/sales/approved-orders'),
-          api.get('/api/v1/inventory/items'),
-          api.get('/api/v1/accounts/debtors'),
-          api.get('/api/v1/kyc/applications'),
+          api.get('/sales/approved-orders'),
+          api.get('/inventory/items'),
+          api.get('/accounts/debtors'),
+          api.get('/kyc/applications'),
         ]);
         setStats({
-          orders: ordersRes.data.total || 0,
-          inventory: itemsRes.data.total || 0,
-          ledgers: ledgersRes.data.length || 0,
-          kyc: kycRes.data.total || 0,
+          orders: Array.isArray(ordersRes.data) ? ordersRes.data.length : ordersRes.data?.total || 0,
+          inventory: Array.isArray(itemsRes.data) ? itemsRes.data.length : itemsRes.data?.total || 0,
+          ledgers: Array.isArray(ledgersRes.data) ? ledgersRes.data.length : ledgersRes.data?.length || 0,
+          kyc: Array.isArray(kycRes.data) ? kycRes.data.length : kycRes.data?.total || 0,
         });
       } catch (error) {
-        console.error('Failed to load', error);
+        console.error('Failed to load stats', error);
       } finally {
         setLoading(false);
       }
     };
     load();
-  }, [api]);
+  }, []);
 
   return (
     <div className="p-6">

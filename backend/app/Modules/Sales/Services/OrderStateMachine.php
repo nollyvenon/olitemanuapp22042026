@@ -11,7 +11,7 @@ class OrderStateMachine {
         'DRAFT' => ['SUBMITTED'],
         'SUBMITTED' => ['UNDER_REVIEW', 'DRAFT'],
         'UNDER_REVIEW' => ['APPROVED', 'REJECTED'],
-        'APPROVED' => ['REJECTED'],
+        'APPROVED' => ['PENDING_AUTH', 'REJECTED'],
         'REJECTED' => ['DRAFT'],
         'PENDING_AUTH' => ['AUTHORIZED', 'OVERRIDDEN'],
         'AUTHORIZED' => [],

@@ -1,42 +1,63 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { useAuth } from '@/hooks/useAuth';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, MapPin } from 'lucide-react';
+import { getOrCreateFingerprint } from '@/utils/fingerprint';
 
-const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-});
-
-type LoginInput = z.infer<typeof loginSchema>;
+type LoginInput = { email: string; password: string };
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [globalError, setGlobalError] = useState('');
+  const [locationStatus, setLocationStatus] = useState<'pending' | 'granted' | 'denied'>('pending');
+  const locationRef = useRef<{ latitude?: number; longitude?: number; gps_source: string }>({ gps_source: 'ip_fallback' });
+  const fingerprintRef = useRef<string>('');
+
+  useEffect(() => {
+    getOrCreateFingerprint().then((fp) => { fingerprintRef.current = fp; });
+
+    if (!navigator.geolocation) {
+      setLocationStatus('granted');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        locationRef.current = { latitude: pos.coords.latitude, longitude: pos.coords.longitude, gps_source: 'gps' };
+        setLocationStatus('granted');
+      },
+      () => {
+        locationRef.current = { gps_source: 'ip_fallback' };
+        setLocationStatus('denied');
+      },
+      { timeout: 10000 }
+    );
+  }, []);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginInput>({
-    resolver: zodResolver(loginSchema),
-  });
+  } = useForm<LoginInput>();
 
   const onSubmit = async (data: LoginInput) => {
+    if (locationStatus === 'pending') { setGlobalError('Waiting for location access...'); return; }
     setGlobalError('');
     setIsLoading(true);
     try {
-      await login(data.email, data.password);
-      router.push('/dashboard');
+      await login(data.email, data.password, {
+        device_fingerprint: fingerprintRef.current || 'unknown',
+        user_agent: navigator.userAgent,
+        ...locationRef.current,
+      });
+      router.push('/overview');
     } catch (error) {
       setGlobalError(error instanceof Error ? error.message : 'Failed to log in.');
     } finally {
@@ -75,7 +96,7 @@ export default function LoginPage() {
               id="email"
               placeholder="you@company.com"
               className="border-[#d5d9d9] focus-visible:border-[#FF9900] focus-visible:ring-[#FF9900]/20 h-10"
-              {...register('email')}
+              {...register('email', { required: 'Email is required', pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Invalid email' } })}
               disabled={isLoading}
             />
             {errors.email && <p className="text-xs text-[#cc0c39]">{errors.email.message}</p>}
@@ -88,18 +109,25 @@ export default function LoginPage() {
               type="password"
               placeholder="••••••••"
               className="border-[#d5d9d9] focus-visible:border-[#FF9900] focus-visible:ring-[#FF9900]/20 h-10"
-              {...register('password')}
+              {...register('password', { required: 'Password is required', minLength: { value: 6, message: 'Min 6 characters' } })}
               disabled={isLoading}
             />
             {errors.password && <p className="text-xs text-[#cc0c39]">{errors.password.message}</p>}
           </div>
 
+          <div className={`flex items-center gap-2 text-xs px-3 py-2 rounded ${locationStatus === 'granted' ? 'bg-green-50 text-green-700' : locationStatus === 'denied' ? 'bg-yellow-50 text-yellow-700' : 'bg-gray-50 text-gray-500'}`}>
+            <MapPin className="h-3 w-3 shrink-0" />
+            {locationStatus === 'pending' && 'Requesting location access...'}
+            {locationStatus === 'granted' && (locationRef.current.gps_source === 'gps' ? 'GPS location captured' : 'Location: IP fallback')}
+            {locationStatus === 'denied' && 'Location denied — using IP fallback'}
+          </div>
+
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || locationStatus === 'pending'}
             className="w-full h-10 bg-[#FF9900] hover:bg-[#e88b00] text-[#0f1111] font-bold rounded text-sm transition-colors disabled:opacity-60 cursor-pointer"
           >
-            {isLoading ? 'Signing in...' : 'Sign in'}
+            {isLoading ? 'Signing in...' : locationStatus === 'pending' ? 'Waiting for location...' : 'Sign in'}
           </button>
         </form>
 

@@ -7,11 +7,11 @@ export function useAuth() {
   const { setTokens, setUser, logout, setLoading } = useAuthStore();
 
   const login = useCallback(
-    async (email: string, password: string) => {
+    async (email: string, password: string, meta: { device_fingerprint: string; user_agent: string; latitude?: number; longitude?: number; gps_source: string }) => {
       setLoading(true);
       try {
         const api = getApiClient();
-        const { data } = await api.post('/auth/login', { email, password });
+        const { data } = await api.post('/auth/login', { email, password, ...meta });
         setTokens(data.access_token, data.refresh_token);
         setUser(data.user as AuthUser);
         return true;

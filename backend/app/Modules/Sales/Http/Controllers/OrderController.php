@@ -84,7 +84,7 @@ class OrderController {
             $before = $order->toArray();
 
             $validated = $request->validate([
-                'status' => 'required|in:draft,confirmed,in_progress,completed,cancelled',
+                'status' => 'required|in:DRAFT,SUBMITTED,UNDER_REVIEW,APPROVED,REJECTED,PENDING_AUTH,AUTHORIZED,OVERRIDDEN',
                 'notes' => 'nullable|string',
             ]);
 
@@ -177,6 +177,11 @@ class OrderController {
             }
 
             $before = $order->toArray();
+            // Transition from APPROVED → PENDING_AUTH
+            if ($order->status === 'APPROVED') {
+                $order = $this->stateMachine->transition($order, 'PENDING_AUTH');
+            }
+            // Then transition from PENDING_AUTH → AUTHORIZED
             $order = $this->stateMachine->transition($order, 'AUTHORIZED');
 
             $this->auditService->log([

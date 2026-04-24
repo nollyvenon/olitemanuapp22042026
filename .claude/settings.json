@@ -67,7 +67,9 @@
       "Bash(curl -s -X POST http://localhost:8000/api/v1/auth/login -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{\"email\":\"superadmin@omclta.com\",\"password\":\"Admin@123456\",\"device_fingerprint\":\"test\",\"user_agent\":\"Mozilla/5.0\",\"gps_source\":\"manual\",\"latitude\":0,\"longitude\":0}')",
       "Bash(curl -s http://localhost:8000/api/v1/auth/login -X POST -H \"Content-Type: application/json\" -d '{\"email\":\"test@test.com\",\"password\":\"password\"}')",
       "Bash(pkill -f \"php artisan serve\")",
-      "Bash(curl -v -X POST http://localhost:8000/api/v1/auth/login -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{\"email\":\"superadmin@omclta.com\",\"password\":\"Admin@123456\",\"device_fingerprint\":null,\"user_agent\":null,\"latitude\":null,\"longitude\":null,\"gps_source\":null}')"
+      "Bash(curl -v -X POST http://localhost:8000/api/v1/auth/login -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{\"email\":\"superadmin@omclta.com\",\"password\":\"Admin@123456\",\"device_fingerprint\":null,\"user_agent\":null,\"latitude\":null,\"longitude\":null,\"gps_source\":null}')",
+      "Bash(cd c:\\\\\\\\Files\\\\\\\\DevelopedApps\\\\\\\\olitemanuapp_21042026\\\\\\\\backend)",
+      "Read(//mnt/c/Files/DevelopedApps/olitemanuapp_21042026/**)"
     ],
     "additionalDirectories": [
       "c:\\Files\\DevelopedApps\\OMCLTA"
