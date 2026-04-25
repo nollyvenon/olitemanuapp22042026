@@ -14,7 +14,7 @@ class Order extends Model {
     use HasUuids, SoftDeletes, Versionable;
 
 
-    protected $fillable = ['order_number', 'customer_id', 'created_by', 'status', 'subtotal', 'tax', 'total', 'notes', 'order_date', 'expected_delivery', 'completed_at', 'form_status', 'version_number', 'parent_id', 'is_current', 'tally_invoice_path', 'delivery_note_path'];
+    protected $fillable = ['order_number', 'customer_id', 'created_by', 'status', 'subtotal', 'tax', 'total', 'notes', 'order_date', 'expected_delivery', 'completed_at', 'form_status', 'version_number', 'parent_id', 'is_current', 'tally_invoice_path', 'delivery_note_path', 'invoice_id'];
 
     public function customer(): BelongsTo {
         return $this->belongsTo(Customer::class);

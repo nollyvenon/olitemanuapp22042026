@@ -43,6 +43,7 @@ class AuthService {
         $location = $this->resolveLocation($validated);
 
         $payload = $this->buildPayload($user, $device, $location);
+        $permissions = $payload['permissions'];
 
         $accessToken = $this->jwtService->generateAccessToken($payload);
         $refreshToken = $this->jwtService->generateRefreshToken($payload);
@@ -74,11 +75,14 @@ class AuthService {
         ]);
 
         $user->load('groups', 'locations');
+        $userArray = $user->toArray();
+        $userArray['permissions'] = $permissions;
+
         return [
             'access_token' => $accessToken,
             'refresh_token' => $refreshToken,
             'device_id' => $device->id,
-            'user' => $user->toArray(),
+            'user' => $userArray,
         ];
     }
 
@@ -95,10 +99,16 @@ class AuthService {
     }
 
     private function buildPayload(User $user, $device, array $location): array {
-        $groupIds = $user->groups()->pluck('groups.id')->toArray();
-        $inheritedGroupIds = $this->groupService->resolveInheritedGroups($groupIds);
-        $permissions = $this->groupService->getEffectivePermissions($inheritedGroupIds);
         $locations = $user->locations()->get(['id', 'name', 'city', 'country', 'lat', 'long'])->toArray();
+
+        // God admin users get all permissions
+        if ($user->is_god_admin) {
+            $permissions = ['admin.*'];
+        } else {
+            $groupIds = $user->groups()->pluck('groups.id')->toArray();
+            $inheritedGroupIds = $this->groupService->resolveInheritedGroups($groupIds);
+            $permissions = $this->groupService->getEffectivePermissions($inheritedGroupIds);
+        }
 
         return [
             'sub' => $user->id,

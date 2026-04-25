@@ -79,7 +79,10 @@ export default function OrderDetailPage() {
     const load = async () => {
       try {
         const { data } = await api.get(`/orders/${id}`);
-        setOrder(data);
+        setOrder({
+          ...data,
+          items: data.items || [],
+        });
       } catch (error) {
         console.error('Failed to load order', error);
       } finally {
@@ -162,6 +165,19 @@ export default function OrderDetailPage() {
     }
   };
 
+  const handleGenerateInvoice = async () => {
+    if (!order) return;
+    setSubmitting(true);
+    try {
+      const { data } = await api.post(`/orders/${id}/invoices`);
+      setOrder(data);
+    } catch (error) {
+      console.error('Invoice generation failed', error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   if (loading) return <div className="p-6">Loading...</div>;
   if (!order) return <div className="p-6">Order not found</div>;
 
@@ -211,7 +227,7 @@ export default function OrderDetailPage() {
             </tr>
           </thead>
           <tbody>
-            {order.items.map(item => (
+            {order.items?.map(item => (
               <tr key={item.id} className="border-b border-gray-100">
                 <td className="py-3">{item.product_name}</td>
                 <td className="text-right py-3 tabular-nums">{item.quantity}</td>
@@ -376,8 +392,12 @@ export default function OrderDetailPage() {
               </Button>
             </div>
           ) : (
-            <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
-              Generate Invoice
+            <Button
+              onClick={handleGenerateInvoice}
+              disabled={submitting}
+              className="w-full bg-green-600 hover:bg-green-700 text-white"
+            >
+              {submitting ? 'Generating...' : 'Generate Invoice'}
             </Button>
           )}
         </Card>

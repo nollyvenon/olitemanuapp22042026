@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import type { ColumnDef, SortingState } from '@tanstack/react-table';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { StatusBadge } from '@/components/shared/StatusBadge';
+import { RowActions } from '@/components/shared/RowActions';
 import { DataTable } from '@/components/data-table/DataTable';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,12 +43,26 @@ const exportCSVItems = (items: InventoryItem[]) => {
   a.click();
 };
 
-const columns: ColumnDef<InventoryItem>[] = [
+const getColumns = (router: ReturnType<typeof useRouter>, onDelete: (id: string) => void): ColumnDef<InventoryItem>[] => [
   { accessorKey: 'sku', header: 'SKU', cell: i => <span className="font-mono text-xs font-semibold" style={{ color: '#146eb4' }}>{String(i.getValue())}</span> },
   { accessorKey: 'name', header: 'Item Name', cell: i => <span className="font-medium text-sm" style={{ color: '#0f1111' }}>{String(i.getValue())}</span> },
   { accessorKey: 'unit', header: 'Unit', cell: i => <span className="text-xs">{String(i.getValue() || '-')}</span> },
   { accessorKey: 'reorder_level', header: 'Reorder Lvl', cell: i => <span className="tabular-nums text-sm">{String(i.getValue() || '-')}</span> },
   { accessorKey: 'unit_cost', header: 'Unit Cost', cell: i => <span className="tabular-nums text-sm">{fmt(Number(i.getValue()) || 0, 2)}</span> },
+  {
+    id: 'actions',
+    header: 'Actions',
+    cell: ({ row }) => (
+      <RowActions
+        id={row.original.id}
+        detailPath={`/dashboard/inventory/items/${row.original.id}`}
+        viewPermission="inventory.items.view"
+        editPermission="inventory.items.edit"
+        deletePermission="inventory.items.delete"
+        onDelete={() => onDelete(row.original.id)}
+      />
+    ),
+  },
 ];
 
 export default function InventoryItemsPage() {
@@ -60,6 +75,16 @@ export default function InventoryItemsPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({ group_id: '', sku: '', name: '', unit: '', unit_cost: '', reorder_level: '' });
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this item?')) return;
+    try {
+      await api.delete(`/stock/items/${id}`);
+      setItems(items.filter(i => i.id !== id));
+    } catch (err) {
+      console.error('Failed to delete item', err);
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -138,11 +163,10 @@ export default function InventoryItemsPage() {
         </div>
       </div>
       <DataTable
-        columns={columns}
+        columns={getColumns(router, handleDelete)}
         data={items}
         sorting={sorting}
         onSortingChange={setSorting}
-        onRowClick={row => router.push(`/dashboard/inventory/items/${row.id}`)}
       />
 
       <Dialog open={open} onOpenChange={setOpen}>

@@ -51,7 +51,7 @@ export function Topbar() {
               <p className="text-xs" style={{ color: '#aab7c4' }}>{user?.email}</p>
             </div>
             <DropdownMenuSeparator style={{ background: '#37475a' }} />
-            <DropdownMenuItem onClick={() => router.push('/profile')} className="text-white hover:bg-[#37475a] cursor-pointer">
+            <DropdownMenuItem onClick={() => router.push('/dashboard/profile')} className="text-white hover:bg-[#37475a] cursor-pointer">
               <User className="mr-2 h-4 w-4 text-[#FF9900]" />
               My Profile
             </DropdownMenuItem>

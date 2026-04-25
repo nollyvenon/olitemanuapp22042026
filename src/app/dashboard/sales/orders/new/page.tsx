@@ -13,6 +13,7 @@ interface StockItem {
   id: string;
   name: string;
   sku: string;
+  unit_cost?: number | string;
 }
 
 interface Customer {
@@ -23,6 +24,7 @@ interface Customer {
 
 interface OrderItem {
   product_name: string;
+  product_id?: string;
   quantity: number;
   unit_price: number;
 }
@@ -36,7 +38,9 @@ export default function NewOrderPage() {
   const [customerId, setCustomerId] = useState('');
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [formStatus, setFormStatus] = useState<'manual_captured' | 'no_manual_form' | ''>('');
-  const [items, setItems] = useState<OrderItem[]>([{ product_name: '', quantity: 1, unit_price: 0 }]);
+  const [expectedDelivery, setExpectedDelivery] = useState('');
+  const [notes, setNotes] = useState('');
+  const [items, setItems] = useState<OrderItem[]>([{ product_name: '', product_id: '', quantity: 1, unit_price: 0 }]);
   const [stockItems, setStockItems] = useState<StockItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -77,7 +81,7 @@ export default function NewOrderPage() {
   };
 
   const addItem = () => {
-    setItems([...items, { product_name: '', quantity: 1, unit_price: 0 }]);
+    setItems([...items, { product_name: '', product_id: '', quantity: 1, unit_price: 0 }]);
   };
 
   const removeItem = (idx: number) => {
@@ -86,14 +90,20 @@ export default function NewOrderPage() {
     }
   };
 
-  const resolvePrice = async (productName: string, idx: number) => {
-    if (!productName) return;
-    try {
-      const { data } = await api.get('/price-lists/price', { params: { item_id: productName } });
-      const price = data.price || 0;
-      updateItem(idx, 'unit_price', price);
-    } catch (err) {
-      console.error('Failed to resolve price', err);
+  const handleProductChange = (productId: string, idx: number) => {
+    const selectedProduct = stockItems.find(item => item.id === productId);
+    if (selectedProduct) {
+      const unitCost = typeof selectedProduct.unit_cost === 'string'
+        ? parseFloat(selectedProduct.unit_cost)
+        : (selectedProduct.unit_cost || 0);
+      const updated = [...items];
+      updated[idx] = {
+        ...updated[idx],
+        product_id: productId,
+        product_name: selectedProduct.name,
+        unit_price: unitCost,
+      };
+      setItems(updated);
     }
   };
 
@@ -113,6 +123,10 @@ export default function NewOrderPage() {
       setError('Form status is required');
       return;
     }
+    if (!expectedDelivery) {
+      setError('Expected delivery date is required');
+      return;
+    }
     if (items.some(item => !item.product_name || item.quantity < 1 || item.unit_price < 0)) {
       setError('All items must have a product, quantity, and price');
       return;
@@ -124,6 +138,8 @@ export default function NewOrderPage() {
         customer_id: customerId,
         form_status: formStatus,
         order_date: new Date().toISOString().split('T')[0],
+        expected_delivery: expectedDelivery,
+        notes: notes || null,
         items: items.map(item => ({
           product_name: item.product_name,
           quantity: item.quantity,
@@ -204,6 +220,29 @@ export default function NewOrderPage() {
               </label>
             </div>
           </div>
+
+          <div>
+            <Label className="text-sm font-medium">Expected Delivery Date *</Label>
+            <Input
+              type="date"
+              value={expectedDelivery}
+              onChange={(e) => setExpectedDelivery(e.target.value)}
+              disabled={submitting}
+              className="w-full mt-1.5"
+            />
+          </div>
+
+          <div>
+            <Label className="text-sm font-medium">Notes</Label>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              disabled={submitting}
+              className="w-full mt-1.5 p-2 border border-gray-300 rounded text-sm"
+              rows={3}
+              placeholder="Any additional notes or special instructions..."
+            />
+          </div>
         </Card>
 
         {/* Order Items */}
@@ -216,13 +255,8 @@ export default function NewOrderPage() {
                 <div className="flex-1 space-y-1">
                   <Label className="text-xs font-medium">Product</Label>
                   <select
-                    value={item.product_name}
-                    onChange={(e) => {
-                      updateItem(idx, 'product_name', e.target.value);
-                      if (e.target.value) {
-                        resolvePrice(e.target.value, idx);
-                      }
-                    }}
+                    value={item.product_id || ''}
+                    onChange={(e) => handleProductChange(e.target.value, idx)}
                     disabled={submitting}
                     className="w-full text-sm border border-gray-300 rounded px-2 py-1.5 bg-white"
                   >
@@ -253,8 +287,8 @@ export default function NewOrderPage() {
                     onChange={(e) => updateItem(idx, 'unit_price', parseFloat(e.target.value) || 0)}
                     min="0"
                     step="0.01"
-                    disabled={true}
-                    className="text-sm bg-gray-50"
+                    disabled={submitting}
+                    className="text-sm"
                   />
                 </div>
 

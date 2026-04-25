@@ -8,6 +8,7 @@ import { StatusBadge } from '@/components/shared/StatusBadge';
 import { DataTable } from '@/components/data-table/DataTable';
 import { Button } from '@/components/ui/button';
 import { PermissionGuard } from '@/components/shared/PermissionGuard';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { getApiClient } from '@/lib/api-client';
 
 interface Invoice {
@@ -23,11 +24,27 @@ interface Invoice {
 const fmt = (v: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(v);
 const fmtDate = (s: string) => new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
+interface Order {
+  id: string;
+  order_number: string;
+  status: string;
+}
+
 export default function InvoicesPage() {
   const router = useRouter();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [sorting, setSorting] = useState<SortingState>([{ id: 'invoice_date', desc: true }]);
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [formData, setFormData] = useState({
+    order_id: '',
+    invoice_date: new Date().toISOString().split('T')[0],
+    due_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+  });
+
+  const api = getApiClient();
 
   const exportCSV = () => {
     const headers = ['Invoice #', 'Customer', 'Issue Date', 'Due Date', 'Total', 'Status'];
@@ -41,21 +58,50 @@ export default function InvoicesPage() {
     a.click();
   };
 
+  const handleCreateInvoice = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.order_id) return;
+
+    setSubmitting(true);
+    try {
+      const { data } = await api.post('/invoices', {
+        order_id: formData.order_id,
+        invoice_date: formData.invoice_date,
+        due_date: formData.due_date,
+      });
+      setInvoices([data, ...invoices]);
+      setShowCreateDialog(false);
+      setFormData({
+        order_id: '',
+        invoice_date: new Date().toISOString().split('T')[0],
+        due_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      });
+    } catch (error) {
+      console.error('Failed to create invoice', error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   useEffect(() => {
     const load = async () => {
       try {
-        const api = getApiClient();
-        const { data } = await api.get('/invoices');
-        const invoicesList = Array.isArray(data) ? data : data.data ?? [];
+        const [invoicesRes, ordersRes] = await Promise.all([
+          api.get('/invoices'),
+          api.get('/orders?status=AUTHORIZED'),
+        ]);
+        const invoicesList = Array.isArray(invoicesRes.data) ? invoicesRes.data : invoicesRes.data.data ?? [];
+        const ordersList = Array.isArray(ordersRes.data) ? ordersRes.data : ordersRes.data.data ?? [];
         setInvoices(invoicesList);
+        setOrders(ordersList.filter((o: any) => o.status === 'AUTHORIZED' && !o.invoice_id));
       } catch (error) {
-        console.error('Failed to load invoices', error);
+        console.error('Failed to load data', error);
       } finally {
         setLoading(false);
       }
     };
     load();
-  }, []);
+  }, [api]);
 
   const columns: ColumnDef<Invoice>[] = [
     { accessorKey: 'invoice_number', header: 'Invoice #',    cell: i => <span className="font-mono text-xs font-semibold" style={{ color: '#146eb4' }}>{String(i.getValue())}</span> },
@@ -78,7 +124,11 @@ export default function InvoicesPage() {
             <Button onClick={exportCSV} variant="outline" className="text-xs">📥 Export CSV</Button>
           )}
           <PermissionGuard permission="sales.invoices.create">
-            <Button style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold hover:opacity-90">
+            <Button
+              onClick={() => setShowCreateDialog(true)}
+              style={{ background: '#FF9900', color: '#0f1111' }}
+              className="font-semibold hover:opacity-90"
+            >
               + Create Invoice
             </Button>
           </PermissionGuard>
@@ -92,6 +142,66 @@ export default function InvoicesPage() {
         onSortingChange={setSorting}
         onRowClick={row => router.push(`/dashboard/sales/invoices/${row.id}`)}
       />
+
+      <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create Invoice</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleCreateInvoice} className="space-y-4">
+            <div>
+              <label className="text-sm font-medium block mb-1">Authorized Order</label>
+              <select
+                value={formData.order_id}
+                onChange={(e) => setFormData({ ...formData, order_id: e.target.value })}
+                required
+                className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+              >
+                <option value="">Select an order</option>
+                {orders.map(o => (
+                  <option key={o.id} value={o.id}>{o.order_number}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="text-sm font-medium block mb-1">Invoice Date</label>
+              <input
+                type="date"
+                value={formData.invoice_date}
+                onChange={(e) => setFormData({ ...formData, invoice_date: e.target.value })}
+                required
+                className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium block mb-1">Due Date</label>
+              <input
+                type="date"
+                value={formData.due_date}
+                onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
+                required
+                className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+              />
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button
+                type="button"
+                onClick={() => setShowCreateDialog(false)}
+                variant="outline"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={submitting || !formData.order_id}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {submitting ? 'Creating...' : 'Create Invoice'}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -17,6 +17,10 @@ class Group extends Model {
         return $this->belongsToMany(Permission::class, 'group_permissions', 'group_id', 'permission_id');
     }
 
+    public function roles(): BelongsToMany {
+        return $this->belongsToMany(Role::class, 'group_roles', 'group_id', 'role_id');
+    }
+
     public function users(): BelongsToMany {
         return $this->belongsToMany(User::class, 'user_groups', 'group_id', 'user_id')
             ->withPivot('assigned_by', 'assigned_at');

@@ -3,6 +3,8 @@
 namespace App\Modules\Sales\Http\Controllers;
 
 use App\Events\OrderStatusChanged;
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\Order;
 use App\Modules\Accounts\Services\PriceListService;
 use App\Modules\Audit\Services\AuditService;
@@ -50,12 +52,12 @@ class OrderController {
 
             $subtotal = 0;
             foreach ($validated['items'] as $item) {
-                $resolvedPrice = $this->priceService->getPriceForItem($item['product_name']);
-                $total = $item['quantity'] * $resolvedPrice;
+                $unitPrice = (float) $item['unit_price'];
+                $total = $item['quantity'] * $unitPrice;
                 $order->items()->create([
                     'product_name' => $item['product_name'],
                     'quantity' => $item['quantity'],
-                    'unit_price' => $resolvedPrice,
+                    'unit_price' => $unitPrice,
                     'total_price' => $total,
                 ]);
                 $subtotal += $total;
@@ -201,15 +203,23 @@ class OrderController {
 
     public function override(Request $request, string $id): JsonResponse {
         try {
+            $permissions = $request->authUser->permissions ?? [];
+            \Log::info('Override permission check', [
+                'user_id' => $request->authUser->sub,
+                'permissions' => $permissions,
+                'has_override' => in_array('sales.orders.override', $permissions),
+                'has_admin_wildcard' => in_array('admin.*', $permissions),
+            ]);
+
+            if (!in_array('sales.orders.override', $permissions) && !in_array('admin.*', $permissions)) {
+                return response()->json(['error' => 'Insufficient permissions for override', 'permissions' => $permissions], 403);
+            }
+
             $order = Order::findOrFail($id);
 
             $validated = $request->validate([
                 'override_reason' => 'required|string|max:500',
             ]);
-
-            if (!in_array('sales.override', $request->authUser->permissions ?? [])) {
-                return response()->json(['error' => 'Insufficient permissions for override'], 403);
-            }
 
             $before = $order->toArray();
             $order->update(['status' => 'OVERRIDDEN', 'metadata' => array_merge($order->metadata ?? [], ['override_reason' => $validated['override_reason']])]);
@@ -227,6 +237,50 @@ class OrderController {
             return response()->json($order);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode() ?: 500);
+        }
+    }
+
+    public function createInvoice(Request $request, string $id): JsonResponse {
+        try {
+            $order = Order::with('customer', 'items')->findOrFail($id);
+
+            $invoice = Invoice::create([
+                'invoice_number' => 'INV-' . now()->format('YmdHis'),
+                'order_id' => $order->id,
+                'customer_id' => $order->customer_id,
+                'issued_by' => $request->authUser->sub,
+                'invoice_date' => now(),
+                'due_date' => now()->addDays(30),
+                'status' => 'draft',
+                'subtotal' => $order->subtotal,
+                'tax' => $order->tax,
+                'total' => $order->total,
+            ]);
+
+            foreach ($order->items as $item) {
+                InvoiceItem::create([
+                    'invoice_id' => $invoice->id,
+                    'order_item_id' => $item->id,
+                    'description' => $item->product_name,
+                    'quantity' => $item->quantity,
+                    'unit_price' => $item->unit_price,
+                    'total_price' => $item->total_price,
+                ]);
+            }
+
+            $this->auditService->log([
+                'user_id' => $request->authUser->sub,
+                'action_type' => 'CREATE',
+                'entity_type' => 'invoices',
+                'entity_id' => $invoice->id,
+                'after_snapshot' => $invoice->toArray(),
+            ]);
+
+            $order->update(['invoice_id' => $invoice->id]);
+
+            return response()->json($order->load('invoice', 'items'), 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }

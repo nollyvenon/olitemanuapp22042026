@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import type { ColumnDef, SortingState } from '@tanstack/react-table';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, Edit2, Trash2 } from 'lucide-react';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { DataTable } from '@/components/data-table/DataTable';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { PermissionGuard } from '@/components/shared/PermissionGuard';
+import { usePermission } from '@/hooks/usePermission';
 import { getApiClient } from '@/lib/api-client';
 
 interface StockGroup {
@@ -40,13 +41,48 @@ const columns: ColumnDef<Category>[] = [
 
 export default function CategoriesPage() {
   const api = getApiClient();
+  const { can } = usePermission();
   const [categories, setCategories] = useState<Category[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ name: '', description: '' });
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this category?')) return;
+    try {
+      await api.delete(`/stock/categories/${id}`);
+      setCategories(categories.filter(c => c.id !== id));
+    } catch (err) {
+      console.error('Failed to delete category', err);
+    }
+  };
+
+  const handleEdit = (category: Category) => {
+    setEditingId(category.id);
+    setForm({ name: category.name, description: category.description || '' });
+    setOpen(true);
+  };
+
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingId) return;
+    setSubmitting(true);
+    try {
+      await api.patch(`/stock/categories/${editingId}`, form);
+      setCategories(categories.map(c => c.id === editingId ? { ...c, ...form } : c));
+      setOpen(false);
+      setEditingId(null);
+      setForm({ name: '', description: '' });
+    } catch (err) {
+      console.error('Failed to update category', err);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -100,19 +136,41 @@ export default function CategoriesPage() {
         {categories.map(cat => (
           <div key={cat.id}>
             <div
-              className="flex items-center gap-3 p-4 border-b bg-gray-50 cursor-pointer hover:bg-gray-100"
-              onClick={() => setExpandedId(expandedId === cat.id ? null : cat.id)}
+              className="flex items-center gap-3 p-4 border-b bg-gray-50 hover:bg-gray-100"
             >
-              <div className="w-6 h-6 flex items-center justify-center">
+              <div
+                className="w-6 h-6 flex items-center justify-center cursor-pointer"
+                onClick={() => setExpandedId(expandedId === cat.id ? null : cat.id)}
+              >
                 {cat.groups && cat.groups.length > 0 && (
                   expandedId === cat.id ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />
                 )}
               </div>
-              <div className="flex-1">
+              <div className="flex-1 cursor-pointer" onClick={() => setExpandedId(expandedId === cat.id ? null : cat.id)}>
                 <p className="font-medium text-sm">{cat.name}</p>
                 <p className="text-xs text-gray-600">{cat.description || '—'}</p>
               </div>
               <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">{cat.groups?.length || 0} groups</span>
+              <div className="flex gap-2">
+                {can('inventory.categories.edit') && (
+                  <button
+                    onClick={() => handleEdit(cat)}
+                    className="text-blue-600 hover:text-blue-700 p-1"
+                    title="Edit"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </button>
+                )}
+                {can('inventory.categories.delete') && (
+                  <button
+                    onClick={() => handleDelete(cat.id)}
+                    className="text-red-600 hover:text-red-700 p-1"
+                    title="Delete"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
             </div>
 
             {expandedId === cat.id && cat.groups && cat.groups.length > 0 && (
@@ -131,12 +189,12 @@ export default function CategoriesPage() {
         ))}
       </div>
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={(newOpen) => { setOpen(newOpen); if (!newOpen) { setEditingId(null); setForm({ name: '', description: '' }); } }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add Category</DialogTitle>
+            <DialogTitle>{editingId ? 'Edit Category' : 'Add Category'}</DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={editingId ? handleSaveEdit : handleSubmit} className="space-y-4">
             <div>
               <Label>Name *</Label>
               <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required disabled={submitting} />
@@ -146,11 +204,11 @@ export default function CategoriesPage() {
               <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} disabled={submitting} />
             </div>
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={submitting}>
+              <Button type="button" variant="outline" onClick={() => { setOpen(false); setEditingId(null); setForm({ name: '', description: '' }); }} disabled={submitting}>
                 Cancel
               </Button>
               <Button type="submit" disabled={submitting}>
-                {submitting ? 'Creating...' : 'Create'}
+                {submitting ? (editingId ? 'Saving...' : 'Creating...') : (editingId ? 'Save' : 'Create')}
               </Button>
             </DialogFooter>
           </form>

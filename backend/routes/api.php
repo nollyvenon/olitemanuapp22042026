@@ -59,6 +59,7 @@ Route::prefix('v1')->group(function () {
         Route::post('orders/{id}/documents', [OrderController::class, 'uploadDocuments']);
         Route::post('orders/{id}/authorize', [OrderController::class, 'authorize']);
         Route::post('orders/{id}/override', [OrderController::class, 'override']);
+        Route::post('orders/{id}/invoices', [OrderController::class, 'createInvoice']);
         Route::post('invoices', [InvoiceController::class, 'store']);
         Route::get('invoices', [InvoiceController::class, 'index']);
         Route::get('invoices/{id}', [InvoiceController::class, 'show']);

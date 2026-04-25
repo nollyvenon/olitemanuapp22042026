@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Barlow, Geist_Mono } from 'next/font/google';
 import { Toaster } from 'sonner';
 import './globals.css';
 import { QueryProvider } from '@/components/providers/QueryProvider';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const barlow = Barlow({
+  variable: '--font-barlow',
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
 });
 
 const geistMono = Geist_Mono({

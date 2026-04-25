@@ -44,15 +44,25 @@ class GroupService {
             return [];
         }
 
-        $permissions = Group::whereIn('id', $groupIds)
-            ->with('permissions')
-            ->get()
-            ->pluck('permissions.*.name')
-            ->flatten()
-            ->unique()
-            ->values()
-            ->toArray();
+        $groups = Group::whereIn('id', $groupIds)
+            ->with('permissions', 'roles.permissions')
+            ->get();
 
-        return $permissions;
+        $permissionNames = [];
+
+        // Get permissions directly from groups
+        foreach ($groups as $group) {
+            foreach ($group->permissions as $permission) {
+                $permissionNames[] = $permission->name;
+            }
+            // Get permissions from roles assigned to the group
+            foreach ($group->roles as $role) {
+                foreach ($role->permissions as $permission) {
+                    $permissionNames[] = $permission->name;
+                }
+            }
+        }
+
+        return array_unique($permissionNames);
     }
 }
