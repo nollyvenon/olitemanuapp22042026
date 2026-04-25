@@ -111,7 +111,8 @@
       "Bash(curl -s http://localhost:3000/api/health)",
       "Bash(curl -s \"http://localhost:3000/dashboard/executive\" -H \"Accept: text/html\")",
       "Bash(curl -s \"http://localhost:8000/api/v1/analytics/executive\" -H \"Authorization: Bearer test\")",
-      "Bash(curl -s \"http://localhost:3000/dashboard\")"
+      "Bash(curl -s \"http://localhost:3000/dashboard\")",
+      "Bash(curl -s -X GET \"http://localhost:8000/api/v1/analytics/accounts-risk\" -H \"Authorization: Bearer test\")"
     ],
     "additionalDirectories": [
       "c:\\Files\\DevelopedApps\\OMCLTA",

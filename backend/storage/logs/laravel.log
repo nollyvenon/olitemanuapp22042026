@@ -2100,3 +2100,13 @@ CONTEXT:  unnamed portal parameter $1 = '...' at C:/Files/DevelopedApps/oliteman
 #3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/artisan(6): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
 #4 {main}
 "} 
+[2026-04-25 08:18:18] local.ERROR: Command "tinker" is not defined. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"tinker\" is not defined. at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/symfony/console/Application.php:759)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/symfony/console/Application.php(298): Symfony/Component/Console/Application->find('tinker')
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/symfony/console/Application.php(195): Symfony/Component/Console/Application->doRun(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony/Component/Console/Application->run(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/artisan(6): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#4 {main}
+"} 
+[2026-04-25 08:21:45] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"test...","tokenLength":4} 
+[2026-04-25 08:21:45] local.ERROR: [JWT] Token validation failed {"error":"Wrong number of segments","code":0,"tokenPrefix":"test...","file":"C:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\vendor\\firebase\\php-jwt\\src\\JWT.php","line":111} 
