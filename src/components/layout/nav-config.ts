@@ -176,6 +176,12 @@ export const NAV_GROUPS: NavGroup[] = [
     label: 'Intelligence',
     items: [
       {
+        label: 'AI Insights',
+        href: '/dashboard/intelligence/ai-insights',
+        icon: Brain,
+        permission: 'analytics.read',
+      },
+      {
         label: 'Reporting Hub',
         href: '/dashboard/intelligence',
         icon: Brain,

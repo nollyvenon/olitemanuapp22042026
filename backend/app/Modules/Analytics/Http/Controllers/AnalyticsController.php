@@ -11,6 +11,7 @@ use App\Modules\Analytics\Services\RevenueIntelligenceService;
 use App\Modules\Analytics\Services\InventoryIntelligenceService;
 use App\Modules\Analytics\Services\AccountsRiskService;
 use App\Modules\Analytics\Services\SalesPerformanceService;
+use App\Modules\Analytics\Services\InsightGeneratorService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -56,5 +57,14 @@ class AnalyticsController
     public function salesPerformance(SalesPerformanceService $service): JsonResponse
     {
         return response()->json($service->getInsights());
+    }
+
+    public function insights(InsightGeneratorService $service): JsonResponse
+    {
+        return response()->json([
+            'daily' => $service->generateDailyInsights(),
+            'weekly' => $service->generateWeeklySummary(),
+            'generated_at' => now()->toIso8601String()
+        ]);
     }
 }

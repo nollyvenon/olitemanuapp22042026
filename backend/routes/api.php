@@ -150,6 +150,7 @@ Route::prefix('v1')->group(function () {
             Route::get('revenue', [AnalyticsController::class, 'revenue']);
             Route::get('accounts-risk', [AnalyticsController::class, 'accountsRisk']);
             Route::get('sales-performance', [AnalyticsController::class, 'salesPerformance']);
+            Route::get('insights', [AnalyticsController::class, 'insights']);
         });
 
         Route::prefix('god-admin')->middleware('god_admin')->group(function () {
