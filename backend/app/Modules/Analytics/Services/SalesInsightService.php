@@ -32,13 +32,14 @@ class SalesInsightService
               AND order_date >= NOW() - INTERVAL '{$period} days'
         ");
 
+        $priorPeriod = $period * 2;
         $prior = DB::selectOne("
             SELECT
               SUM(total) FILTER (WHERE status = 'AUTHORIZED') AS authorized_revenue,
               AVG(total) FILTER (WHERE status = 'AUTHORIZED') AS avg_order_value
             FROM orders
             WHERE is_current = true AND deleted_at IS NULL
-              AND order_date >= NOW() - INTERVAL '{$period * 2} days'
+              AND order_date >= NOW() - INTERVAL '{$priorPeriod} days'
               AND order_date < NOW() - INTERVAL '{$period} days'
         ");
 
