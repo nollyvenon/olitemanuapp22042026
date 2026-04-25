@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getApiClient } from '@/lib/api-client';
 import { useAiStore } from '@/store/ai.store';
 
 export const useAiDashboard = () => {
   const { setInsights, setAlerts, setForecast, setKpis, setLoading, setLastUpdated } = useAiStore();
   const api = getApiClient();
+  const [pollingInterval, setPollingInterval] = useState(30000);
 
   const fetchData = async () => {
     setLoading(true);
@@ -28,10 +29,23 @@ export const useAiDashboard = () => {
   };
 
   useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await api.get('/settings');
+        const interval = (res.data.ai_polling_interval || 30) * 1000;
+        setPollingInterval(interval);
+      } catch (err) {
+        console.error('Failed to fetch settings', err);
+      }
+    };
+    fetchSettings();
+  }, [api]);
+
+  useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 30000);
+    const interval = setInterval(fetchData, pollingInterval);
     return () => clearInterval(interval);
-  }, []);
+  }, [pollingInterval]);
 
   const { insights, alerts, forecast, kpis, lastUpdated, isLoading } = useAiStore();
   return { insights, alerts, forecast, kpis, lastUpdated, isLoading, refetch: fetchData };

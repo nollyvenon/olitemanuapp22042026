@@ -54,9 +54,14 @@ class AiInsightService {
 
     private function enrichWithOpenAI(array $data): array {
         try {
+            $setting = \App\Models\Setting::where('key', 'openai_api_key')->first();
+            $apiKey = $setting?->value ?? env('OPENAI_API_KEY');
+
+            if (!$apiKey) return '';
+
             $prompt = "Analyze this ERP data and provide 3 actionable business recommendations:\n" . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
-            $response = Http::withToken(env('OPENAI_API_KEY'))->post('https://api.openai.com/v1/chat/completions', [
+            $response = Http::withToken($apiKey)->post('https://api.openai.com/v1/chat/completions', [
                 'model' => 'gpt-4o-mini',
                 'messages' => [['role' => 'user', 'content' => $prompt]],
                 'temperature' => 0.7,

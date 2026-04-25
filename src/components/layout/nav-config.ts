@@ -317,6 +317,12 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: Settings,
         permission: 'admin.*',
       },
+      {
+        label: 'AI Settings',
+        href: '/dashboard/admin/ai-settings',
+        icon: Brain,
+        permission: 'admin.*',
+      },
     ],
   },
   {
