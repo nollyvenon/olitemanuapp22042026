@@ -74,10 +74,10 @@ class AccountsRiskService
                 COUNT(*) AS overdue_invoices,
                 MAX(CURRENT_DATE - i.due_date::date)::int AS days_overdue,
                 ROUND(SUM(CASE WHEN i.status NOT IN ('paid','cancelled') THEN i.total ELSE 0 END)::numeric /
-                  NULLIF(SUM(i.total), 0) * 100, 1) AS % overdue
+                  NULLIF(SUM(i.total), 0) * 100, 1) AS overdue_percent
             FROM customers c
             LEFT JOIN invoices i ON i.customer_id = c.id AND i.deleted_at IS NULL
-            WHERE CURRENT_DATE > i.due_date::date AND i.status NOT IN ('paid','cancelled')
+            WHERE i.deleted_at IS NULL AND CURRENT_DATE > i.due_date::date AND i.status NOT IN ('paid','cancelled')
             GROUP BY c.id, c.name, c.email
             ORDER BY amount_due DESC
         ");
