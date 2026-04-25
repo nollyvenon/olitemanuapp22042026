@@ -123,7 +123,9 @@
       "Bash(rm -rf /c/Files/DevelopedApps/olitemanuapp_21042026/backend/bootstrap/cache/*)",
       "Bash(php artisan *)",
       "PowerShell(Stop-Process -Force)",
-      "Bash(grep -E \"\\\\.\\(tsx|ts|jsx|js\\)$\")"
+      "Bash(grep -E \"\\\\.\\(tsx|ts|jsx|js\\)$\")",
+      "Bash(rm -rf bootstrap/cache/*)",
+      "Bash(curl -s http://localhost:8000/api/v1/analytics/ai/insights -H \"Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJpYXQiOjE3MTk0NTEyNzYsImV4cCI6MTcxOTQ1Nzc3Niwic3ViIjoiMDk4ZjJkYjAtYzc1Ni00OGVhLTljMDAtYzcxNjcwYWEzZmU5In0.NKwfEz32pAGLhjLm4VG8pMajV6hH37fZdgBj8z9cMTQ\")"
     ],
     "additionalDirectories": [
       "c:\\Files\\DevelopedApps\\OMCLTA",

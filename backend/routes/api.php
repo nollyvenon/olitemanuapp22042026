@@ -149,6 +149,10 @@ Route::prefix('v1')->group(function () {
         Route::patch('manuals/{id}', [ManualController::class, 'update']);
 
         Route::prefix('analytics')->group(function () {
+            Route::get('ai/insights', [AnalyticsController::class, 'aiInsights']);
+            Route::get('ai/forecast', [AnalyticsController::class, 'aiForecast']);
+            Route::get('ai/alerts', [AnalyticsController::class, 'aiAlerts']);
+
             Route::get('unified', [AnalyticsController::class, 'unified']);
             Route::get('unified/{module}', [AnalyticsController::class, 'unifiedModule']);
             Route::get('correlations', [AnalyticsController::class, 'crossModuleCorrelations']);

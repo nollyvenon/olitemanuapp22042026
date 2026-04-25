@@ -1,0 +1,2 @@
+[2026-04-25 15:27:11] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":268} 
+[2026-04-25 15:27:11] local.ERROR: [JWT] Token validation failed {"error":"Signature verification failed","code":0,"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","file":"C:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\vendor\\firebase\\php-jwt\\src\\JWT.php","line":162} 

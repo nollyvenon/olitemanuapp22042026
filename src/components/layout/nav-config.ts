@@ -26,6 +26,7 @@ import {
   Brain,
   LineChart,
   HelpCircle,
+  Sparkles,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -44,7 +45,10 @@ export interface NavGroup {
 
 export const NAV_GROUPS: NavGroup[] = [
   {
-    items: [{ label: 'Dashboard', href: '/dashboard/overview', icon: LayoutDashboard }],
+    items: [
+      { label: 'Dashboard', href: '/dashboard/overview', icon: LayoutDashboard },
+      { label: 'AI Dashboard', href: '/dashboard/ai-dashboard', icon: Sparkles },
+    ],
   },
   {
     label: 'Sales',

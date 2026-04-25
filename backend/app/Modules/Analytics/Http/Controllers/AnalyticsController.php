@@ -16,6 +16,7 @@ use App\Modules\Analytics\Services\AlertService;
 use App\Modules\Analytics\Services\ForecastService;
 use App\Modules\Analytics\Services\AuditReportService;
 use App\Modules\Analytics\Services\UnifiedIntelligenceService;
+use App\Modules\Analytics\Services\AiInsightService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -125,5 +126,24 @@ class AnalyticsController
     public function crossModuleCorrelations(UnifiedIntelligenceService $service): JsonResponse
     {
         return response()->json(['correlations' => $service->getCrossModuleCorrelations()]);
+    }
+
+    public function aiInsights(AiInsightService $service): JsonResponse
+    {
+        return response()->json($service->getInsights());
+    }
+
+    public function aiForecast(ForecastService $service): JsonResponse
+    {
+        return response()->json(['sales' => $service->getSalesForecasts(), 'inventory' => $service->getInventoryForecasts(), 'cashflow' => $service->getCashFlowForecasts()]);
+    }
+
+    public function aiAlerts(AlertService $service): JsonResponse
+    {
+        $alerts = $service->getActiveAlerts();
+        foreach ($alerts as $alert) {
+            \App\Models\Notification::create(['user_id' => \Auth::id(), 'type' => $alert['type'] ?? 'alert', 'message' => $alert['message'] ?? '', 'data' => json_encode($alert)]);
+        }
+        return response()->json(['alerts' => $alerts]);
     }
 }
