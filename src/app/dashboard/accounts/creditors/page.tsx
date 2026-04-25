@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect } from 'react';
 import type { ColumnDef, SortingState } from '@tanstack/react-table';
 import { PageHeader } from '@/components/shared/PageHeader';

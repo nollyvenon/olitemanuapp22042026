@@ -211,6 +211,12 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: DollarSign,
         permission: 'analytics.read',
       },
+      {
+        label: 'Inventory',
+        href: '/dashboard/intelligence/inventory-intelligence',
+        icon: Package,
+        permission: 'analytics.read',
+      },
     ],
   },
   {
