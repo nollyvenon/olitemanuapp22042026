@@ -22,7 +22,7 @@ interface InventoryReport {
   status: string;
 }
 
-const fmt = (v: number, d = 0) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
+const fmt = (v: number, d = 0) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
 
 const columns: ColumnDef<InventoryReport>[] = [
   { accessorKey: 'code',        header: 'Code',        cell: i => <span className="font-mono text-xs font-semibold" style={{ color: '#146eb4' }}>{String(i.getValue())}</span> },

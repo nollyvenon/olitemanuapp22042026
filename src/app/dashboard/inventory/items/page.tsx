@@ -29,7 +29,7 @@ interface ItemGroup {
   name: string;
 }
 
-const fmt = (v: number, decimals = 0) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(v);
+const fmt = (v: number, decimals = 0) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(v);
 
 const exportCSVItems = (items: InventoryItem[]) => {
   const headers = ['SKU', 'Item Name', 'Unit', 'Reorder Level', 'Unit Cost'];

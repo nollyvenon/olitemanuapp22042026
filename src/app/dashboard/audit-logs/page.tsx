@@ -41,7 +41,7 @@ const ACTION_COLORS: Record<string, { bg: string; color: string }> = {
   ISSUE:    { bg: '#fff8e7', color: '#c45500' },
 };
 
-const fmtTime = (s: string) => new Date(s).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+const fmtTime = (s: string) => new Date(s).toLocaleString('en-NG', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
 
 const columns: ColumnDef<AuditLog>[] = [
   { accessorKey: 'user',      header: 'User',      cell: i => <span className="font-medium text-sm" style={{ color: '#0f1111' }}>{String(i.getValue())}</span> },

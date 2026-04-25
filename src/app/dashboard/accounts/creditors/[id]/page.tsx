@@ -29,7 +29,7 @@ interface Transaction {
   reference: string;
 }
 
-const fmt = (v: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(v);
+const fmt = (v: number) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(v);
 
 export default function CreditorDetailPage() {
   const params = useParams();
@@ -87,7 +87,7 @@ export default function CreditorDetailPage() {
         </Card>
         <Card className="p-4">
           <p className="text-xs text-gray-600 font-semibold">Next Due</p>
-          <p className="text-sm font-medium mt-2">{new Date(creditor.next_due).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+          <p className="text-sm font-medium mt-2">{new Date(creditor.next_due).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
         </Card>
         <Card className="p-4">
           <p className="text-xs text-gray-600 font-semibold">Status</p>

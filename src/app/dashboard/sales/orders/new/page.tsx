@@ -29,7 +29,7 @@ interface OrderItem {
   unit_price: number;
 }
 
-const fmt = (v: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(v);
+const fmt = (v: number) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(v);
 
 export default function NewOrderPage() {
   const router = useRouter();

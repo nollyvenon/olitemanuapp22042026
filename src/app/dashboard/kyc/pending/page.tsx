@@ -29,7 +29,7 @@ const columns: ColumnDef<KycApplication>[] = [
   { accessorKey: 'ref',           header: 'Ref #',          cell: i => <span className="font-mono text-xs font-semibold" style={{ color: '#146eb4' }}>{String(i.getValue())}</span> },
   { accessorKey: 'applicant',     header: 'Applicant',      cell: i => <span className="font-medium text-sm" style={{ color: '#0f1111' }}>{String(i.getValue())}</span> },
   { accessorKey: 'business_type', header: 'Business Type',  cell: i => <span className="text-sm" style={{ color: '#555555' }}>{String(i.getValue())}</span> },
-  { accessorKey: 'submitted_date',header: 'Submitted',      cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
+  { accessorKey: 'submitted_date',header: 'Submitted',      cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
   {
     accessorKey: 'days_pending',
     header: 'Days Pending',

@@ -28,7 +28,7 @@ export function Topbar() {
           <Menu className="h-5 w-5" />
         </button>
         <span className="hidden sm:block text-sm font-medium" style={{ color: '#aab7c4' }}>
-          {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+          {new Date().toLocaleDateString('en-NG', { weekday: 'long', month: 'long', day: 'numeric' })}
         </span>
       </div>
 

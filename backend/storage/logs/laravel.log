@@ -1296,3 +1296,23 @@ CONTEXT:  unnamed portal parameter $4 = '...' at C:/Files/DevelopedApps/oliteman
 [2026-04-25 00:39:06] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
 [2026-04-25 00:39:06] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
 [2026-04-25 00:39:06] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:41:11] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:41:11] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:41:11] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:41:11] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:41:41] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:41:41] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:41:41] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:41:41] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:42:13] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:42:13] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:42:13] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:42:13] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:42:57] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:42:57] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:42:57] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:42:57] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:43:15] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:43:15] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:43:16] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:43:16] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 

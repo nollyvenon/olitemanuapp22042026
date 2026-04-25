@@ -31,7 +31,7 @@ const VOUCHERS: Voucher[] = [
   { id: '8',  voucher_number: 'VCH-00384', type: 'Payment',  party: 'Copper Tech Industries', date: '2026-04-17', amount: 62000,  narration: 'Wire supply March settlement',  created_by: 'Sarah Mensah', status: 'pending' },
 ];
 
-const fmt = (v: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(v);
+const fmt = (v: number) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(v);
 
 const TYPE_COLORS: Record<string, { bg: string; color: string }> = {
   Receipt: { bg: '#e8f8f5', color: '#067d62' },
@@ -51,7 +51,7 @@ const columns: ColumnDef<Voucher>[] = [
     },
   },
   { accessorKey: 'party',      header: 'Party',       cell: i => <span className="font-medium text-sm" style={{ color: '#0f1111' }}>{String(i.getValue())}</span> },
-  { accessorKey: 'date',       header: 'Date',        cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
+  { accessorKey: 'date',       header: 'Date',        cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
   { accessorKey: 'amount',     header: 'Amount',      cell: i => <span className="font-bold tabular-nums">{fmt(i.getValue() as number)}</span> },
   { accessorKey: 'narration',  header: 'Narration',   cell: i => <span className="text-xs truncate max-w-[200px] block" style={{ color: '#555555' }}>{String(i.getValue())}</span> },
   { accessorKey: 'created_by', header: 'Created By',  cell: i => <span className="text-sm" style={{ color: '#767676' }}>{String(i.getValue())}</span> },

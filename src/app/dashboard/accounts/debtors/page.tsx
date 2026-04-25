@@ -21,7 +21,7 @@ interface Debtor {
   status: string;
 }
 
-const fmt = (v: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(v);
+const fmt = (v: number) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(v);
 
 const columns: ColumnDef<Debtor>[] = [
   { accessorKey: 'account_code', header: 'Account #',     cell: i => <span className="font-mono text-xs font-semibold" style={{ color: '#146eb4' }}>{String(i.getValue())}</span> },
@@ -30,7 +30,7 @@ const columns: ColumnDef<Debtor>[] = [
   { accessorKey: 'credit_limit', header: 'Credit Limit',  cell: i => <span className="tabular-nums text-sm">{fmt(i.getValue() as number)}</span> },
   { accessorKey: 'balance',      header: 'Balance',       cell: i => <span className="font-bold tabular-nums" style={{ color: (i.getValue() as number) > 0 ? '#cc0c39' : '#067d62' }}>{fmt(i.getValue() as number)}</span> },
   { accessorKey: 'overdue',      header: 'Overdue',       cell: i => <span className="font-bold tabular-nums" style={{ color: (i.getValue() as number) > 0 ? '#cc0c39' : '#767676' }}>{fmt(i.getValue() as number)}</span> },
-  { accessorKey: 'last_payment', header: 'Last Payment',  cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
+  { accessorKey: 'last_payment', header: 'Last Payment',  cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
   { accessorKey: 'status',       header: 'Status',        cell: i => <StatusBadge status={String(i.getValue())} /> },
 ];
 

@@ -31,7 +31,7 @@ const APPLICATIONS: KycApplication[] = [
   { id: '10', ref: 'KYC-00232', applicant: 'CloudBridge Tech',          business_type: 'Technology',    submitted_date: '2026-04-16', status: 'approved', reviewed_by: 'James Okafor',  reviewed_date: '2026-04-17' },
 ];
 
-const fmtDate = (s?: string) => s ? new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+const fmtDate = (s?: string) => s ? new Date(s).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
 
 const columns: ColumnDef<KycApplication>[] = [
   { accessorKey: 'ref',           header: 'Ref #',            cell: i => <span className="font-mono text-xs font-semibold" style={{ color: '#146eb4' }}>{String(i.getValue())}</span> },

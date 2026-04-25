@@ -42,7 +42,7 @@ const columns: ColumnDef<MovementReport>[] = [
   { accessorKey: 'qty_in',  header: 'Qty In',   cell: i => <span className="font-bold tabular-nums" style={{ color: (i.getValue() as number) > 0 ? '#067d62' : '#767676' }}>{(i.getValue() as number) > 0 ? `+${(i.getValue() as number).toLocaleString()}` : '—'}</span> },
   { accessorKey: 'qty_out', header: 'Qty Out',  cell: i => <span className="font-bold tabular-nums" style={{ color: (i.getValue() as number) > 0 ? '#cc0c39' : '#767676' }}>{(i.getValue() as number) > 0 ? `-${(i.getValue() as number).toLocaleString()}` : '—'}</span> },
   { accessorKey: 'balance', header: 'Balance',  cell: i => <span className="font-bold tabular-nums">{(i.getValue() as number).toLocaleString()}</span> },
-  { accessorKey: 'date',    header: 'Date',     cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
+  { accessorKey: 'date',    header: 'Date',     cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
 ];
 
 export default function MovementsReportPage() {

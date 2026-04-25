@@ -58,7 +58,7 @@ const StateFlow = ({ current }: { current: string }) => {
   );
 };
 
-const fmt = (v: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(v);
+const fmt = (v: number) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(v);
 
 export default function OrderDetailPage() {
   const params = useParams();
@@ -202,7 +202,7 @@ export default function OrderDetailPage() {
       <div className="grid grid-cols-3 gap-4">
         <Card className="p-4">
           <p className="text-xs text-gray-600 font-semibold">Order Date</p>
-          <p className="text-sm font-medium mt-1">{new Date(order.order_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+          <p className="text-sm font-medium mt-1">{new Date(order.order_date).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
         </Card>
         <Card className="p-4">
           <p className="text-xs text-gray-600 font-semibold">Form Status</p>

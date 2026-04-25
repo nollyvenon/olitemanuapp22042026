@@ -44,7 +44,7 @@ const columns: ColumnDef<StockMovement>[] = [
       </span>
     ),
   },
-  { accessorKey: 'date', header: 'Date', cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
+  { accessorKey: 'date', header: 'Date', cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
 ];
 
 export default function StockMovementsPage() {

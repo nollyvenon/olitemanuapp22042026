@@ -35,7 +35,7 @@ interface Document {
   verified: boolean;
 }
 
-const fmtDate = (s?: string) => s ? new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+const fmtDate = (s?: string) => s ? new Date(s).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
 
 export default function KycApplicationDetailPage() {
   const params = useParams();

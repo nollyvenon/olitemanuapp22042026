@@ -38,7 +38,7 @@ const STATUS_STYLES: Record<TxStatus, { bg: string; color: string; label: string
 };
 
 const fmt = (v: number) =>
-  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(v);
+  new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(v);
 
 function SortIcon({ sorted }: { sorted: false | 'asc' | 'desc' }) {
   if (sorted === 'asc')  return <ArrowUp className="ml-1 h-3 w-3 inline" />;
@@ -106,7 +106,7 @@ const COLUMNS: ColumnDef<Transaction, any>[] = [
     header: ({ column }) => <SortableHeader column={column} label="Date" />,
     cell: ({ getValue }) => (
       <span className="text-xs tabular-nums" style={{ color: '#767676' }}>
-        {new Date(String(getValue())).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+        {new Date(String(getValue())).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' })}
       </span>
     ),
   },

@@ -21,7 +21,7 @@ interface SalesOrder {
   form_status?: string;
 }
 
-const fmt = (v: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(v);
+const fmt = (v: number) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(v);
 
 export default function SalesOrdersPage() {
   const router = useRouter();
@@ -60,7 +60,7 @@ export default function SalesOrdersPage() {
   const columns: ColumnDef<SalesOrder>[] = [
     { accessorKey: 'order_number', header: 'Order #', cell: i => <span className="font-mono text-xs font-semibold" style={{ color: '#146eb4' }}>{String(i.getValue())}</span> },
     { accessorKey: 'customer_name',     header: 'Customer',  cell: i => <span className="font-medium text-sm" style={{ color: '#0f1111' }}>{String(i.getValue())}</span> },
-    { accessorKey: 'order_date',         header: 'Date',      cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
+    { accessorKey: 'order_date',         header: 'Date',      cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
     { id: 'items', header: 'Items', cell: ({ row }) => <span className="tabular-nums">{row.original.items?.length ?? 0}</span> },
     { accessorKey: 'total',        header: 'Total',     cell: i => <span className="font-bold tabular-nums">{fmt(i.getValue() as number)}</span> },
     { accessorKey: 'status',       header: 'Status',    cell: i => <StatusBadge status={String(i.getValue())} /> },

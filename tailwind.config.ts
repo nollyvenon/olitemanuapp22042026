@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-barlow)', 'sans-serif'],
+      },
       colors: {
         primary: 'var(--primary)',
         secondary: 'var(--secondary)',

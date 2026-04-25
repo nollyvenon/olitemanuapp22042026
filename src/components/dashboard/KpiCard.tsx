@@ -24,12 +24,12 @@ export interface KpiCardProps {
 function formatValue(value: number, format: KpiCardProps['format'] = 'number', prefix = '', suffix = '') {
   let formatted: string;
   if (format === 'currency') {
-    formatted = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
+    formatted = new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
   } else if (format === 'compact') {
-    formatted = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(value);
+    formatted = new Intl.NumberFormat('en-NG', { notation: 'compact', maximumFractionDigits: 1 }).format(value);
     formatted = prefix + formatted + suffix;
   } else {
-    formatted = prefix + new Intl.NumberFormat('en-US').format(value) + suffix;
+    formatted = prefix + new Intl.NumberFormat('en-NG').format(value) + suffix;
   }
   return formatted;
 }
@@ -44,7 +44,7 @@ function useCountUp(target: number, duration = 900) {
       const p = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - p, 3);
       const current = Math.round(eased * target);
-      if (ref.current) ref.current.textContent = new Intl.NumberFormat('en-US').format(current);
+      if (ref.current) ref.current.textContent = new Intl.NumberFormat('en-NG').format(current);
       if (p < 1) frameId = requestAnimationFrame(tick);
     };
     frameId = requestAnimationFrame(tick);

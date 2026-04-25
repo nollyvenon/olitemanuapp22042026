@@ -21,15 +21,15 @@ interface PriceList {
 }
 
 const PRICE_LISTS: PriceList[] = [
-  { id: '1', code: 'PL-2026-STD',  name: 'Standard Price List 2026',    currency: 'USD', customer_segment: 'General',    item_count: 248, effective_from: '2026-01-01', effective_to: '2026-12-31', status: 'active' },
-  { id: '2', code: 'PL-2026-PREM', name: 'Premium Customer 2026',        currency: 'USD', customer_segment: 'Premium',    item_count: 248, effective_from: '2026-01-01', effective_to: '2026-12-31', status: 'active' },
-  { id: '3', code: 'PL-2026-EXP',  name: 'Export Price List 2026',       currency: 'USD', customer_segment: 'Export',     item_count: 120, effective_from: '2026-01-01', effective_to: '2026-12-31', status: 'active' },
+  { id: '1', code: 'PL-2026-STD',  name: 'Standard Price List 2026',    currency: 'NGN', customer_segment: 'General',    item_count: 248, effective_from: '2026-01-01', effective_to: '2026-12-31', status: 'active' },
+  { id: '2', code: 'PL-2026-PREM', name: 'Premium Customer 2026',        currency: 'NGN', customer_segment: 'Premium',    item_count: 248, effective_from: '2026-01-01', effective_to: '2026-12-31', status: 'active' },
+  { id: '3', code: 'PL-2026-EXP',  name: 'Export Price List 2026',       currency: 'NGN', customer_segment: 'Export',     item_count: 120, effective_from: '2026-01-01', effective_to: '2026-12-31', status: 'active' },
   { id: '4', code: 'PL-2026-WHB',  name: 'Wholesale Bulk 2026',          currency: 'NGN', customer_segment: 'Wholesale',  item_count: 180, effective_from: '2026-01-01', effective_to: '2026-06-30', status: 'active' },
-  { id: '5', code: 'PL-2025-STD',  name: 'Standard Price List 2025',     currency: 'USD', customer_segment: 'General',    item_count: 231, effective_from: '2025-01-01', effective_to: '2025-12-31', status: 'inactive' },
-  { id: '6', code: 'PL-Q2-PROMO',  name: 'Q2 2026 Promotional Prices',   currency: 'USD', customer_segment: 'All',        item_count: 48,  effective_from: '2026-04-01', effective_to: '2026-06-30', status: 'active' },
+  { id: '5', code: 'PL-2025-STD',  name: 'Standard Price List 2025',     currency: 'NGN', customer_segment: 'General',    item_count: 231, effective_from: '2025-01-01', effective_to: '2025-12-31', status: 'inactive' },
+  { id: '6', code: 'PL-Q2-PROMO',  name: 'Q2 2026 Promotional Prices',   currency: 'NGN', customer_segment: 'All',        item_count: 48,  effective_from: '2026-04-01', effective_to: '2026-06-30', status: 'active' },
 ];
 
-const fmtDate = (s: string) => new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const fmtDate = (s: string) => new Date(s).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' });
 
 const columns: ColumnDef<PriceList>[] = [
   { accessorKey: 'code',             header: 'Code',             cell: i => <span className="font-mono text-xs font-semibold" style={{ color: '#146eb4' }}>{String(i.getValue())}</span> },

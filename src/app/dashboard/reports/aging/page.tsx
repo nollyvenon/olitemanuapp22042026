@@ -21,7 +21,7 @@ interface AgingRow {
   total: number;
 }
 
-const fmt = (v: number) => v === 0 ? <span style={{ color: '#d5d9d9' }}>—</span> : <span className="tabular-nums">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(v)}</span>;
+const fmt = (v: number) => v === 0 ? <span style={{ color: '#d5d9d9' }}>—</span> : <span className="tabular-nums">{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(v)}</span>;
 
 const columns: ColumnDef<AgingRow>[] = [
   { accessorKey: 'account',      header: 'Account #',  cell: i => <span className="font-mono text-xs font-semibold" style={{ color: '#146eb4' }}>{String(i.getValue())}</span> },
@@ -39,7 +39,7 @@ const columns: ColumnDef<AgingRow>[] = [
   { accessorKey: 'days_60',      header: '31–60 Days', cell: i => <span style={{ color: (i.getValue() as number) > 0 ? '#FF9900' : undefined }}>{fmt(i.getValue() as number)}</span> },
   { accessorKey: 'days_90',      header: '61–90 Days', cell: i => <span style={{ color: (i.getValue() as number) > 0 ? '#cc0c39' : undefined }}>{fmt(i.getValue() as number)}</span> },
   { accessorKey: 'days_90_plus', header: '90+ Days',   cell: i => <span className="font-bold" style={{ color: (i.getValue() as number) > 0 ? '#cc0c39' : undefined }}>{fmt(i.getValue() as number)}</span> },
-  { accessorKey: 'total',        header: 'Total',      cell: i => <span className="font-bold tabular-nums">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(i.getValue() as number)}</span> },
+  { accessorKey: 'total',        header: 'Total',      cell: i => <span className="font-bold tabular-nums">{new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(i.getValue() as number)}</span> },
 ];
 
 export default function AgingReportPage() {

@@ -30,7 +30,7 @@ const columns: ColumnDef<KycApproved>[] = [
   { accessorKey: 'applicant',        header: 'Applicant',       cell: i => <span className="font-medium text-sm" style={{ color: '#0f1111' }}>{String(i.getValue())}</span> },
   { accessorKey: 'business_type',    header: 'Business Type',   cell: i => <span className="text-sm" style={{ color: '#555555' }}>{String(i.getValue())}</span> },
   { accessorKey: 'approved_by',      header: 'Approved By',     cell: i => <span className="text-sm" style={{ color: '#555555' }}>{String(i.getValue())}</span> },
-  { accessorKey: 'approved_date',    header: 'Approved Date',   cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
+  { accessorKey: 'approved_date',    header: 'Approved Date',   cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
   { accessorKey: 'customer_account', header: 'Customer Acct',  cell: i => <span className="font-mono text-xs font-semibold" style={{ color: '#067d62' }}>{String(i.getValue() ?? '—')}</span> },
   { id: 'status', header: 'Status',  cell: () => <StatusBadge status="approved" /> },
 ];

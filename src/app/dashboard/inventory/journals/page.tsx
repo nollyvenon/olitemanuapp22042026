@@ -39,7 +39,7 @@ const columns: ColumnDef<Journal>[] = [
   { accessorKey: 'ref',        header: 'Reference',   cell: i => <span className="font-mono text-xs font-semibold" style={{ color: '#146eb4' }}>{String(i.getValue())}</span> },
   { accessorKey: 'type',       header: 'Type',        cell: i => <span className="font-medium text-sm" style={{ color: '#0f1111' }}>{String(i.getValue())}</span> },
   { accessorKey: 'store',      header: 'Store',       cell: i => <span className="text-sm" style={{ color: '#555555' }}>{String(i.getValue())}</span> },
-  { accessorKey: 'date',       header: 'Date',        cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
+  { accessorKey: 'date',       header: 'Date',        cell: i => <span className="text-xs tabular-nums" style={{ color: '#767676' }}>{new Date(String(i.getValue())).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' })}</span> },
   { accessorKey: 'items',      header: 'Lines',       cell: i => <span className="tabular-nums">{String(i.getValue())}</span> },
   { accessorKey: 'total_qty',  header: 'Total Qty',   cell: i => <span className="font-bold tabular-nums">{(i.getValue() as number).toLocaleString()}</span> },
   { accessorKey: 'created_by', header: 'Created By',  cell: i => <span className="text-sm" style={{ color: '#555555' }}>{String(i.getValue())}</span> },

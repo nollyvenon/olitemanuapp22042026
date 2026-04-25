@@ -28,8 +28,8 @@ interface Invoice {
   items?: InvoiceItem[];
 }
 
-const fmt = (v: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(v);
-const fmtDate = (s: string) => new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const fmt = (v: number) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(v);
+const fmtDate = (s: string) => new Date(s).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' });
 
 export default function InvoiceDetailPage() {
   const params = useParams();
