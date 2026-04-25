@@ -106,7 +106,8 @@
       "Bash(grep -r '$request->authUser' 'c:\\\\Files\\\\DevelopedApps\\\\olitemanuapp_21042026\\\\backend' '--include=*.php')",
       "Bash(grep -E \"\\\\.\\(php|sql\\)$\")",
       "Bash(PGPASSWORD=postgres psql -h localhost -U postgres -d omclta -c \"SELECT id, name, email, is_god_admin, is_active FROM users WHERE is_god_admin = true OR is_sub_admin = true LIMIT 5;\")",
-      "Bash(curl -s http://localhost:8000/health)"
+      "Bash(curl -s http://localhost:8000/health)",
+      "Bash(tee build-output.log)"
     ],
     "additionalDirectories": [
       "c:\\Files\\DevelopedApps\\OMCLTA",

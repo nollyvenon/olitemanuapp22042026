@@ -90,37 +90,41 @@ export default function InvoicesPage() {
   const exportExcel = async () => {
     const { headers, rows } = exportData();
     try {
-      const { data } = await api.post('/export/excel', {
+      const response = await api.post('/export/excel', {
         headers,
         rows,
         filename: `invoices-${new Date().toISOString().split('T')[0]}.xlsx`
       }, { responseType: 'blob' });
-      const url = window.URL.createObjectURL(new Blob([data]));
+      const url = window.URL.createObjectURL(response.data);
       const a = document.createElement('a');
       a.href = url;
       a.download = `invoices-${new Date().toISOString().split('T')[0]}.xlsx`;
       a.click();
-    } catch (error) {
+      window.URL.revokeObjectURL(url);
+    } catch (error: any) {
       console.error('Export failed', error);
+      alert('Failed to export Excel file');
     }
   };
 
   const exportPDF = async () => {
     const { headers, rows } = exportData();
     try {
-      const { data } = await api.post('/export/pdf', {
+      const response = await api.post('/export/pdf', {
         headers,
         rows,
         title: 'Sales Invoices Report',
         filename: `invoices-${new Date().toISOString().split('T')[0]}.pdf`
       }, { responseType: 'blob' });
-      const url = window.URL.createObjectURL(new Blob([data]));
+      const url = window.URL.createObjectURL(response.data);
       const a = document.createElement('a');
       a.href = url;
       a.download = `invoices-${new Date().toISOString().split('T')[0]}.pdf`;
       a.click();
-    } catch (error) {
+      window.URL.revokeObjectURL(url);
+    } catch (error: any) {
       console.error('Export failed', error);
+      alert('Failed to export PDF file');
     }
   };
 
@@ -162,7 +166,7 @@ export default function InvoicesPage() {
         // Extract unique depots and territories
         const depotsSet = new Set<string>();
         const territoriesSet = new Set<string>();
-        invoicesList.forEach(i => {
+        invoicesList.forEach((i: Invoice) => {
           if (i.order?.creator?.locations?.[0]?.name) depotsSet.add(i.order.creator.locations[0].name);
           if (i.order?.creator?.locations?.[0]?.city) territoriesSet.add(i.order.creator.locations[0].city);
         });

@@ -38,11 +38,18 @@ class ExportController {
             $tempFile = tempnam(sys_get_temp_dir(), 'xlsx_');
             $writer->save($tempFile);
 
-            return response()->download($tempFile, $validated['filename'], [
+            $content = file_get_contents($tempFile);
+            @unlink($tempFile);
+
+            return response($content, 200, [
                 'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            ])->deleteFileAfterSend();
+                'Content-Disposition' => 'attachment; filename="' . $validated['filename'] . '"',
+                'Content-Length' => strlen($content),
+                'Access-Control-Allow-Origin' => '*',
+                'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
+            ]);
         } catch (\Exception $e) {
-            return response(['error' => 'Failed to generate Excel file'], 500);
+            return response(['error' => 'Failed to generate Excel file: ' . $e->getMessage()], 500);
         }
     }
 
@@ -56,24 +63,40 @@ class ExportController {
 
         try {
             $pdf = new \TCPDF();
-            $pdf->AddPage();
-            $pdf->SetFont('Arial', 'B', 16);
-            $pdf->Cell(0, 10, $validated['title'], 0, 1, 'C');
-            $pdf->SetFont('Arial', '', 10);
-            $pdf->Ln(5);
+            $pdf->SetDefaultMonospacedFont(\PDF_FONT_MONOSPACED);
+            $pdf->SetMargins(5, 10, 5);
+            $pdf->AddPage('L'); // Landscape mode for better column spacing
+            $pdf->SetFont('helvetica', 'B', 14);
+            $pdf->Cell(0, 8, $validated['title'], 0, 1, 'C');
+            $pdf->SetFont('helvetica', '', 9);
+            $pdf->Ln(3);
 
-            // Create table
-            $pdf->SetFont('Arial', 'B', 9);
-            $colWidths = array_fill(0, count($validated['headers']), 190 / count($validated['headers']));
+            // Calculate column widths - distribute evenly across page width
+            $numCols = count($validated['headers']);
+            $pageWidth = $pdf->GetPageWidth() - 10; // Account for margins (5+5)
+            $colWidth = $pageWidth / $numCols;
+
+            // Print headers with better styling
+            $pdf->SetFont('helvetica', 'B', 7);
+            $pdf->SetFillColor(220, 220, 220);
+            $pdf->SetDrawColor(0, 0, 0);
+            $pdf->SetLineWidth(0.3);
 
             foreach ($validated['headers'] as $header) {
-                $pdf->MultiCell($colWidths[0], 5, $header, 1, 'C');
+                // Truncate header text to fit column width
+                $text = substr($header, 0, 18);
+                $pdf->Cell($colWidth, 5, $text, 1, 0, 'C', true);
             }
+            $pdf->Ln();
 
-            $pdf->SetFont('Arial', '', 8);
+            // Print rows
+            $pdf->SetFont('helvetica', '', 6.5);
+            $pdf->SetFillColor(255, 255, 255);
             foreach ($validated['rows'] as $row) {
                 foreach ($row as $cell) {
-                    $pdf->MultiCell($colWidths[0], 5, (string)$cell, 1, 'L');
+                    // Truncate cell text to fit column width
+                    $text = substr((string)$cell, 0, 22);
+                    $pdf->Cell($colWidth, 4, $text, 1, 0, 'L');
                 }
                 $pdf->Ln();
             }
@@ -81,11 +104,18 @@ class ExportController {
             $tempFile = tempnam(sys_get_temp_dir(), 'pdf_');
             $pdf->Output($tempFile, 'F');
 
-            return response()->download($tempFile, $validated['filename'], [
+            $content = file_get_contents($tempFile);
+            @unlink($tempFile);
+
+            return response($content, 200, [
                 'Content-Type' => 'application/pdf',
-            ])->deleteFileAfterSend();
+                'Content-Disposition' => 'attachment; filename="' . $validated['filename'] . '"',
+                'Content-Length' => strlen($content),
+                'Access-Control-Allow-Origin' => '*',
+                'Access-Control-Allow-Methods' => 'GET, POST, OPTIONS',
+            ]);
         } catch (\Exception $e) {
-            return response(['error' => 'Failed to generate PDF file'], 500);
+            return response(['error' => 'Failed to generate PDF file: ' . $e->getMessage()], 500);
         }
     }
 }

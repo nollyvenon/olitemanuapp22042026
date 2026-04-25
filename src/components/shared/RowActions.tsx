@@ -70,7 +70,7 @@ export function RowActions({
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger>
         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
           <MoreVertical className="h-4 w-4" />
         </Button>

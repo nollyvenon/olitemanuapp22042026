@@ -44,7 +44,7 @@ function createApiClient(): AxiosInstance {
       });
 
       // If 401 and not yet retried
-      /*if (error.response?.status === 401 && !('_retry' in originalRequest)) {
+      if (error.response?.status === 401 && !('_retry' in originalRequest)) {
         (originalRequest as any)._retry = true;
         console.log('[API] Attempting token refresh...');
 
@@ -96,7 +96,7 @@ function createApiClient(): AxiosInstance {
           }
           return Promise.reject(refreshError);
         }
-      }*/
+      }
 
       return Promise.reject(error);
     }

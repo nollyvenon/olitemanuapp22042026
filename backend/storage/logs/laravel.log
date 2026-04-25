@@ -1488,3 +1488,347 @@ CONTEXT:  unnamed portal parameter $4 = '...' at C:/Files/DevelopedApps/oliteman
 [2026-04-25 01:04:21] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
 [2026-04-25 01:04:21] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
 [2026-04-25 01:04:21] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:12] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:12] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:12] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:12] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:12] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:12] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:12] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:12] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:13] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:13] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:13] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:13] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:13] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:13] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:13] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:13] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:14] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:14] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:15] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:15] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:16] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:16] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:16] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:16] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:16] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:16] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:16] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:16] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:22] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:22] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:22] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:22] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:26] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:26] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:26] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:26] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:35] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:35] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:35] local.ERROR: Class "TCPDF" not found {"exception":"[object] (Error(code: 0): Class \"TCPDF\" not found at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Reports/Http/Controllers/ExportController.php:58)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Modules/Reports/Http/Controllers/ExportController->exportPDF(Object(Illuminate/Http/Request))
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(269): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Modules/Reports/Http/Controllers/ExportController), 'exportPDF')
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(215): Illuminate/Routing/Route->runController()
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Auth/Http/Middleware/JwtMiddleware.php(38): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Modules/Auth/Http/Middleware/JwtMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#7 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#8 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#9 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#10 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#11 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#12 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#13 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#14 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Http/Middleware/CorsMiddleware.php(10): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Http/Middleware/CorsMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#16 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#17 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#18 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#19 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/public/index.php(13): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#20 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Files//Develo...')
+#21 {main}
+"} 
+[2026-04-25 01:05:37] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:37] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:37] local.ERROR: Class "TCPDF" not found {"exception":"[object] (Error(code: 0): Class \"TCPDF\" not found at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Reports/Http/Controllers/ExportController.php:58)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Modules/Reports/Http/Controllers/ExportController->exportPDF(Object(Illuminate/Http/Request))
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(269): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Modules/Reports/Http/Controllers/ExportController), 'exportPDF')
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(215): Illuminate/Routing/Route->runController()
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Auth/Http/Middleware/JwtMiddleware.php(38): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Modules/Auth/Http/Middleware/JwtMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#7 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#8 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#9 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#10 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#11 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#12 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#13 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#14 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Http/Middleware/CorsMiddleware.php(10): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Http/Middleware/CorsMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#16 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#17 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#18 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#19 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/public/index.php(13): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#20 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Files//Develo...')
+#21 {main}
+"} 
+[2026-04-25 01:05:37] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:37] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:37] local.ERROR: Class "TCPDF" not found {"exception":"[object] (Error(code: 0): Class \"TCPDF\" not found at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Reports/Http/Controllers/ExportController.php:58)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Modules/Reports/Http/Controllers/ExportController->exportPDF(Object(Illuminate/Http/Request))
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(269): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Modules/Reports/Http/Controllers/ExportController), 'exportPDF')
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(215): Illuminate/Routing/Route->runController()
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Auth/Http/Middleware/JwtMiddleware.php(38): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Modules/Auth/Http/Middleware/JwtMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#7 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#8 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#9 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#10 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#11 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#12 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#13 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#14 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Http/Middleware/CorsMiddleware.php(10): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Http/Middleware/CorsMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#16 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#17 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#18 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#19 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/public/index.php(13): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#20 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Files//Develo...')
+#21 {main}
+"} 
+[2026-04-25 01:05:43] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:43] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:43] local.ERROR: Class "PhpOffice\PhpSpreadsheet\Spreadsheet" not found {"exception":"[object] (Error(code: 0): Class \"PhpOffice\\PhpSpreadsheet\\Spreadsheet\" not found at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Reports/Http/Controllers/ExportController.php:17)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Modules/Reports/Http/Controllers/ExportController->exportExcel(Object(Illuminate/Http/Request))
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(269): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Modules/Reports/Http/Controllers/ExportController), 'exportExcel')
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(215): Illuminate/Routing/Route->runController()
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Auth/Http/Middleware/JwtMiddleware.php(38): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Modules/Auth/Http/Middleware/JwtMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#7 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#8 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#9 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#10 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#11 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#12 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#13 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#14 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Http/Middleware/CorsMiddleware.php(10): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Http/Middleware/CorsMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#16 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#17 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#18 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#19 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/public/index.php(13): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#20 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Files//Develo...')
+#21 {main}
+"} 
+[2026-04-25 01:05:45] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:05:45] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:05:45] local.ERROR: Class "TCPDF" not found {"exception":"[object] (Error(code: 0): Class \"TCPDF\" not found at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Reports/Http/Controllers/ExportController.php:58)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Modules/Reports/Http/Controllers/ExportController->exportPDF(Object(Illuminate/Http/Request))
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(269): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Modules/Reports/Http/Controllers/ExportController), 'exportPDF')
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(215): Illuminate/Routing/Route->runController()
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Auth/Http/Middleware/JwtMiddleware.php(38): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Modules/Auth/Http/Middleware/JwtMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#7 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#8 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#9 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#10 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#11 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#12 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#13 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#14 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Http/Middleware/CorsMiddleware.php(10): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Http/Middleware/CorsMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#16 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#17 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#18 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#19 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/public/index.php(13): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#20 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Files//Develo...')
+#21 {main}
+"} 
+[2026-04-25 01:06:15] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:06:15] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:06:15] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:06:15] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:10:16] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:10:16] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:10:17] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:10:17] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:10:17] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:10:17] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:10:17] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:10:17] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:10:22] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:10:22] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:10:23] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:10:23] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:10:25] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:10:25] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:10:25] local.ERROR: Class "TCPDF" not found {"exception":"[object] (Error(code: 0): Class \"TCPDF\" not found at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Reports/Http/Controllers/ExportController.php:63)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Modules/Reports/Http/Controllers/ExportController->exportPDF(Object(Illuminate/Http/Request))
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(269): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Modules/Reports/Http/Controllers/ExportController), 'exportPDF')
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(215): Illuminate/Routing/Route->runController()
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Auth/Http/Middleware/JwtMiddleware.php(38): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Modules/Auth/Http/Middleware/JwtMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#7 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#8 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#9 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#10 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#11 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#12 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#13 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#14 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Http/Middleware/CorsMiddleware.php(10): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Http/Middleware/CorsMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#16 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#17 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#18 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#19 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/public/index.php(13): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#20 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Files//Develo...')
+#21 {main}
+"} 
+[2026-04-25 01:11:30] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:11:30] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:11:30] local.ERROR: Class "TCPDF" not found {"exception":"[object] (Error(code: 0): Class \"TCPDF\" not found at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Reports/Http/Controllers/ExportController.php:63)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Modules/Reports/Http/Controllers/ExportController->exportPDF(Object(Illuminate/Http/Request))
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(269): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Modules/Reports/Http/Controllers/ExportController), 'exportPDF')
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(215): Illuminate/Routing/Route->runController()
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Auth/Http/Middleware/JwtMiddleware.php(38): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Modules/Auth/Http/Middleware/JwtMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#7 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#8 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#9 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#10 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#11 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#12 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#13 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#14 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Http/Middleware/CorsMiddleware.php(10): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Http/Middleware/CorsMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#16 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#17 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#18 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#19 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/public/index.php(13): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#20 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Files//Develo...')
+#21 {main}
+"} 
+[2026-04-25 01:13:31] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:13:31] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:13:40] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:13:40] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:13:40] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:13:40] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:13:48] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:13:48] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:14:00] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:14:00] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:22:11] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:22:12] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:24:02] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:24:02] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:26:31] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:26:31] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:28:08] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:28:08] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:28:08] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:28:08] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:28:14] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:28:14] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:28:14] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:28:14] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:28:30] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:28:30] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:28:31] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:28:31] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:28:31] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:28:31] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:28:31] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:28:31] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:28:31] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:28:31] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:28:32] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:28:32] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:28:32] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:28:32] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:28:32] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:28:32] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:32:37] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:32:37] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:32:38] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:32:38] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:32:38] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:32:38] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:32:39] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:32:39] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:32:39] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:32:39] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:32:40] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:32:40] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:32:40] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:32:40] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:32:41] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:32:41] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:37:51] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:37:51] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:37:51] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:37:51] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:37:52] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:37:52] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:37:52] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:37:52] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:37:52] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:37:52] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:37:52] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:37:52] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:37:52] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:37:52] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:37:53] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:37:53] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:37:55] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:37:55] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:37:55] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:37:55] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:37:59] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:37:59] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:38:03] local.ERROR: Call to undefined method PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::setCellValueByColumnAndRow() {"exception":"[object] (Error(code: 0): Call to undefined method PhpOffice\\PhpSpreadsheet\\Worksheet\\Worksheet::setCellValueByColumnAndRow() at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Reports/Http/Controllers/ExportController.php:22)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Modules/Reports/Http/Controllers/ExportController->exportExcel(Object(Illuminate/Http/Request))
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(269): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Modules/Reports/Http/Controllers/ExportController), 'exportExcel')
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(215): Illuminate/Routing/Route->runController()
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Auth/Http/Middleware/JwtMiddleware.php(38): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Modules/Auth/Http/Middleware/JwtMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#7 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#8 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#9 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#10 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#11 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#12 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#13 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#14 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Http/Middleware/CorsMiddleware.php(10): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Http/Middleware/CorsMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#16 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#17 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#18 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#19 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/public/index.php(13): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#20 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Files//Develo...')
+#21 {main}
+"} 

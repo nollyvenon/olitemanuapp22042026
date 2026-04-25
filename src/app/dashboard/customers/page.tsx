@@ -66,43 +66,6 @@ export default function CustomersPage() {
     a.click();
   };
 
-  const exportExcel = async () => {
-    const { headers, rows } = exportData();
-    try {
-      const { data } = await api.post('/export/excel', {
-        headers,
-        rows,
-        filename: `customers-${new Date().toISOString().split('T')[0]}.xlsx`
-      }, { responseType: 'blob' });
-      const url = window.URL.createObjectURL(new Blob([data]));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `customers-${new Date().toISOString().split('T')[0]}.xlsx`;
-      a.click();
-    } catch (error) {
-      console.error('Export failed', error);
-    }
-  };
-
-  const exportPDF = async () => {
-    const { headers, rows } = exportData();
-    try {
-      const { data } = await api.post('/export/pdf', {
-        headers,
-        rows,
-        title: 'Customers Report',
-        filename: `customers-${new Date().toISOString().split('T')[0]}.pdf`
-      }, { responseType: 'blob' });
-      const url = window.URL.createObjectURL(new Blob([data]));
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `customers-${new Date().toISOString().split('T')[0]}.pdf`;
-      a.click();
-    } catch (error) {
-      console.error('Export failed', error);
-    }
-  };
-
   useEffect(() => {
     const load = async () => {
       try {
@@ -185,37 +148,41 @@ export default function CustomersPage() {
   const exportExcel = async () => {
     const { headers, rows } = exportData();
     try {
-      const { data } = await api.post('/export/excel', {
+      const response = await api.post('/export/excel', {
         headers,
         rows,
         filename: `customers-${new Date().toISOString().split('T')[0]}.xlsx`
       }, { responseType: 'blob' });
-      const url = window.URL.createObjectURL(new Blob([data]));
+      const url = window.URL.createObjectURL(response.data);
       const a = document.createElement('a');
       a.href = url;
       a.download = `customers-${new Date().toISOString().split('T')[0]}.xlsx`;
       a.click();
-    } catch (error) {
+      window.URL.revokeObjectURL(url);
+    } catch (error: any) {
       console.error('Export failed', error);
+      alert('Failed to export Excel file');
     }
   };
 
   const exportPDF = async () => {
     const { headers, rows } = exportData();
     try {
-      const { data } = await api.post('/export/pdf', {
+      const response = await api.post('/export/pdf', {
         headers,
         rows,
         title: 'Customers Report',
         filename: `customers-${new Date().toISOString().split('T')[0]}.pdf`
       }, { responseType: 'blob' });
-      const url = window.URL.createObjectURL(new Blob([data]));
+      const url = window.URL.createObjectURL(response.data);
       const a = document.createElement('a');
       a.href = url;
       a.download = `customers-${new Date().toISOString().split('T')[0]}.pdf`;
       a.click();
-    } catch (error) {
+      window.URL.revokeObjectURL(url);
+    } catch (error: any) {
       console.error('Export failed', error);
+      alert('Failed to export PDF file');
     }
   };
 

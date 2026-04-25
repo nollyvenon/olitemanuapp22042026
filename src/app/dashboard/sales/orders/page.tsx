@@ -125,7 +125,7 @@ export default function SalesOrdersPage() {
         // Extract unique depots and territories
         const depotsSet = new Set<string>();
         const territoriesSet = new Set<string>();
-        ordersList.forEach(o => {
+        ordersList.forEach((o: SalesOrder) => {
           if (o.creator?.locations?.[0]?.name) depotsSet.add(o.creator.locations[0].name);
           if (o.creator?.locations?.[0]?.city) territoriesSet.add(o.creator.locations[0].city);
         });

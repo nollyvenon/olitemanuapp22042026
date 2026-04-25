@@ -149,17 +149,19 @@ export default function InventoryItemsPage() {
   const exportExcel = async () => {
     const { headers, rows } = exportData();
     try {
-      const { data } = await api.post('/export/excel', {
+      const response = await api.post('/export/excel', {
         headers,
         rows,
         filename: `items-${new Date().toISOString().split('T')[0]}.xlsx`
       }, { responseType: 'blob' });
-      const url = window.URL.createObjectURL(new Blob([data]));
+      const url = window.URL.createObjectURL(response.data);
       const a = document.createElement('a');
       a.href = url;
       a.download = `items-${new Date().toISOString().split('T')[0]}.xlsx`;
       a.click();
+      window.URL.revokeObjectURL(url);
     } catch (error) {
+      alert('Failed to export Excel file. Please try again.');
       console.error('Export failed', error);
     }
   };
@@ -167,18 +169,20 @@ export default function InventoryItemsPage() {
   const exportPDF = async () => {
     const { headers, rows } = exportData();
     try {
-      const { data } = await api.post('/export/pdf', {
+      const response = await api.post('/export/pdf', {
         headers,
         rows,
         title: 'Inventory Items Report',
         filename: `items-${new Date().toISOString().split('T')[0]}.pdf`
       }, { responseType: 'blob' });
-      const url = window.URL.createObjectURL(new Blob([data]));
+      const url = window.URL.createObjectURL(response.data);
       const a = document.createElement('a');
       a.href = url;
       a.download = `items-${new Date().toISOString().split('T')[0]}.pdf`;
       a.click();
+      window.URL.revokeObjectURL(url);
     } catch (error) {
+      alert('Failed to export PDF file. Please try again.');
       console.error('Export failed', error);
     }
   };
