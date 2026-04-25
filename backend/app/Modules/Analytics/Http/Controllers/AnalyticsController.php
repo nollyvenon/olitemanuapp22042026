@@ -13,6 +13,7 @@ use App\Modules\Analytics\Services\AccountsRiskService;
 use App\Modules\Analytics\Services\SalesPerformanceService;
 use App\Modules\Analytics\Services\InsightGeneratorService;
 use App\Modules\Analytics\Services\AlertService;
+use App\Modules\Analytics\Services\ForecastService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -72,5 +73,20 @@ class AnalyticsController
     public function alerts(AlertService $service): JsonResponse
     {
         return response()->json(['alerts' => $service->getActiveAlerts()]);
+    }
+
+    public function salesForecast(ForecastService $service): JsonResponse
+    {
+        return response()->json($service->getSalesForecasts());
+    }
+
+    public function inventoryForecast(ForecastService $service): JsonResponse
+    {
+        return response()->json($service->getInventoryForecasts());
+    }
+
+    public function cashFlowForecast(ForecastService $service): JsonResponse
+    {
+        return response()->json($service->getCashFlowForecasts());
     }
 }

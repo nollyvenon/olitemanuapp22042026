@@ -24,6 +24,7 @@ import {
   Group,
   User,
   Brain,
+  LineChart,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -175,6 +176,12 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: 'Intelligence',
     items: [
+      {
+        label: 'Forecasts',
+        href: '/dashboard/intelligence/forecasts',
+        icon: LineChart,
+        permission: 'analytics.read',
+      },
       {
         label: 'AI Insights',
         href: '/dashboard/intelligence/ai-insights',

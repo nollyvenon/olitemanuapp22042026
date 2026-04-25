@@ -152,6 +152,9 @@ Route::prefix('v1')->group(function () {
             Route::get('sales-performance', [AnalyticsController::class, 'salesPerformance']);
             Route::get('insights', [AnalyticsController::class, 'insights']);
             Route::get('alerts', [AnalyticsController::class, 'alerts']);
+            Route::get('forecast/sales', [AnalyticsController::class, 'salesForecast']);
+            Route::get('forecast/inventory', [AnalyticsController::class, 'inventoryForecast']);
+            Route::get('forecast/cashflow', [AnalyticsController::class, 'cashFlowForecast']);
         });
 
         Route::prefix('god-admin')->middleware('god_admin')->group(function () {
