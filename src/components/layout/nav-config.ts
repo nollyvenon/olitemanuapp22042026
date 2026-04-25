@@ -217,6 +217,12 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: Package,
         permission: 'analytics.read',
       },
+      {
+        label: 'Accounts Risk',
+        href: '/dashboard/intelligence/accounts-risk',
+        icon: CreditCard,
+        permission: 'analytics.read',
+      },
     ],
   },
   {

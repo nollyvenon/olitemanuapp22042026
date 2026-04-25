@@ -1,4 +1,7 @@
 'use client';
+
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { getApiClient } from '@/lib/api-client';
