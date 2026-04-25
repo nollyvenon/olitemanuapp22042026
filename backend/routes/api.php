@@ -147,6 +147,7 @@ Route::prefix('v1')->group(function () {
             Route::get('collections', [AnalyticsController::class, 'collections']);
             Route::get('inventory', [AnalyticsController::class, 'inventory']);
             Route::get('performance', [AnalyticsController::class, 'performance']);
+            Route::get('revenue', [AnalyticsController::class, 'revenue']);
         });
 
         Route::prefix('god-admin')->middleware('god_admin')->group(function () {

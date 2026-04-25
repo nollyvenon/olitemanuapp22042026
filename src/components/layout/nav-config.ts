@@ -205,6 +205,12 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: Users,
         permission: 'analytics.read',
       },
+      {
+        label: 'Revenue',
+        href: '/dashboard/intelligence/revenue',
+        icon: DollarSign,
+        permission: 'analytics.read',
+      },
     ],
   },
   {

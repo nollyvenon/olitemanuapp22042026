@@ -110,7 +110,8 @@
       "Bash(tee build-output.log)",
       "Bash(curl -s http://localhost:3000/api/health)",
       "Bash(curl -s \"http://localhost:3000/dashboard/executive\" -H \"Accept: text/html\")",
-      "Bash(curl -s \"http://localhost:8000/api/v1/analytics/executive\" -H \"Authorization: Bearer test\")"
+      "Bash(curl -s \"http://localhost:8000/api/v1/analytics/executive\" -H \"Authorization: Bearer test\")",
+      "Bash(curl -s \"http://localhost:3000/dashboard\")"
     ],
     "additionalDirectories": [
       "c:\\Files\\DevelopedApps\\OMCLTA",

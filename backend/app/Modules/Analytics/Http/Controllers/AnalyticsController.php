@@ -7,6 +7,7 @@ use App\Modules\Analytics\Services\CollectionsInsightService;
 use App\Modules\Analytics\Services\InventoryInsightService;
 use App\Modules\Analytics\Services\PerformanceInsightService;
 use App\Modules\Analytics\Services\ExecutiveDashboardService;
+use App\Modules\Analytics\Services\RevenueIntelligenceService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -35,6 +36,11 @@ class AnalyticsController
     }
 
     public function executive(ExecutiveDashboardService $service): JsonResponse
+    {
+        return response()->json($service->getInsights());
+    }
+
+    public function revenue(RevenueIntelligenceService $service): JsonResponse
     {
         return response()->json($service->getInsights());
     }
