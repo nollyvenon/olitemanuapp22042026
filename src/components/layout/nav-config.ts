@@ -295,6 +295,12 @@ export const NAV_GROUPS: NavGroup[] = [
         permission: 'admin.*',
       },
       {
+        label: 'Audit Reports',
+        href: '/dashboard/admin/audit-reports',
+        icon: ScrollText,
+        permission: 'admin.*',
+      },
+      {
         label: 'Settings',
         href: '/dashboard/admin/settings',
         icon: Settings,

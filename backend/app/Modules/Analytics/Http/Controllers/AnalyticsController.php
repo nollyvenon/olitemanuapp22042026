@@ -14,6 +14,7 @@ use App\Modules\Analytics\Services\SalesPerformanceService;
 use App\Modules\Analytics\Services\InsightGeneratorService;
 use App\Modules\Analytics\Services\AlertService;
 use App\Modules\Analytics\Services\ForecastService;
+use App\Modules\Analytics\Services\AuditReportService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -88,5 +89,25 @@ class AnalyticsController
     public function cashFlowForecast(ForecastService $service): JsonResponse
     {
         return response()->json($service->getCashFlowForecasts());
+    }
+
+    public function auditTransactions(Request $request, AuditReportService $service): JsonResponse
+    {
+        return response()->json(['transactions' => $service->getTransactionHistory($request->all())]);
+    }
+
+    public function auditActivity(Request $request, AuditReportService $service): JsonResponse
+    {
+        return response()->json(['logs' => $service->getUserActivityLogs($request->all())]);
+    }
+
+    public function auditOverrides(Request $request, AuditReportService $service): JsonResponse
+    {
+        return response()->json(['overrides' => $service->getOverrideTracking($request->all())]);
+    }
+
+    public function auditSuspicious(AuditReportService $service): JsonResponse
+    {
+        return response()->json(['suspicious' => $service->detectSuspiciousActivity(), 'summary' => $service->getAuditSummary()]);
     }
 }

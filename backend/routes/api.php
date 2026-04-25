@@ -155,6 +155,10 @@ Route::prefix('v1')->group(function () {
             Route::get('forecast/sales', [AnalyticsController::class, 'salesForecast']);
             Route::get('forecast/inventory', [AnalyticsController::class, 'inventoryForecast']);
             Route::get('forecast/cashflow', [AnalyticsController::class, 'cashFlowForecast']);
+            Route::get('audit/transactions', [AnalyticsController::class, 'auditTransactions']);
+            Route::get('audit/activity', [AnalyticsController::class, 'auditActivity']);
+            Route::get('audit/overrides', [AnalyticsController::class, 'auditOverrides']);
+            Route::get('audit/suspicious', [AnalyticsController::class, 'auditSuspicious']);
         });
 
         Route::prefix('god-admin')->middleware('god_admin')->group(function () {
