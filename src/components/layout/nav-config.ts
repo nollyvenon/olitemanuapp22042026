@@ -223,6 +223,12 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: CreditCard,
         permission: 'analytics.read',
       },
+      {
+        label: 'Sales Performance',
+        href: '/dashboard/intelligence/sales-performance',
+        icon: TrendingUp,
+        permission: 'analytics.read',
+      },
     ],
   },
   {

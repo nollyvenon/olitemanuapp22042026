@@ -10,6 +10,7 @@ use App\Modules\Analytics\Services\ExecutiveDashboardService;
 use App\Modules\Analytics\Services\RevenueIntelligenceService;
 use App\Modules\Analytics\Services\InventoryIntelligenceService;
 use App\Modules\Analytics\Services\AccountsRiskService;
+use App\Modules\Analytics\Services\SalesPerformanceService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -48,6 +49,11 @@ class AnalyticsController
     }
 
     public function accountsRisk(AccountsRiskService $service): JsonResponse
+    {
+        return response()->json($service->getInsights());
+    }
+
+    public function salesPerformance(SalesPerformanceService $service): JsonResponse
     {
         return response()->json($service->getInsights());
     }
