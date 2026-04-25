@@ -15,6 +15,7 @@ use App\Modules\Analytics\Services\InsightGeneratorService;
 use App\Modules\Analytics\Services\AlertService;
 use App\Modules\Analytics\Services\ForecastService;
 use App\Modules\Analytics\Services\AuditReportService;
+use App\Modules\Analytics\Services\UnifiedIntelligenceService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -109,5 +110,20 @@ class AnalyticsController
     public function auditSuspicious(AuditReportService $service): JsonResponse
     {
         return response()->json(['suspicious' => $service->detectSuspiciousActivity(), 'summary' => $service->getAuditSummary()]);
+    }
+
+    public function unified(UnifiedIntelligenceService $service): JsonResponse
+    {
+        return response()->json($service->getUnifiedIntelligence());
+    }
+
+    public function unifiedModule(Request $request, UnifiedIntelligenceService $service): JsonResponse
+    {
+        return response()->json($service->getModuleInsights($request->route('module')));
+    }
+
+    public function crossModuleCorrelations(UnifiedIntelligenceService $service): JsonResponse
+    {
+        return response()->json(['correlations' => $service->getCrossModuleCorrelations()]);
     }
 }

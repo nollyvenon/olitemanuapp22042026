@@ -142,6 +142,9 @@ Route::prefix('v1')->group(function () {
         Route::put('settings', [SettingsController::class, 'update']);
 
         Route::prefix('analytics')->group(function () {
+            Route::get('unified', [AnalyticsController::class, 'unified']);
+            Route::get('unified/{module}', [AnalyticsController::class, 'unifiedModule']);
+            Route::get('correlations', [AnalyticsController::class, 'crossModuleCorrelations']);
             Route::get('executive', [AnalyticsController::class, 'executive']);
             Route::get('sales', [AnalyticsController::class, 'sales']);
             Route::get('collections', [AnalyticsController::class, 'collections']);
