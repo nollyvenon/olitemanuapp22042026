@@ -12,6 +12,7 @@ use App\Modules\Analytics\Services\InventoryIntelligenceService;
 use App\Modules\Analytics\Services\AccountsRiskService;
 use App\Modules\Analytics\Services\SalesPerformanceService;
 use App\Modules\Analytics\Services\InsightGeneratorService;
+use App\Modules\Analytics\Services\AlertService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -66,5 +67,10 @@ class AnalyticsController
             'weekly' => $service->generateWeeklySummary(),
             'generated_at' => now()->toIso8601String()
         ]);
+    }
+
+    public function alerts(AlertService $service): JsonResponse
+    {
+        return response()->json(['alerts' => $service->getActiveAlerts()]);
     }
 }
