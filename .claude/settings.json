@@ -107,7 +107,10 @@
       "Bash(grep -E \"\\\\.\\(php|sql\\)$\")",
       "Bash(PGPASSWORD=postgres psql -h localhost -U postgres -d omclta -c \"SELECT id, name, email, is_god_admin, is_active FROM users WHERE is_god_admin = true OR is_sub_admin = true LIMIT 5;\")",
       "Bash(curl -s http://localhost:8000/health)",
-      "Bash(tee build-output.log)"
+      "Bash(tee build-output.log)",
+      "Bash(curl -s http://localhost:3000/api/health)",
+      "Bash(curl -s \"http://localhost:3000/dashboard/executive\" -H \"Accept: text/html\")",
+      "Bash(curl -s \"http://localhost:8000/api/v1/analytics/executive\" -H \"Authorization: Bearer test\")"
     ],
     "additionalDirectories": [
       "c:\\Files\\DevelopedApps\\OMCLTA",

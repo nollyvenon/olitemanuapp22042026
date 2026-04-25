@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { KpiSection } from '@/components/dashboard/KpiSection';
 import { AnalyticsSection } from '@/components/dashboard/AnalyticsSection';
 import { RecentTransactions } from '@/components/dashboard/RecentTransactions';

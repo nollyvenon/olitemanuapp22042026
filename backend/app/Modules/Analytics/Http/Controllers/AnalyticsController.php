@@ -6,6 +6,7 @@ use App\Modules\Analytics\Services\SalesInsightService;
 use App\Modules\Analytics\Services\CollectionsInsightService;
 use App\Modules\Analytics\Services\InventoryInsightService;
 use App\Modules\Analytics\Services\PerformanceInsightService;
+use App\Modules\Analytics\Services\ExecutiveDashboardService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -31,5 +32,10 @@ class AnalyticsController
     {
         $period = (int) $request->query('period', 30);
         return response()->json($service->getInsights($period));
+    }
+
+    public function executive(ExecutiveDashboardService $service): JsonResponse
+    {
+        return response()->json($service->getInsights());
     }
 }

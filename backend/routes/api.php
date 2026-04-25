@@ -142,6 +142,7 @@ Route::prefix('v1')->group(function () {
         Route::put('settings', [SettingsController::class, 'update']);
 
         Route::prefix('analytics')->group(function () {
+            Route::get('executive', [AnalyticsController::class, 'executive']);
             Route::get('sales', [AnalyticsController::class, 'sales']);
             Route::get('collections', [AnalyticsController::class, 'collections']);
             Route::get('inventory', [AnalyticsController::class, 'inventory']);
