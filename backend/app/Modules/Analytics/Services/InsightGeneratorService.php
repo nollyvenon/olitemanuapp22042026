@@ -8,13 +8,14 @@ class InsightGeneratorService
 {
     public function generateDailyInsights(): array
     {
-        $insights = [];
-        $insights[] = ...$this->detectSalesAnomalies();
-        $insights[] = ...$this->detectReceivablesAnomalies();
-        $insights[] = ...$this->detectInventoryAnomalies();
-        $insights[] = ...$this->detectTrendBreakpoints();
-        $insights[] = ...$this->detectCorrelations();
-        return array_filter(array_merge(...array_values([$insights])));
+        $insights = array_merge(
+            $this->detectSalesAnomalies(),
+            $this->detectReceivablesAnomalies(),
+            $this->detectInventoryAnomalies(),
+            $this->detectTrendBreakpoints(),
+            $this->detectCorrelations()
+        );
+        return array_filter($insights);
     }
 
     public function generateWeeklySummary(): array

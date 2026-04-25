@@ -113,7 +113,9 @@
       "Bash(curl -s \"http://localhost:8000/api/v1/analytics/executive\" -H \"Authorization: Bearer test\")",
       "Bash(curl -s \"http://localhost:3000/dashboard\")",
       "Bash(curl -s -X GET \"http://localhost:8000/api/v1/analytics/accounts-risk\" -H \"Authorization: Bearer test\")",
-      "Bash(php -l app/Modules/Analytics/Services/SalesInsightService.php)"
+      "Bash(php -l app/Modules/Analytics/Services/SalesInsightService.php)",
+      "Bash(php -l app/Modules/Analytics/Services/InsightGeneratorService.php)",
+      "Bash(php -l app/Modules/Analytics/Http/Controllers/AnalyticsController.php)"
     ],
     "additionalDirectories": [
       "c:\\Files\\DevelopedApps\\OMCLTA",
