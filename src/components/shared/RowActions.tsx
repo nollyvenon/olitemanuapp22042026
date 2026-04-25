@@ -70,10 +70,8 @@ export function RowActions({
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger>
-        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-          <MoreVertical className="h-4 w-4" />
-        </Button>
+      <DropdownMenuTrigger className="inline-flex items-center justify-center h-8 w-8 rounded hover:bg-gray-100">
+        <MoreVertical className="h-4 w-4 text-gray-600" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {canView && (

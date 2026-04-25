@@ -25,6 +25,7 @@ use App\Modules\MarketIntelligence\Http\Controllers\MarketIntelligenceController
 use App\Modules\MarketIntelligence\Http\Controllers\MarketPlanController;
 use App\Modules\Reporting\Http\Controllers\InventoryReportController;
 use App\Modules\Settings\Http\Controllers\SettingsController;
+use App\Modules\Analytics\Http\Controllers\AnalyticsController;
 use App\Modules\GodAdmin\Http\Controllers\GodAdminController;
 use Illuminate\Support\Facades\Route;
 
@@ -139,6 +140,13 @@ Route::prefix('v1')->group(function () {
         Route::get('settings', [SettingsController::class, 'index']);
         Route::post('settings', [SettingsController::class, 'store']);
         Route::put('settings', [SettingsController::class, 'update']);
+
+        Route::prefix('analytics')->group(function () {
+            Route::get('sales', [AnalyticsController::class, 'sales']);
+            Route::get('collections', [AnalyticsController::class, 'collections']);
+            Route::get('inventory', [AnalyticsController::class, 'inventory']);
+            Route::get('performance', [AnalyticsController::class, 'performance']);
+        });
 
         Route::prefix('god-admin')->middleware('god_admin')->group(function () {
             Route::post('override', [GodAdminController::class, 'override']);

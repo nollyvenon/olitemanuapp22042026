@@ -23,6 +23,7 @@ import {
   UserCog,
   Group,
   User,
+  Brain,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -168,6 +169,41 @@ export const NAV_GROUPS: NavGroup[] = [
         href: '/dashboard/kyc/rejected',
         icon: Shield,
         permission: 'kyc.read',
+      },
+    ],
+  },
+  {
+    label: 'Intelligence',
+    items: [
+      {
+        label: 'Reporting Hub',
+        href: '/dashboard/intelligence',
+        icon: Brain,
+        permission: 'analytics.read',
+      },
+      {
+        label: 'Sales',
+        href: '/dashboard/intelligence/sales',
+        icon: TrendingUp,
+        permission: 'analytics.read',
+      },
+      {
+        label: 'Collections',
+        href: '/dashboard/intelligence/collections',
+        icon: DollarSign,
+        permission: 'analytics.read',
+      },
+      {
+        label: 'Inventory',
+        href: '/dashboard/intelligence/inventory',
+        icon: Package,
+        permission: 'analytics.read',
+      },
+      {
+        label: 'Performance',
+        href: '/dashboard/intelligence/performance',
+        icon: Users,
+        permission: 'analytics.read',
       },
     ],
   },
