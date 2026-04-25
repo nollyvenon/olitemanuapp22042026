@@ -64,7 +64,7 @@ export default function AuditReports() {
 
   const logCols: ColumnDef<any, any>[] = [
     { accessorKey: 'user_name', header: 'User', cell: ({ getValue }) => <span className="font-medium text-xs">{String(getValue())}</span> },
-    { accessorKey: 'action', header: 'Action', cell: ({ getValue }) => <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">{String(getValue())}</span> },
+    { accessorKey: 'action_type', header: 'Action', cell: ({ getValue }) => <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">{String(getValue())}</span> },
     { accessorKey: 'entity_type', header: 'Entity', cell: ({ getValue }) => <span className="text-xs">{String(getValue())}</span> },
     { accessorKey: 'ip_address', header: 'IP', cell: ({ getValue, row }) => <span className={row.original.location_flag === 'new_ip' ? 'text-orange-600 font-bold text-xs' : 'text-xs'}>{String(getValue())}</span> },
     { accessorKey: 'created_at', header: 'Timestamp', cell: ({ getValue }) => <span className="text-xs">{new Date(String(getValue())).toLocaleString()}</span> },
@@ -73,7 +73,7 @@ export default function AuditReports() {
   const ovrCols: ColumnDef<any, any>[] = [
     { accessorKey: 'user_name', header: 'User', cell: ({ getValue }) => <span className="font-medium text-xs">{String(getValue())}</span> },
     { accessorKey: 'entity_type', header: 'Type', cell: ({ getValue }) => <span className="text-xs font-semibold text-red-600">{String(getValue())}</span> },
-    { accessorKey: 'description', header: 'Description', cell: ({ getValue }) => <span className="text-xs truncate">{String(getValue())}</span> },
+    { accessorKey: 'entity_id', header: 'Entity ID', cell: ({ getValue }) => <span className="text-xs font-mono">{String(getValue())}</span> },
     { accessorKey: 'frequency', header: 'Frequency', cell: ({ getValue }) => <span className={getValue() === 'high_frequency' ? 'text-red-600 font-bold text-xs' : 'text-xs'}>{String(getValue())}</span> },
     { accessorKey: 'created_at', header: 'Time', cell: ({ getValue }) => <span className="text-xs">{new Date(String(getValue())).toLocaleString()}</span> },
   ];

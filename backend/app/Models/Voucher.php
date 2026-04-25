@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Versionable;
 
 class Voucher extends Model {
-    use HasUuids, Versionable;
+    use HasUuids, Versionable, SoftDeletes;
 
     protected $fillable = ['voucher_number', 'ledger_id', 'created_by', 'override_by', 'override_reason', 'type', 'status', 'amount', 'currency', 'reference', 'notes', 'transaction_date', 'posted_at', 'reversed_at', 'reversal_of', 'version_number', 'parent_id', 'is_current'];
 

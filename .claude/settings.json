@@ -115,7 +115,15 @@
       "Bash(curl -s -X GET \"http://localhost:8000/api/v1/analytics/accounts-risk\" -H \"Authorization: Bearer test\")",
       "Bash(php -l app/Modules/Analytics/Services/SalesInsightService.php)",
       "Bash(php -l app/Modules/Analytics/Services/InsightGeneratorService.php)",
-      "Bash(php -l app/Modules/Analytics/Http/Controllers/AnalyticsController.php)"
+      "Bash(php -l app/Modules/Analytics/Http/Controllers/AnalyticsController.php)",
+      "Bash(powershell -Command \"netstat -ano | grep LISTENING\")",
+      "PowerShell(Stop-Process -Id 15328 -Force -ErrorAction SilentlyContinue)",
+      "PowerShell(Stop-Process -Id 41676 -Force -ErrorAction SilentlyContinue)",
+      "Bash(curl -s http://localhost:8000/api/health)",
+      "Bash(rm -rf /c/Files/DevelopedApps/olitemanuapp_21042026/backend/bootstrap/cache/*)",
+      "Bash(php artisan *)",
+      "PowerShell(Stop-Process -Force)",
+      "Bash(grep -E \"\\\\.\\(tsx|ts|jsx|js\\)$\")"
     ],
     "additionalDirectories": [
       "c:\\Files\\DevelopedApps\\OMCLTA",

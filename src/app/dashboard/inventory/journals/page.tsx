@@ -57,6 +57,7 @@ export default function JournalsPage() {
   const [submitting, setSubmitting] = useState(false);
   const [journalType, setJournalType] = useState('add');
   const [form, setForm] = useState({ item_id: '', location_id: '', to_location_id: '', quantity: '', notes: '' });
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const load = async () => {
@@ -84,10 +85,11 @@ export default function JournalsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    setError('');
     try {
       const endpoint = journalType === 'add' ? '/stock/journals/add' : journalType === 'transfer' ? '/stock/journals/transfer' : '/stock/journals/remove';
       const payload = journalType === 'transfer'
-        ? { item_id: form.item_id, from_location_id: form.location_id, to_location_id: form.to_location_id, quantity: parseInt(form.quantity), notes: form.notes }
+        ? { item_id: form.item_id, from_location: form.location_id, to_location: form.to_location_id, quantity: parseInt(form.quantity), notes: form.notes }
         : { item_id: form.item_id, location_id: form.location_id, quantity: parseInt(form.quantity), notes: form.notes };
       await api.post(endpoint, payload);
       setOpen(false);
@@ -96,8 +98,13 @@ export default function JournalsPage() {
       const { data } = await api.get('/stock/journals');
       const journalsList = Array.isArray(data) ? data : data.data ?? [];
       setJournals(journalsList);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to create journal', err);
+      const errorMsg = err.response?.data?.error || err.response?.data?.message || 'Failed to create journal';
+      setError(errorMsg);
+      if (err.response?.data?.errors) {
+        console.error('Validation errors:', err.response.data.errors);
+      }
     } finally {
       setSubmitting(false);
     }
@@ -189,7 +196,7 @@ export default function JournalsPage() {
               )}
             </PermissionGuard>
             <PermissionGuard permission="inventory.stock.movement">
-              <Button onClick={() => setOpen(true)} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold hover:opacity-90">+ New Journal</Button>
+              <Button onClick={() => { setOpen(true); setError(''); }} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold hover:opacity-90">+ New Journal</Button>
             </PermissionGuard>
           </div>
         }
@@ -201,6 +208,11 @@ export default function JournalsPage() {
           <DialogHeader>
             <DialogTitle>Create Stock Movement</DialogTitle>
           </DialogHeader>
+          {error && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
+              {error}
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label>Movement Type *</Label>

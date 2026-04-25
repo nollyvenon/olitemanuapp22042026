@@ -26,15 +26,14 @@ class AuditReportService
     public function getUserActivityLogs(array $filters = []): array
     {
         $query = "
-            SELECT al.id, al.user_id, u.name as user_name, al.action, al.entity_type, al.entity_id,
-              al.description, al.ip_address, al.created_at, al.user_agent,
+            SELECT al.id, al.user_id, u.name as user_name, al.action_type, al.entity_type, al.entity_id,
+              al.metadata, al.ip_address, al.created_at,
               CASE WHEN al.ip_address NOT IN (SELECT DISTINCT ip_address FROM audit_logs WHERE user_id=al.user_id LIMIT 5) THEN 'new_ip' ELSE 'known' END as location_flag
             FROM audit_logs al
             LEFT JOIN users u ON al.user_id = u.id
-            WHERE al.deleted_at IS NULL
         ";
         if ($filters['user_id'] ?? null) $query .= " AND al.user_id = '{$filters['user_id']}'";
-        if ($filters['action'] ?? null) $query .= " AND al.action = '{$filters['action']}'";
+        if ($filters['action'] ?? null) $query .= " AND al.action_type = '{$filters['action']}'";
         if ($filters['start_date'] ?? null) $query .= " AND al.created_at >= '{$filters['start_date']}'";
         if ($filters['end_date'] ?? null) $query .= " AND al.created_at <= '{$filters['end_date']}'";
         $query .= " ORDER BY al.created_at DESC LIMIT 1000";
@@ -44,12 +43,12 @@ class AuditReportService
     public function getOverrideTracking(array $filters = []): array
     {
         $query = "
-            SELECT al.id, al.user_id, u.name as user_name, al.entity_type, al.entity_id, al.description,
+            SELECT al.id, al.user_id, u.name as user_name, al.entity_type, al.entity_id, al.metadata,
               al.created_at, al.ip_address,
               CASE WHEN COUNT(*) OVER (PARTITION BY al.user_id, DATE_TRUNC('day', al.created_at)) > 5 THEN 'high_frequency' ELSE 'normal' END as frequency
             FROM audit_logs al
             LEFT JOIN users u ON al.user_id = u.id
-            WHERE al.action IN ('override', 'force_transition', 'suspend_user', 'override_price', 'override_inventory') AND al.deleted_at IS NULL
+            WHERE al.action_type IN ('override', 'force_transition', 'suspend_user', 'override_price', 'override_inventory')
         ";
         if ($filters['user_id'] ?? null) $query .= " AND al.user_id = '{$filters['user_id']}'";
         if ($filters['start_date'] ?? null) $query .= " AND al.created_at >= '{$filters['start_date']}'";
@@ -65,7 +64,7 @@ class AuditReportService
         $bulk_deletes = DB::selectOne("
             SELECT COUNT(*) as count, u.id, u.name FROM audit_logs al
             LEFT JOIN users u ON al.user_id = u.id
-            WHERE al.action = 'delete' AND al.created_at >= NOW() - INTERVAL '24 hours'
+            WHERE al.action_type = 'delete' AND al.created_at >= NOW() - INTERVAL '24 hours'
             GROUP BY u.id, u.name HAVING COUNT(*) > 20
         ");
         if ($bulk_deletes && (int)$bulk_deletes->count > 20) {
@@ -81,7 +80,7 @@ class AuditReportService
         $failed_logins = DB::selectOne("
             SELECT COUNT(*) as count, u.id, u.name FROM audit_logs al
             LEFT JOIN users u ON al.user_id = u.id
-            WHERE al.action = 'failed_login' AND al.created_at >= NOW() - INTERVAL '1 hour'
+            WHERE al.action_type = 'failed_login' AND al.created_at >= NOW() - INTERVAL '1 hour'
             GROUP BY u.id, u.name HAVING COUNT(*) > 5
         ");
         if ($failed_logins && (int)$failed_logins->count > 5) {
@@ -113,10 +112,10 @@ class AuditReportService
         }
 
         $large_overrides = DB::select("
-            SELECT al.user_id, u.name, al.description, al.created_at, COUNT(*) as override_count FROM audit_logs al
+            SELECT al.user_id, u.name, al.created_at, COUNT(*) as override_count FROM audit_logs al
             LEFT JOIN users u ON al.user_id = u.id
-            WHERE al.action IN ('override_price', 'override_inventory') AND al.created_at >= NOW() - INTERVAL '24 hours'
-            GROUP BY al.user_id, u.name, al.description, al.created_at HAVING COUNT(*) > 3
+            WHERE al.action_type IN ('override_price', 'override_inventory') AND al.created_at >= NOW() - INTERVAL '24 hours'
+            GROUP BY al.user_id, u.name, al.created_at HAVING COUNT(*) > 3
         ");
         foreach ($large_overrides as $ov) {
             $suspicious[] = [
@@ -136,7 +135,7 @@ class AuditReportService
         $summary = DB::select("
             SELECT
               (SELECT COUNT(*) FROM audit_logs WHERE created_at >= NOW() - INTERVAL '24 hours') as logs_24h,
-              (SELECT COUNT(*) FROM audit_logs WHERE action IN ('override', 'force_transition', 'suspend_user') AND created_at >= NOW() - INTERVAL '24 hours') as overrides_24h,
+              (SELECT COUNT(*) FROM audit_logs WHERE action_type IN ('override', 'force_transition', 'suspend_user') AND created_at >= NOW() - INTERVAL '24 hours') as overrides_24h,
               (SELECT COUNT(DISTINCT user_id) FROM audit_logs WHERE created_at >= NOW() - INTERVAL '24 hours') as active_users_24h,
               (SELECT COUNT(*) FROM vouchers WHERE created_at >= NOW() - INTERVAL '24 hours' AND deleted_at IS NULL) as transactions_24h
         ");
