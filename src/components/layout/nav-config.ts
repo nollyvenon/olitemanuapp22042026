@@ -25,6 +25,7 @@ import {
   User,
   Brain,
   LineChart,
+  HelpCircle,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -315,7 +316,13 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
+    label: 'Help',
     items: [
+      {
+        label: 'Manual',
+        href: '/dashboard/manual',
+        icon: HelpCircle,
+      },
       {
         label: 'Audit Logs',
         href: '/dashboard/audit-logs',

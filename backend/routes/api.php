@@ -27,6 +27,7 @@ use App\Modules\Reporting\Http\Controllers\InventoryReportController;
 use App\Modules\Settings\Http\Controllers\SettingsController;
 use App\Modules\Analytics\Http\Controllers\AnalyticsController;
 use App\Modules\GodAdmin\Http\Controllers\GodAdminController;
+use App\Http\Controllers\ManualController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -140,6 +141,12 @@ Route::prefix('v1')->group(function () {
         Route::get('settings', [SettingsController::class, 'index']);
         Route::post('settings', [SettingsController::class, 'store']);
         Route::put('settings', [SettingsController::class, 'update']);
+
+        Route::get('manuals', [ManualController::class, 'index']);
+        Route::get('manuals/{id}', [ManualController::class, 'show']);
+        Route::get('manuals/search', [ManualController::class, 'search']);
+        Route::post('manuals', [ManualController::class, 'store']);
+        Route::patch('manuals/{id}', [ManualController::class, 'update']);
 
         Route::prefix('analytics')->group(function () {
             Route::get('unified', [AnalyticsController::class, 'unified']);

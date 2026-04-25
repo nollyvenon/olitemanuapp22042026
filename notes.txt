@@ -1,0 +1,29 @@
+Email: godadmin1@omclta.com
+Password: GodAdmin@123456
+
+✓ Email entered: superadmin@omclta.com
+✓ Password entered: Admin@123456
+
+
+Admin User (has all permissions):
+
+Email: admin@omclta.local
+Password: admin123
+Other test users:
+
+Sub Admin: subadmin@omclta.local / subadmin123
+Sales: sales@omclta.local / sales123
+Accountant: accountant@omclta.local / account123
+Inventory: inventory@omclta.local / inv123
+
+
+
+testuser1@yahoo.com
+testuser1
+
+To verify the fix works:
+
+Log out if you're logged in
+Log in as sales.manager@omclta.com / SalesMgr@123 → sidebar should show "Sales Orders"
+Log in as storemanager@omclta.com / StoreMgr@123 → sidebar should show "Inventory"
+Log in as superadmin@omclta.com / Admin@123456 → sidebar should show all items
