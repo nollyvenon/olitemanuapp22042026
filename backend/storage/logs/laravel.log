@@ -1316,3 +1316,175 @@ CONTEXT:  unnamed portal parameter $4 = '...' at C:/Files/DevelopedApps/oliteman
 [2026-04-25 00:43:15] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
 [2026-04-25 00:43:16] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
 [2026-04-25 00:43:16] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:47:19] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:47:19] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:47:20] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:47:20] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:48:19] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:48:19] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:48:20] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:48:20] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:48:23] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:48:23] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:48:24] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:48:24] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:50:22] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:50:22] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:50:22] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:50:22] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:53:13] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:53:13] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:53:13] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:53:13] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:53:24] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:53:24] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:53:25] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:53:25] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:53:29] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:53:29] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:53:30] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:53:30] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:54:13] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:54:13] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:54:13] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:54:13] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:54:22] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:54:22] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:54:22] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:54:22] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:54:25] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:54:25] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:54:25] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:54:25] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:54:57] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:54:57] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:54:57] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:54:57] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:55:26] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:55:26] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:55:26] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:55:26] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:55:27] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:55:27] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:55:27] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:55:27] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:55:29] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:55:29] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:55:30] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:55:30] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:55:30] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:55:30] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:55:30] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:55:30] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:55:39] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:55:39] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:55:39] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:55:39] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:55:39] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:55:39] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:55:40] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:55:40] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:55:40] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:55:40] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:55:40] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:55:40] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:58:28] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:58:28] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:58:28] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:58:28] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:59:49] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:59:49] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:59:49] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:59:49] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:59:49] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:59:49] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:59:49] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:59:49] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:59:50] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:59:50] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:59:50] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:59:50] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:59:51] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:59:51] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:59:51] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:59:51] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:59:52] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:59:52] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:59:52] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:59:52] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:59:52] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:59:52] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 00:59:52] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 00:59:52] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:00:27] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:00:27] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:00:28] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:00:28] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:00:28] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:00:28] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:00:28] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:00:28] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:01:02] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:01:02] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:01:02] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:01:02] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:01:02] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:01:02] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:01:03] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:01:03] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:01:04] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:01:04] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:01:04] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:01:04] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:01:04] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:01:04] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:01:05] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:01:05] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:03:34] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:03:34] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:03:34] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:03:34] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:03:34] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:03:34] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:03:34] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:03:34] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:03:35] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:03:35] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:03:35] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:03:35] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:03:35] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:03:35] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:03:35] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:03:35] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:04:07] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:04:07] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:04:07] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:04:07] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:04:08] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:04:08] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:04:08] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:04:08] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:04:08] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:04:08] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:04:08] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:04:08] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:04:08] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:04:08] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:04:08] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-25 01:04:08] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-25 01:04:19] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:04:19] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:04:20] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:04:20] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:04:20] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:04:20] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:04:20] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:04:20] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:04:20] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:04:20] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:04:21] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:04:21] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:04:21] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:04:21] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 
+[2026-04-25 01:04:21] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":1759} 
+[2026-04-25 01:04:21] local.INFO: [JWT] Token decoded successfully {"sub":"019dc131-86b5-73c9-b3bc-c9fdfa5460f3","type":"access"} 

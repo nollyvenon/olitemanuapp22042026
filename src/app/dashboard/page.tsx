@@ -43,16 +43,16 @@ export default function DashboardPage() {
           <div className="px-5 py-3 font-semibold text-sm" style={{ background: '#232f3e', color: '#FF9900' }}>System Health</div>
           <div className="p-5 grid grid-cols-2 gap-3">
             {[
-              { label: 'API Server', status: 'Online' },
-              { label: 'Database', status: 'Healthy' },
-              { label: 'Queue Worker', status: 'Running' },
-              { label: 'Scheduler', status: 'Active' },
-              { label: 'Storage', status: '68% used' },
-              { label: 'Cache', status: 'Warm' },
+              { label: 'API Server', status: 'Online', color: '#067d62' },
+              { label: 'Database', status: 'Healthy', color: '#146eb4' },
+              { label: 'Queue Worker', status: 'Running', color: '#FF9900' },
+              { label: 'Scheduler', status: 'Active', color: '#c45500' },
+              { label: 'Storage', status: '68% used', color: '#febd69' },
+              { label: 'Cache', status: 'Warm', color: '#8d6e63' },
             ].map((item) => (
-              <div key={item.label} className="flex items-center justify-between p-3 rounded" style={{ background: '#f4f6f8' }}>
-                <span className="text-sm" style={{ color: '#555555' }}>{item.label}</span>
-                <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: '#e8f8f5', color: '#067d62' }}>{item.status}</span>
+              <div key={item.label} className="flex items-center justify-between p-3 rounded" style={{ background: item.color + '12', border: `1px solid ${item.color}30` }}>
+                <span className="text-sm font-medium" style={{ color: '#555555' }}>{item.label}</span>
+                <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: item.color + '20', color: item.color }}>{item.status}</span>
               </div>
             ))}
           </div>

@@ -42,6 +42,67 @@ export default function CustomersPage() {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [form, setForm] = useState({ name: '', company: '', email: '', phone: '', address: '', type: 'individual' });
 
+  const exportData = () => {
+    const headers = ['Name', 'Company', 'Email', 'Phone', 'Address', 'Type'];
+    const rows = customers.map(c => [
+      c.name,
+      c.company || '-',
+      c.email || '-',
+      c.phone || '-',
+      c.address || '-',
+      c.type || 'individual'
+    ]);
+    return { headers, rows };
+  };
+
+  const exportCSV = () => {
+    const { headers, rows } = exportData();
+    const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `customers-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+  };
+
+  const exportExcel = async () => {
+    const { headers, rows } = exportData();
+    try {
+      const { data } = await api.post('/export/excel', {
+        headers,
+        rows,
+        filename: `customers-${new Date().toISOString().split('T')[0]}.xlsx`
+      }, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `customers-${new Date().toISOString().split('T')[0]}.xlsx`;
+      a.click();
+    } catch (error) {
+      console.error('Export failed', error);
+    }
+  };
+
+  const exportPDF = async () => {
+    const { headers, rows } = exportData();
+    try {
+      const { data } = await api.post('/export/pdf', {
+        headers,
+        rows,
+        title: 'Customers Report',
+        filename: `customers-${new Date().toISOString().split('T')[0]}.pdf`
+      }, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `customers-${new Date().toISOString().split('T')[0]}.pdf`;
+      a.click();
+    } catch (error) {
+      console.error('Export failed', error);
+    }
+  };
+
   useEffect(() => {
     const load = async () => {
       try {
@@ -121,16 +182,41 @@ export default function CustomersPage() {
     }
   };
 
-  const exportCSV = () => {
-    const headers = ['Name', 'Company', 'Email', 'Phone', 'Type'];
-    const rows = customers.map(c => [c.name, c.company || '', c.email || '', c.phone || '', c.type || 'individual']);
-    const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `customers-${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
+  const exportExcel = async () => {
+    const { headers, rows } = exportData();
+    try {
+      const { data } = await api.post('/export/excel', {
+        headers,
+        rows,
+        filename: `customers-${new Date().toISOString().split('T')[0]}.xlsx`
+      }, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `customers-${new Date().toISOString().split('T')[0]}.xlsx`;
+      a.click();
+    } catch (error) {
+      console.error('Export failed', error);
+    }
+  };
+
+  const exportPDF = async () => {
+    const { headers, rows } = exportData();
+    try {
+      const { data } = await api.post('/export/pdf', {
+        headers,
+        rows,
+        title: 'Customers Report',
+        filename: `customers-${new Date().toISOString().split('T')[0]}.pdf`
+      }, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `customers-${new Date().toISOString().split('T')[0]}.pdf`;
+      a.click();
+    } catch (error) {
+      console.error('Export failed', error);
+    }
   };
 
   const openEditDialog = (customer: Customer) => {
@@ -156,10 +242,16 @@ export default function CustomersPage() {
           description="Manage customer accounts and information"
         />
         <div className="flex gap-2">
-          {customers.length > 0 && (
-            <Button onClick={exportCSV} variant="outline" className="text-xs">📥 Export CSV</Button>
-          )}
-          <PermissionGuard permission="sales.orders.create">
+          <PermissionGuard permission="sales.customers.export">
+            {customers.length > 0 && (
+              <div className="flex gap-1">
+                <Button onClick={exportCSV} variant="outline" className="text-xs">📄 CSV</Button>
+                <Button onClick={exportExcel} variant="outline" className="text-xs">📊 Excel</Button>
+                <Button onClick={exportPDF} variant="outline" className="text-xs">📑 PDF</Button>
+              </div>
+            )}
+          </PermissionGuard>
+          <PermissionGuard permission="sales.customers.create">
             <Button onClick={() => setOpenAdd(true)} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold">
               + Add Customer
             </Button>

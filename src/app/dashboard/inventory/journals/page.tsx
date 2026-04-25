@@ -103,6 +103,69 @@ export default function JournalsPage() {
     }
   };
 
+  const exportData = () => {
+    const headers = ['Reference', 'Type', 'Store', 'Date', 'Lines', 'Total Qty', 'Created By', 'Status'];
+    const rows = journals.map(j => [
+      j.ref,
+      j.type,
+      j.store,
+      new Date(j.date).toLocaleDateString('en-NG', { month: 'short', day: 'numeric', year: 'numeric' }),
+      j.items,
+      j.total_qty,
+      j.created_by,
+      j.status
+    ]);
+    return { headers, rows };
+  };
+
+  const exportCSV = () => {
+    const { headers, rows } = exportData();
+    const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `journals-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+  };
+
+  const exportExcel = async () => {
+    const { headers, rows } = exportData();
+    try {
+      const { data } = await api.post('/export/excel', {
+        headers,
+        rows,
+        filename: `journals-${new Date().toISOString().split('T')[0]}.xlsx`
+      }, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `journals-${new Date().toISOString().split('T')[0]}.xlsx`;
+      a.click();
+    } catch (error) {
+      console.error('Export failed', error);
+    }
+  };
+
+  const exportPDF = async () => {
+    const { headers, rows } = exportData();
+    try {
+      const { data } = await api.post('/export/pdf', {
+        headers,
+        rows,
+        title: 'Inventory Journals Report',
+        filename: `journals-${new Date().toISOString().split('T')[0]}.pdf`
+      }, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `journals-${new Date().toISOString().split('T')[0]}.pdf`;
+      a.click();
+    } catch (error) {
+      console.error('Export failed', error);
+    }
+  };
+
   if (loading) return <div className="p-6">Loading...</div>;
 
   return (
@@ -111,9 +174,20 @@ export default function JournalsPage() {
         title="Inventory Journals"
         description="Stock receipts, issues, transfers and adjustments"
         actions={
-          <PermissionGuard permission="inventory.stock.movement">
-            <Button onClick={() => setOpen(true)} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold hover:opacity-90">+ New Journal</Button>
-          </PermissionGuard>
+          <div className="flex gap-2">
+            <PermissionGuard permission="inventory.journals.export">
+              {journals.length > 0 && (
+                <div className="flex gap-1">
+                  <Button onClick={exportCSV} variant="outline" className="text-xs">📄 CSV</Button>
+                  <Button onClick={exportExcel} variant="outline" className="text-xs">📊 Excel</Button>
+                  <Button onClick={exportPDF} variant="outline" className="text-xs">📑 PDF</Button>
+                </div>
+              )}
+            </PermissionGuard>
+            <PermissionGuard permission="inventory.stock.movement">
+              <Button onClick={() => setOpen(true)} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold hover:opacity-90">+ New Journal</Button>
+            </PermissionGuard>
+          </div>
         }
       />
       <DataTable columns={columns} data={journals} sorting={sorting} onSortingChange={setSorting} />
@@ -161,7 +235,7 @@ export default function JournalsPage() {
             </div>
             <div>
               <Label>Notes</Label>
-              <Input value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} disabled={submitting} />
+              <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} disabled={submitting} className="w-full border border-gray-300 rounded px-3 py-2 text-sm" rows={3} placeholder="Add any notes..." />
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={submitting}>

@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { PermissionGuard } from '@/components/shared/PermissionGuard';
 import { getApiClient } from '@/lib/api-client';
 
 interface InventoryItem {
@@ -30,18 +31,6 @@ interface ItemGroup {
 }
 
 const fmt = (v: number, decimals = 0) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(v);
-
-const exportCSVItems = (items: InventoryItem[]) => {
-  const headers = ['SKU', 'Item Name', 'Unit', 'Reorder Level', 'Unit Cost'];
-  const rows = items.map(i => [i.sku, i.name, i.unit || '', i.reorder_level || '', fmt(i.unit_cost || 0, 2)]);
-  const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `items-${new Date().toISOString().split('T')[0]}.csv`;
-  a.click();
-};
 
 const getColumns = (router: ReturnType<typeof useRouter>, onDelete: (id: string) => void): ColumnDef<InventoryItem>[] => [
   { accessorKey: 'sku', header: 'SKU', cell: i => <span className="font-mono text-xs font-semibold" style={{ color: '#146eb4' }}>{String(i.getValue())}</span> },
@@ -140,6 +129,60 @@ export default function InventoryItemsPage() {
     }
   };
 
+  const exportData = () => {
+    const headers = ['SKU', 'Item Name', 'Unit', 'Reorder Level', 'Unit Cost'];
+    const rows = items.map(i => [i.sku, i.name, i.unit || '-', i.reorder_level || '-', i.unit_cost || 0]);
+    return { headers, rows };
+  };
+
+  const exportCSV = () => {
+    const { headers, rows } = exportData();
+    const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `items-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+  };
+
+  const exportExcel = async () => {
+    const { headers, rows } = exportData();
+    try {
+      const { data } = await api.post('/export/excel', {
+        headers,
+        rows,
+        filename: `items-${new Date().toISOString().split('T')[0]}.xlsx`
+      }, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `items-${new Date().toISOString().split('T')[0]}.xlsx`;
+      a.click();
+    } catch (error) {
+      console.error('Export failed', error);
+    }
+  };
+
+  const exportPDF = async () => {
+    const { headers, rows } = exportData();
+    try {
+      const { data } = await api.post('/export/pdf', {
+        headers,
+        rows,
+        title: 'Inventory Items Report',
+        filename: `items-${new Date().toISOString().split('T')[0]}.pdf`
+      }, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `items-${new Date().toISOString().split('T')[0]}.pdf`;
+      a.click();
+    } catch (error) {
+      console.error('Export failed', error);
+    }
+  };
+
   if (loading) return <div className="p-6">Loading...</div>;
 
   return (
@@ -150,9 +193,15 @@ export default function InventoryItemsPage() {
           description="Manage stock levels, costs, and reorder points"
         />
         <div className="flex gap-2">
-          {items.length > 0 && (
-            <Button onClick={() => exportCSVItems(items)} variant="outline" className="text-xs">📥 Export CSV</Button>
-          )}
+          <PermissionGuard permission="inventory.items.export">
+            {items.length > 0 && (
+              <div className="flex gap-1">
+                <Button onClick={exportCSV} variant="outline" className="text-xs">📄 CSV</Button>
+                <Button onClick={exportExcel} variant="outline" className="text-xs">📊 Excel</Button>
+                <Button onClick={exportPDF} variant="outline" className="text-xs">📑 PDF</Button>
+              </div>
+            )}
+          </PermissionGuard>
           <Button
             onClick={() => setOpen(true)}
             style={{ background: '#FF9900', color: '#0f1111' }}

@@ -13,12 +13,12 @@ class InvoiceController {
     public function __construct(private AuditService $auditService) {}
 
     public function index(Request $request): JsonResponse {
-        $invoices = Invoice::with('customer', 'items')->orderBy('invoice_date', 'desc')->paginate(20);
+        $invoices = Invoice::with('customer', 'items', 'order', 'order.creator', 'order.creator.locations')->orderBy('invoice_date', 'desc')->paginate(20);
         return response()->json($invoices);
     }
 
     public function show(Request $request, string $id): JsonResponse {
-        $invoice = Invoice::with('customer', 'items', 'payments')->findOrFail($id);
+        $invoice = Invoice::with('customer', 'items', 'payments', 'order', 'order.creator', 'order.creator.locations')->findOrFail($id);
         return response()->json($invoice);
     }
 

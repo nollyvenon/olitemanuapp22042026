@@ -66,6 +66,60 @@ export default function StoreCentersPage() {
     }
   };
 
+  const exportData = () => {
+    const headers = ['Name', 'City', 'State', 'Country'];
+    const rows = locations.map(l => [l.name, l.city || '-', l.state || '-', l.country || '-']);
+    return { headers, rows };
+  };
+
+  const exportCSV = () => {
+    const { headers, rows } = exportData();
+    const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `store-centers-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+  };
+
+  const exportExcel = async () => {
+    const { headers, rows } = exportData();
+    try {
+      const { data } = await api.post('/export/excel', {
+        headers,
+        rows,
+        filename: `store-centers-${new Date().toISOString().split('T')[0]}.xlsx`
+      }, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `store-centers-${new Date().toISOString().split('T')[0]}.xlsx`;
+      a.click();
+    } catch (error) {
+      console.error('Export failed', error);
+    }
+  };
+
+  const exportPDF = async () => {
+    const { headers, rows } = exportData();
+    try {
+      const { data } = await api.post('/export/pdf', {
+        headers,
+        rows,
+        title: 'Store Centers Report',
+        filename: `store-centers-${new Date().toISOString().split('T')[0]}.pdf`
+      }, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `store-centers-${new Date().toISOString().split('T')[0]}.pdf`;
+      a.click();
+    } catch (error) {
+      console.error('Export failed', error);
+    }
+  };
+
   if (loading) return <div className="p-6">Loading...</div>;
 
   return (
@@ -74,11 +128,22 @@ export default function StoreCentersPage() {
         title="Store Centers"
         description="Manage distribution and storage locations"
         actions={
-          <PermissionGuard permission="inventory.products.create">
-            <Button onClick={() => setOpen(true)} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold">
-              + Add Store
-            </Button>
-          </PermissionGuard>
+          <div className="flex gap-2">
+            <PermissionGuard permission="inventory.locations.export">
+              {locations.length > 0 && (
+                <div className="flex gap-1">
+                  <Button onClick={exportCSV} variant="outline" className="text-xs">📄 CSV</Button>
+                  <Button onClick={exportExcel} variant="outline" className="text-xs">📊 Excel</Button>
+                  <Button onClick={exportPDF} variant="outline" className="text-xs">📑 PDF</Button>
+                </div>
+              )}
+            </PermissionGuard>
+            <PermissionGuard permission="inventory.products.create">
+              <Button onClick={() => setOpen(true)} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold">
+                + Add Store
+              </Button>
+            </PermissionGuard>
+          </div>
         }
       />
       <DataTable columns={columns} data={locations} sorting={sorting} onSortingChange={setSorting} />

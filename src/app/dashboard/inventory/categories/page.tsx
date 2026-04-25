@@ -116,6 +116,60 @@ export default function CategoriesPage() {
     }
   };
 
+  const exportData = () => {
+    const headers = ['Name', 'Description', 'Groups Count'];
+    const rows = categories.map(c => [c.name, c.description || '-', c.groups?.length || 0]);
+    return { headers, rows };
+  };
+
+  const exportCSV = () => {
+    const { headers, rows } = exportData();
+    const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `categories-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+  };
+
+  const exportExcel = async () => {
+    const { headers, rows } = exportData();
+    try {
+      const { data } = await api.post('/export/excel', {
+        headers,
+        rows,
+        filename: `categories-${new Date().toISOString().split('T')[0]}.xlsx`
+      }, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `categories-${new Date().toISOString().split('T')[0]}.xlsx`;
+      a.click();
+    } catch (error) {
+      console.error('Export failed', error);
+    }
+  };
+
+  const exportPDF = async () => {
+    const { headers, rows } = exportData();
+    try {
+      const { data } = await api.post('/export/pdf', {
+        headers,
+        rows,
+        title: 'Inventory Categories Report',
+        filename: `categories-${new Date().toISOString().split('T')[0]}.pdf`
+      }, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `categories-${new Date().toISOString().split('T')[0]}.pdf`;
+      a.click();
+    } catch (error) {
+      console.error('Export failed', error);
+    }
+  };
+
   if (loading) return <div className="p-6">Loading...</div>;
 
   return (
@@ -124,11 +178,22 @@ export default function CategoriesPage() {
         title="Inventory Categories"
         description="Organise inventory items by category"
         actions={
-          <PermissionGuard permission="inventory.products.create">
-            <Button onClick={() => setOpen(true)} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold">
-              + Add Category
-            </Button>
-          </PermissionGuard>
+          <div className="flex gap-2">
+            <PermissionGuard permission="inventory.categories.export">
+              {categories.length > 0 && (
+                <div className="flex gap-1">
+                  <Button onClick={exportCSV} variant="outline" className="text-xs">📄 CSV</Button>
+                  <Button onClick={exportExcel} variant="outline" className="text-xs">📊 Excel</Button>
+                  <Button onClick={exportPDF} variant="outline" className="text-xs">📑 PDF</Button>
+                </div>
+              )}
+            </PermissionGuard>
+            <PermissionGuard permission="inventory.products.create">
+              <Button onClick={() => setOpen(true)} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold">
+                + Add Category
+              </Button>
+            </PermissionGuard>
+          </div>
         }
       />
 

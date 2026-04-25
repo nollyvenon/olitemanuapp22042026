@@ -32,6 +32,14 @@ interface Order {
   delivery_note_path?: string;
   invoice?: { id: string };
   metadata?: Record<string, any>;
+  creator?: {
+    name: string;
+    locations?: Array<{ name: string; city?: string }>;
+  };
+  customer?: {
+    name: string;
+    company?: string;
+  };
 }
 
 const StateFlow = ({ current }: { current: string }) => {
@@ -78,7 +86,7 @@ export default function OrderDetailPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const { data } = await api.get(`/orders/${id}`);
+        const { data } = await api.get(`/orders/${id}?include=creator,creator.locations,customer`);
         setOrder({
           ...data,
           items: data.items || [],
@@ -197,6 +205,27 @@ export default function OrderDetailPage() {
 
       {/* State Flow */}
       <StateFlow current={order.status} />
+
+      {/* Customer & Initiator Info */}
+      <div className="grid grid-cols-4 gap-4">
+        <Card className="p-4">
+          <p className="text-xs text-gray-600 font-semibold">Customer</p>
+          <p className="text-sm font-medium mt-1">{order.customer?.name || order.customer_name}</p>
+          {order.customer?.company && <p className="text-xs text-gray-500">{order.customer.company}</p>}
+        </Card>
+        <Card className="p-4">
+          <p className="text-xs text-gray-600 font-semibold">Initiator</p>
+          <p className="text-sm font-medium mt-1">{order.creator?.name || '-'}</p>
+        </Card>
+        <Card className="p-4">
+          <p className="text-xs text-gray-600 font-semibold">Depot</p>
+          <p className="text-sm font-medium mt-1">{order.creator?.locations?.[0]?.name || '-'}</p>
+        </Card>
+        <Card className="p-4">
+          <p className="text-xs text-gray-600 font-semibold">Territory</p>
+          <p className="text-sm font-medium mt-1">{order.creator?.locations?.[0]?.city || '-'}</p>
+        </Card>
+      </div>
 
       {/* Order Details Grid */}
       <div className="grid grid-cols-3 gap-4">

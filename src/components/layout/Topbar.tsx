@@ -1,7 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { LogOut, Menu, Bell, User } from 'lucide-react';
+import { useEffect } from 'react';
+import { LogOut, Menu, Bell, User, Moon, Sun } from 'lucide-react';
 import { useAuthStore } from '@/store/auth.store';
 import { useUIStore } from '@/store/ui.store';
 import {
@@ -15,9 +16,31 @@ import {
 export function Topbar() {
   const router = useRouter();
   const { user, logout } = useAuthStore();
-  const { toggleSidebar } = useUIStore();
+  const { toggleSidebar, theme, setTheme } = useUIStore();
 
   const handleLogout = () => { logout(); router.push('/login'); };
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    if (typeof window !== 'undefined') {
+      if (newTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  }, [theme]);
 
   const initials = user?.name?.split(' ').map((n) => n[0]).join('').toUpperCase() || 'U';
 
@@ -36,6 +59,14 @@ export function Topbar() {
         <button className="relative p-2 rounded hover:bg-[#37475a] transition-colors text-white">
           <Bell className="h-4 w-4" />
           <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#FF9900]" />
+        </button>
+
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded hover:bg-[#37475a] transition-colors text-white"
+          title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+        >
+          {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
         </button>
 
         <DropdownMenu>

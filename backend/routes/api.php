@@ -18,6 +18,7 @@ use App\Modules\Accounts\Http\Controllers\PriceListController;
 use App\Modules\Accounts\Http\Controllers\TerritoryController;
 use App\Modules\Kyc\Http\Controllers\KycController;
 use App\Modules\Reports\Http\Controllers\ReportController;
+use App\Modules\Reports\Http\Controllers\ExportController;
 use App\Modules\Audit\Http\Controllers\AuditController;
 use App\Modules\Notifications\Http\Controllers\NotificationController;
 use App\Modules\MarketIntelligence\Http\Controllers\MarketIntelligenceController;
@@ -102,6 +103,9 @@ Route::prefix('v1')->group(function () {
         Route::post('reports', [ReportController::class, 'store']);
         Route::get('reports/{id}', [ReportController::class, 'show']);
         Route::post('reports/{id}/generate', [ReportController::class, 'generate']);
+
+        Route::post('export/excel', [ExportController::class, 'exportExcel']);
+        Route::post('export/pdf', [ExportController::class, 'exportPDF']);
 
         Route::get('audit-logs', [AuditController::class, 'index']);
         Route::get('audit-logs/{id}', [AuditController::class, 'show']);

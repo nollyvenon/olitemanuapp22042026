@@ -116,6 +116,60 @@ export default function GroupsPage() {
     }
   };
 
+  const exportData = () => {
+    const headers = ['Category', 'Group Name', 'Description'];
+    const rows = groups.map(g => [g.category_name || '-', g.name, g.description || '-']);
+    return { headers, rows };
+  };
+
+  const exportCSV = () => {
+    const { headers, rows } = exportData();
+    const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `groups-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+  };
+
+  const exportExcel = async () => {
+    const { headers, rows } = exportData();
+    try {
+      const { data } = await api.post('/export/excel', {
+        headers,
+        rows,
+        filename: `groups-${new Date().toISOString().split('T')[0]}.xlsx`
+      }, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `groups-${new Date().toISOString().split('T')[0]}.xlsx`;
+      a.click();
+    } catch (error) {
+      console.error('Export failed', error);
+    }
+  };
+
+  const exportPDF = async () => {
+    const { headers, rows } = exportData();
+    try {
+      const { data } = await api.post('/export/pdf', {
+        headers,
+        rows,
+        title: 'Item Groups Report',
+        filename: `groups-${new Date().toISOString().split('T')[0]}.pdf`
+      }, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `groups-${new Date().toISOString().split('T')[0]}.pdf`;
+      a.click();
+    } catch (error) {
+      console.error('Export failed', error);
+    }
+  };
+
   if (loading) return <div className="p-6">Loading...</div>;
 
   return (
@@ -124,9 +178,20 @@ export default function GroupsPage() {
         title="Item Groups"
         description="Group inventory items for reporting and categorisation"
         actions={
-          <PermissionGuard permission="inventory.products.create">
-            <Button onClick={() => setOpen(true)} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold hover:opacity-90">+ Add Group</Button>
-          </PermissionGuard>
+          <div className="flex gap-2">
+            <PermissionGuard permission="inventory.groups.export">
+              {groups.length > 0 && (
+                <div className="flex gap-1">
+                  <Button onClick={exportCSV} variant="outline" className="text-xs">📄 CSV</Button>
+                  <Button onClick={exportExcel} variant="outline" className="text-xs">📊 Excel</Button>
+                  <Button onClick={exportPDF} variant="outline" className="text-xs">📑 PDF</Button>
+                </div>
+              )}
+            </PermissionGuard>
+            <PermissionGuard permission="inventory.products.create">
+              <Button onClick={() => setOpen(true)} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold hover:opacity-90">+ Add Group</Button>
+            </PermissionGuard>
+          </div>
         }
       />
       <DataTable columns={getColumns(handleDelete)} data={groups} sorting={sorting} onSortingChange={setSorting} />

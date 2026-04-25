@@ -26,6 +26,16 @@ interface Invoice {
   tax: number;
   total: number;
   items?: InvoiceItem[];
+  order?: {
+    creator?: {
+      name: string;
+      locations?: Array<{ name: string; city?: string }>;
+    };
+  };
+  customer?: {
+    name: string;
+    company?: string;
+  };
 }
 
 const fmt = (v: number) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(v);
@@ -44,7 +54,7 @@ export default function InvoiceDetailPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const { data } = await api.get(`/invoices/${id}`);
+        const { data } = await api.get(`/invoices/${id}?include=order,order.creator,order.creator.locations,customer`);
         setInvoice(data);
       } catch (error) {
         console.error('Failed to load invoice', error);
@@ -83,6 +93,27 @@ export default function InvoiceDetailPage() {
           <p className="text-gray-600 mt-1">{invoice.customer_name}</p>
         </div>
         <StatusBadge status={invoice.status} />
+      </div>
+
+      {/* Customer & Initiator Info */}
+      <div className="grid grid-cols-4 gap-4">
+        <Card className="p-4">
+          <p className="text-xs text-gray-600 font-semibold">Customer</p>
+          <p className="text-sm font-medium mt-1">{invoice.customer?.name || invoice.customer_name}</p>
+          {invoice.customer?.company && <p className="text-xs text-gray-500">{invoice.customer.company}</p>}
+        </Card>
+        <Card className="p-4">
+          <p className="text-xs text-gray-600 font-semibold">Initiator</p>
+          <p className="text-sm font-medium mt-1">{invoice.order?.creator?.name || '-'}</p>
+        </Card>
+        <Card className="p-4">
+          <p className="text-xs text-gray-600 font-semibold">Depot</p>
+          <p className="text-sm font-medium mt-1">{invoice.order?.creator?.locations?.[0]?.name || '-'}</p>
+        </Card>
+        <Card className="p-4">
+          <p className="text-xs text-gray-600 font-semibold">Territory</p>
+          <p className="text-sm font-medium mt-1">{invoice.order?.creator?.locations?.[0]?.city || '-'}</p>
+        </Card>
       </div>
 
       {/* Details Grid */}

@@ -16,12 +16,12 @@ class OrderController {
     public function __construct(private AuditService $auditService, private OrderStateMachine $stateMachine, private PriceListService $priceService) {}
 
     public function index(Request $request): JsonResponse {
-        $orders = Order::with('customer', 'items')->orderBy('order_date', 'desc')->paginate(20);
+        $orders = Order::with('customer', 'items', 'creator', 'creator.locations')->orderBy('order_date', 'desc')->paginate(20);
         return response()->json($orders);
     }
 
     public function show(Request $request, string $id): JsonResponse {
-        $order = Order::with('customer', 'items', 'invoice')->findOrFail($id);
+        $order = Order::with('customer', 'items', 'invoice', 'creator', 'creator.locations')->findOrFail($id);
         return response()->json($order);
     }
 
