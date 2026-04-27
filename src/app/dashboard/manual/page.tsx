@@ -27,7 +27,7 @@ export default function ManualPage() {
         const res = await api.get('/manuals');
         const data = res.data;
         setManuals(data);
-        setModules([...new Set(data.map((m: Manual) => m.module))]);
+        setModules([...new Set(data.map((m: Manual) => m.module))] as string[]);
         if (data.length > 0) setSelected(data[0]);
       } catch (err) {
         console.error('Failed to load manuals', err);

@@ -43,10 +43,10 @@ export default function AiDashboard() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-4 gap-4">
-        <KpiCard title="Revenue Today" value={kpis?.revenue_today || 0} format="currency" accentColor="#FF9900" icon={TrendingUp} />
-        <KpiCard title="Orders Today" value={kpis?.orders_today || 0} format="number" accentColor="#067d62" icon={TrendingUp} />
-        <KpiCard title="Low Stock Items" value={kpis?.low_stock_items || 0} format="number" accentColor="#cc0c39" icon={AlertCircle} />
-        <KpiCard title="Overdue Invoices" value={kpis?.overdue_invoices || 0} format="number" accentColor="#c45500" icon={AlertCircle} />
+        <KpiCard title="Revenue Today" value={kpis?.revenue_today || 0} format="currency" change={0} accentColor="#FF9900" icon={TrendingUp} />
+        <KpiCard title="Orders Today" value={kpis?.orders_today || 0} format="number" change={0} accentColor="#067d62" icon={TrendingUp} />
+        <KpiCard title="Low Stock Items" value={kpis?.low_stock_items || 0} format="number" change={0} accentColor="#cc0c39" icon={AlertCircle} />
+        <KpiCard title="Overdue Invoices" value={kpis?.overdue_invoices || 0} format="number" change={0} accentColor="#c45500" icon={AlertCircle} />
       </div>
 
       {/* Critical Alerts */}
