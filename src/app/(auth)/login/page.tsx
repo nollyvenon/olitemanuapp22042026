@@ -11,6 +11,7 @@ import { getOrCreateFingerprint } from '@/utils/fingerprint';
 
 type LoginInput = { email: string; password: string };
 
+
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
@@ -19,26 +20,30 @@ export default function LoginPage() {
   const [locationStatus, setLocationStatus] = useState<'pending' | 'granted' | 'denied'>('pending');
   const locationRef = useRef<{ latitude?: number; longitude?: number; gps_source: string }>({ gps_source: 'ip_fallback' });
   const fingerprintRef = useRef<string>('');
+  const userAgentRef = useRef<string>('');
 
   useEffect(() => {
     getOrCreateFingerprint().then((fp) => { fingerprintRef.current = fp; });
 
-    if (!navigator.geolocation) {
-      setLocationStatus('granted');
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        locationRef.current = { latitude: pos.coords.latitude, longitude: pos.coords.longitude, gps_source: 'gps' };
+    if (typeof navigator !== 'undefined') {
+      userAgentRef.current = navigator.userAgent;
+      if (!navigator.geolocation) {
         setLocationStatus('granted');
-      },
-      () => {
-        locationRef.current = { gps_source: 'ip_fallback' };
-        setLocationStatus('denied');
-      },
-      { timeout: 10000 }
-    );
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          locationRef.current = { latitude: pos.coords.latitude, longitude: pos.coords.longitude, gps_source: 'gps' };
+          setLocationStatus('granted');
+        },
+        () => {
+          locationRef.current = { gps_source: 'ip_fallback' };
+          setLocationStatus('denied');
+        },
+        { timeout: 10000 }
+      );
+    }
   }, []);
 
   const {
@@ -54,7 +59,7 @@ export default function LoginPage() {
     try {
       await login(data.email, data.password, {
         device_fingerprint: fingerprintRef.current || 'unknown',
-        user_agent: navigator.userAgent,
+        user_agent: userAgentRef.current || '',
         ...locationRef.current,
       });
       router.push('/dashboard/overview');
