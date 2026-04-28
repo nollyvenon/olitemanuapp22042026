@@ -3,10 +3,13 @@ import { getOrCreateFingerprint } from '@/utils/fingerprint';
 
 export function useDevice() {
   const [fingerprint, setFingerprint] = useState<string | null>(null);
-  const [userAgent] = useState(() => navigator.userAgent);
+  const [userAgent, setUserAgent] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Safe here — useEffect only runs on the client, never during SSR
+    setUserAgent(navigator.userAgent);
+
     getOrCreateFingerprint()
       .then((fp) => {
         setFingerprint(fp);
