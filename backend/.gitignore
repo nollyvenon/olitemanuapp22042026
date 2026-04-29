@@ -1,0 +1,4 @@
+.venv/*
+storage/logs/*
+# Ignore Laravel log file
+storage/logs/laravel.log
