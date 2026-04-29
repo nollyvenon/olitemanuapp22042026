@@ -1,45 +1,43 @@
-export async function generateDeviceFingerprint(): Promise<string> {
-  const nav = navigator as any;
+// utils/fingerprint.ts
+
+const FINGERPRINT_KEY = 'device_fingerprint';
+
+function generateFingerprint(): string {
+  if (typeof window === 'undefined') return 'ssr-fallback';
+
   const components = [
     navigator.userAgent,
     navigator.language,
-    navigator.hardwareConcurrency?.toString() || '',
-    nav.deviceMemory?.toString() || '',
-    navigator.maxTouchPoints?.toString() || '',
-    screen.width + 'x' + screen.height,
-    screen.colorDepth.toString(),
-    new Date().getTimezoneOffset().toString(),
-    navigator.plugins.length.toString(),
+    String(screen.colorDepth),
+    String(screen.width) + 'x' + String(screen.height),
+    String(new Date().getTimezoneOffset()),
+    String(navigator.hardwareConcurrency ?? ''),
+    String((navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? ''),
   ];
 
-  const combined = components.join('|');
-  return await hashString(combined);
-}
-
-async function hashString(input: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(input);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-}
-
-export function getCachedFingerprint(key = 'device_fingerprint'): string | null {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem(key);
-}
-
-export async function getOrCreateFingerprint(
-  key = 'device_fingerprint'
-): Promise<string> {
-  if (typeof window === 'undefined') {
-    throw new Error('Cannot generate fingerprint outside of browser');
+  // Simple hash
+  const raw = components.join('|');
+  let hash = 0;
+  for (let i = 0; i < raw.length; i++) {
+    const char = raw.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash |= 0;
   }
+  return Math.abs(hash).toString(36);
+}
 
-  const cached = getCachedFingerprint(key);
-  if (cached) return cached;
+export async function getOrCreateFingerprint(): Promise<string> {
+  // Guard: never run on the server
+  if (typeof window === 'undefined') return 'ssr-fallback';
 
-  const fingerprint = await generateDeviceFingerprint();
-  localStorage.setItem(key, fingerprint);
-  return fingerprint;
+  try {
+    const stored = localStorage.getItem(FINGERPRINT_KEY);
+    if (stored) return stored;
+
+    const fp = generateFingerprint();
+    localStorage.setItem(FINGERPRINT_KEY, fp);
+    return fp;
+  } catch {
+    return generateFingerprint();
+  }
 }

@@ -65,7 +65,7 @@ class RevenueIntelligenceService
                 COUNT(DISTINCT o.id) AS orders,
                 COUNT(DISTINCT c.id) AS customers,
                 AVG(o.total) AS avg_order_value,
-                (COUNT(DISTINCT o.id)::float/COUNT(DISTINCT c.id))*100 AS conversion_rate
+                CASE WHEN COUNT(DISTINCT c.id) > 0 THEN (COUNT(DISTINCT o.id)::float/COUNT(DISTINCT c.id))*100 ELSE 0 END AS conversion_rate
             FROM orders o
             JOIN users u ON u.id=o.created_by
             JOIN customers c ON c.id=o.customer_id
@@ -81,13 +81,13 @@ class RevenueIntelligenceService
         return DB::select("
             SELECT DATE_TRUNC('week', o.order_date)::date AS week,
                 SUM(o.total) FILTER (WHERE o.status='AUTHORIZED') AS revenue,
-                LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date)) AS prev_revenue,
-                ROUND(((SUM(o.total)-LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date)))/
-                  LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date))*100)::numeric, 1) AS growth_pct
+                LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date)::date) AS prev_revenue,
+                CASE WHEN LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date)::date) > 0 THEN ROUND(((SUM(o.total)-LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date)::date))/
+                  LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date)::date)*100)::numeric, 1) ELSE 0 END AS growth_pct
             FROM orders o
             WHERE o.is_current=true AND o.deleted_at IS NULL
               AND o.order_date >= NOW()-INTERVAL '90 days'
-            GROUP BY 1
+            GROUP BY DATE_TRUNC('week', o.order_date)::date
             ORDER BY 1
         ");
     }
@@ -98,7 +98,7 @@ class RevenueIntelligenceService
             SELECT si.name, si.sku,
                 SUM(oi.quantity*oi.unit_price) AS revenue,
                 SUM(oi.quantity*(si.unit_cost)) AS cogs,
-                ROUND(((SUM(oi.quantity*oi.unit_price)-SUM(oi.quantity*si.unit_cost))/SUM(oi.quantity*oi.unit_price)*100)::numeric, 1) AS margin_pct
+                CASE WHEN SUM(oi.quantity*oi.unit_price) > 0 THEN ROUND(((SUM(oi.quantity*oi.unit_price)-SUM(oi.quantity*si.unit_cost))/SUM(oi.quantity*oi.unit_price)*100)::numeric, 1) ELSE 0 END AS margin_pct
             FROM order_items oi
             JOIN stock_items si ON si.id=oi.stock_item_id
             JOIN orders o ON o.id=oi.order_id
@@ -145,7 +145,7 @@ class RevenueIntelligenceService
         ");
         return array_map(fn($p) => [
             'name' => $p->name, 'sku' => $p->sku, 'recent' => (float)$p->recent, 'prior' => (float)$p->prior,
-            'decline_pct' => round(((float)$p->recent-(float)$p->prior)/(float)$p->prior*100, 1),
+            'decline_pct' => ($p->prior > 0) ? round(((float)$p->recent-(float)$p->prior)/(float)$p->prior*100, 1) : 0,
             'action' => 'Discount, bundle, or discontinue'
         ], $data);
     }
@@ -153,22 +153,12 @@ class RevenueIntelligenceService
     private function detectLeakage(): array
     {
         $leakage = [];
-        $highDiscounts = DB::selectOne("
-            SELECT COUNT(*) as cnt, SUM(oi.discount) as total FROM order_items oi
-            WHERE oi.discount > 0 AND oi.order_id IN (
-                SELECT id FROM orders WHERE status='AUTHORIZED' AND order_date >= NOW()-INTERVAL '30 days'
-            )
-        ");
-        if ($highDiscounts->total > 0) {
-            $leakage[] = ['type' => 'Excessive Discounting', 'amount' => (float)$highDiscounts->total, 'impact' => 'Reduce to improve margins'];
-        }
-
         $returnedItems = DB::selectOne("
             SELECT SUM(total) as total FROM invoices
             WHERE status='cancelled' AND deleted_at IS NULL
               AND created_at >= NOW()-INTERVAL '30 days'
         ");
-        if ($returnedItems->total > 0) {
+        if (($returnedItems->total ?? 0) > 0) {
             $leakage[] = ['type' => 'Returns/Cancellations', 'amount' => (float)$returnedItems->total, 'impact' => 'Investigate root cause'];
         }
 

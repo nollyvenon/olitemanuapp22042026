@@ -38,3 +38,11 @@ backup_*.sql
 node_modules
 .next
 backend/storage/framework/views
+
+# Ignore build and environment files
+package-lock.json
+backend/database/database.sqlite
+backend/bootstrap/cache/
+src/app/dashboard/accounts/creditors/[id]/generateStaticParams.ts
+src/app/dashboard/accounts/debtors/[id]/generateStaticParams.ts
+src/app/dashboard/inventory/items/[id]/generateStaticParams.ts
