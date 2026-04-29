@@ -1,2 +1,193 @@
-[2026-04-25 15:27:11] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":268} 
-[2026-04-25 15:27:11] local.ERROR: [JWT] Token validation failed {"error":"Signature verification failed","code":0,"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","file":"C:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\vendor\\firebase\\php-jwt\\src\\JWT.php","line":162} 
+
+[2026-04-29 22:25:12] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-29 22:25:12] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-29 22:25:12] local.ERROR: SQLSTATE[42803]: Grouping error: 7 ERROR:  column "o.order_date" must appear in the GROUP BY clause or be used in an aggregate function
+LINE 4: ...G(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_da...
+                                                             ^ (Connection: pgsql, Host: localhost, Port: 5432, Database: omclta, SQL: 
+            SELECT DATE_TRUNC('week', o.order_date)::date AS week,
+                SUM(o.total) FILTER (WHERE o.status='AUTHORIZED') AS revenue,
+                LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date)) AS prev_revenue,
+                ROUND(((SUM(o.total)-LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date)))/
+                  LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date))*100)::numeric, 1) AS growth_pct
+            FROM orders o
+            WHERE o.is_current=true AND o.deleted_at IS NULL
+              AND o.order_date >= NOW()-INTERVAL '90 days'
+            GROUP BY 1
+            ORDER BY 1
+        ) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42803): SQLSTATE[42803]: Grouping error: 7 ERROR:  column \"o.order_date\" must appear in the GROUP BY clause or be used in an aggregate function
+LINE 4: ...G(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_da...
+                                                             ^ (Connection: pgsql, Host: localhost, Port: 5432, Database: omclta, SQL: 
+            SELECT DATE_TRUNC('week', o.order_date)::date AS week,
+                SUM(o.total) FILTER (WHERE o.status='AUTHORIZED') AS revenue,
+                LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date)) AS prev_revenue,
+                ROUND(((SUM(o.total)-LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date)))/
+                  LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date))*100)::numeric, 1) AS growth_pct
+            FROM orders o
+            WHERE o.is_current=true AND o.deleted_at IS NULL
+              AND o.order_date >= NOW()-INTERVAL '90 days'
+            GROUP BY 1
+            ORDER BY 1
+        ) at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php:841)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(797): Illuminate/Database/Connection->runQueryCallback('/n            SE...', Array, Object(Closure))
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(412): Illuminate/Database/Connection->run('/n            SE...', Array, Object(Closure))
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/DatabaseManager.php(496): Illuminate/Database/Connection->select('/n            SE...')
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php(363): Illuminate/Database/DatabaseManager->__call('select', Array)
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Analytics/Services/RevenueIntelligenceService.php(81): Illuminate/Support/Facades/Facade::__callStatic('select', Array)
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Analytics/Services/RevenueIntelligenceService.php(15): App/Modules/Analytics/Services/RevenueIntelligenceService->growthTrends()
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Analytics/Http/Controllers/AnalyticsController.php(54): App/Modules/Analytics/Services/RevenueIntelligenceService->getInsights()
+#7 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Modules/Analytics/Http/Controllers/AnalyticsController->revenue(Object(App/Modules/Analytics/Services/RevenueIntelligenceService))
+#8 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(269): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Modules/Analytics/Http/Controllers/AnalyticsController), 'revenue')
+#9 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(215): Illuminate/Routing/Route->runController()
+#10 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#11 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#12 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Auth/Http/Middleware/JwtMiddleware.php(38): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#13 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Modules/Auth/Http/Middleware/JwtMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#14 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#16 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#17 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#18 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#19 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#20 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#21 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Http/Middleware/CorsMiddleware.php(10): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#22 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Http/Middleware/CorsMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#23 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#24 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#25 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#26 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/public/index.php(13): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#27 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Files//Develo...')
+#28 {main}
+
+[previous exception] [object] (PDOException(code: 42803): SQLSTATE[42803]: Grouping error: 7 ERROR:  column \"o.order_date\" must appear in the GROUP BY clause or be used in an aggregate function
+LINE 4: ...G(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_da...
+                                                             ^ at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php:426)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(426): PDOStatement->execute()
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(830): Illuminate/Database/Connection->Illuminate/Database/{closure}('/n            SE...', Array)
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(797): Illuminate/Database/Connection->runQueryCallback('/n            SE...', Array, Object(Closure))
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(412): Illuminate/Database/Connection->run('/n            SE...', Array, Object(Closure))
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/DatabaseManager.php(496): Illuminate/Database/Connection->select('/n            SE...')
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php(363): Illuminate/Database/DatabaseManager->__call('select', Array)
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Analytics/Services/RevenueIntelligenceService.php(81): Illuminate/Support/Facades/Facade::__callStatic('select', Array)
+#7 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Analytics/Services/RevenueIntelligenceService.php(15): App/Modules/Analytics/Services/RevenueIntelligenceService->growthTrends()
+#8 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Analytics/Http/Controllers/AnalyticsController.php(54): App/Modules/Analytics/Services/RevenueIntelligenceService->getInsights()
+#9 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Modules/Analytics/Http/Controllers/AnalyticsController->revenue(Object(App/Modules/Analytics/Services/RevenueIntelligenceService))
+#10 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(269): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Modules/Analytics/Http/Controllers/AnalyticsController), 'revenue')
+#11 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(215): Illuminate/Routing/Route->runController()
+#12 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#13 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#14 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Auth/Http/Middleware/JwtMiddleware.php(38): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Modules/Auth/Http/Middleware/JwtMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#16 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#17 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#18 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#19 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#20 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#21 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#22 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#23 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Http/Middleware/CorsMiddleware.php(10): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#24 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Http/Middleware/CorsMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#25 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#26 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#27 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#28 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/public/index.php(13): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#29 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Files//Develo...')
+#30 {main}
+"} 
+[2026-04-29 22:25:12] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-29 22:25:12] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"access"} 
+[2026-04-29 22:25:12] local.ERROR: SQLSTATE[42803]: Grouping error: 7 ERROR:  column "o.order_date" must appear in the GROUP BY clause or be used in an aggregate function
+LINE 4: ...G(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_da...
+                                                             ^ (Connection: pgsql, Host: localhost, Port: 5432, Database: omclta, SQL: 
+            SELECT DATE_TRUNC('week', o.order_date)::date AS week,
+                SUM(o.total) FILTER (WHERE o.status='AUTHORIZED') AS revenue,
+                LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date)) AS prev_revenue,
+                ROUND(((SUM(o.total)-LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date)))/
+                  LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date))*100)::numeric, 1) AS growth_pct
+            FROM orders o
+            WHERE o.is_current=true AND o.deleted_at IS NULL
+              AND o.order_date >= NOW()-INTERVAL '90 days'
+            GROUP BY 1
+            ORDER BY 1
+        ) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42803): SQLSTATE[42803]: Grouping error: 7 ERROR:  column \"o.order_date\" must appear in the GROUP BY clause or be used in an aggregate function
+LINE 4: ...G(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_da...
+                                                             ^ (Connection: pgsql, Host: localhost, Port: 5432, Database: omclta, SQL: 
+            SELECT DATE_TRUNC('week', o.order_date)::date AS week,
+                SUM(o.total) FILTER (WHERE o.status='AUTHORIZED') AS revenue,
+                LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date)) AS prev_revenue,
+                ROUND(((SUM(o.total)-LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date)))/
+                  LAG(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_date))*100)::numeric, 1) AS growth_pct
+            FROM orders o
+            WHERE o.is_current=true AND o.deleted_at IS NULL
+              AND o.order_date >= NOW()-INTERVAL '90 days'
+            GROUP BY 1
+            ORDER BY 1
+        ) at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php:841)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(797): Illuminate/Database/Connection->runQueryCallback('/n            SE...', Array, Object(Closure))
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(412): Illuminate/Database/Connection->run('/n            SE...', Array, Object(Closure))
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/DatabaseManager.php(496): Illuminate/Database/Connection->select('/n            SE...')
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php(363): Illuminate/Database/DatabaseManager->__call('select', Array)
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Analytics/Services/RevenueIntelligenceService.php(81): Illuminate/Support/Facades/Facade::__callStatic('select', Array)
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Analytics/Services/RevenueIntelligenceService.php(15): App/Modules/Analytics/Services/RevenueIntelligenceService->growthTrends()
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Analytics/Http/Controllers/AnalyticsController.php(54): App/Modules/Analytics/Services/RevenueIntelligenceService->getInsights()
+#7 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Modules/Analytics/Http/Controllers/AnalyticsController->revenue(Object(App/Modules/Analytics/Services/RevenueIntelligenceService))
+#8 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(269): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Modules/Analytics/Http/Controllers/AnalyticsController), 'revenue')
+#9 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(215): Illuminate/Routing/Route->runController()
+#10 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#11 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#12 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Auth/Http/Middleware/JwtMiddleware.php(38): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#13 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Modules/Auth/Http/Middleware/JwtMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#14 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#16 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#17 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#18 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#19 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#20 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#21 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Http/Middleware/CorsMiddleware.php(10): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#22 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Http/Middleware/CorsMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#23 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#24 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#25 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#26 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/public/index.php(13): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#27 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Files//Develo...')
+#28 {main}
+
+[previous exception] [object] (PDOException(code: 42803): SQLSTATE[42803]: Grouping error: 7 ERROR:  column \"o.order_date\" must appear in the GROUP BY clause or be used in an aggregate function
+LINE 4: ...G(SUM(o.total)) OVER (ORDER BY DATE_TRUNC('week', o.order_da...
+                                                             ^ at C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php:426)
+[stacktrace]
+#0 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(426): PDOStatement->execute()
+#1 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(830): Illuminate/Database/Connection->Illuminate/Database/{closure}('/n            SE...', Array)
+#2 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(797): Illuminate/Database/Connection->runQueryCallback('/n            SE...', Array, Object(Closure))
+#3 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(412): Illuminate/Database/Connection->run('/n            SE...', Array, Object(Closure))
+#4 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Database/DatabaseManager.php(496): Illuminate/Database/Connection->select('/n            SE...')
+#5 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php(363): Illuminate/Database/DatabaseManager->__call('select', Array)
+#6 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Analytics/Services/RevenueIntelligenceService.php(81): Illuminate/Support/Facades/Facade::__callStatic('select', Array)
+#7 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Analytics/Services/RevenueIntelligenceService.php(15): App/Modules/Analytics/Services/RevenueIntelligenceService->growthTrends()
+#8 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Analytics/Http/Controllers/AnalyticsController.php(54): App/Modules/Analytics/Services/RevenueIntelligenceService->getInsights()
+#9 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Modules/Analytics/Http/Controllers/AnalyticsController->revenue(Object(App/Modules/Analytics/Services/RevenueIntelligenceService))
+#10 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(269): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Modules/Analytics/Http/Controllers/AnalyticsController), 'revenue')
+#11 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(215): Illuminate/Routing/Route->runController()
+#12 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#13 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#14 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Modules/Auth/Http/Middleware/JwtMiddleware.php(38): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#15 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Modules/Auth/Http/Middleware/JwtMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#16 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#17 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#18 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#19 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#20 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#21 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#22 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#23 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/app/Http/Middleware/CorsMiddleware.php(10): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#24 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): App/Http/Middleware/CorsMiddleware->handle(Object(Illuminate/Http/Request), Object(Closure))
+#25 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#26 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#27 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#28 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/public/index.php(13): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#29 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Files//Develo...')
+#30 {main}
+"} 

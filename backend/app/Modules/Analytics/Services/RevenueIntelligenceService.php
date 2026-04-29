@@ -30,7 +30,7 @@ class RevenueIntelligenceService
                 COUNT(DISTINCT o.id) AS orders,
                 SUM(oi.quantity) AS units_sold
             FROM order_items oi
-            JOIN stock_items si ON si.id=oi.item_id
+            JOIN stock_items si ON si.id=oi.stock_item_id
             JOIN orders o ON o.id=oi.order_id
             WHERE o.status='AUTHORIZED' AND o.is_current=true AND o.deleted_at IS NULL
               AND o.order_date >= NOW()-INTERVAL '90 days'
@@ -100,7 +100,7 @@ class RevenueIntelligenceService
                 SUM(oi.quantity*(si.unit_cost)) AS cogs,
                 ROUND(((SUM(oi.quantity*oi.unit_price)-SUM(oi.quantity*si.unit_cost))/SUM(oi.quantity*oi.unit_price)*100)::numeric, 1) AS margin_pct
             FROM order_items oi
-            JOIN stock_items si ON si.id=oi.item_id
+            JOIN stock_items si ON si.id=oi.stock_item_id
             JOIN orders o ON o.id=oi.order_id
             WHERE o.status='AUTHORIZED' AND o.is_current=true AND o.deleted_at IS NULL
               AND o.order_date >= NOW()-INTERVAL '90 days'
@@ -114,7 +114,7 @@ class RevenueIntelligenceService
         $data = DB::select("
             SELECT si.name, si.sku, SUM(oi.quantity*oi.unit_price) AS revenue
             FROM order_items oi
-            JOIN stock_items si ON si.id=oi.item_id
+            JOIN stock_items si ON si.id=oi.stock_item_id
             JOIN orders o ON o.id=oi.order_id
             WHERE o.status='AUTHORIZED' AND o.is_current=true AND o.deleted_at IS NULL
               AND o.order_date >= NOW()-INTERVAL '90 days'
@@ -134,7 +134,7 @@ class RevenueIntelligenceService
                 SUM(CASE WHEN o.order_date >= NOW()-INTERVAL '45 days' THEN oi.quantity*oi.unit_price ELSE 0 END) AS recent,
                 SUM(CASE WHEN o.order_date < NOW()-INTERVAL '45 days' AND o.order_date >= NOW()-INTERVAL '90 days' THEN oi.quantity*oi.unit_price ELSE 0 END) AS prior
             FROM order_items oi
-            JOIN stock_items si ON si.id=oi.item_id
+            JOIN stock_items si ON si.id=oi.stock_item_id
             JOIN orders o ON o.id=oi.order_id
             WHERE o.status='AUTHORIZED' AND o.is_current=true AND o.deleted_at IS NULL
               AND o.order_date >= NOW()-INTERVAL '90 days'
@@ -212,7 +212,7 @@ class RevenueIntelligenceService
         $recs = [];
         $topProduct = DB::selectOne("
             SELECT si.name, SUM(oi.quantity*oi.unit_price) as rev FROM order_items oi
-            JOIN stock_items si ON si.id=oi.item_id
+            JOIN stock_items si ON si.id=oi.stock_item_id
             JOIN orders o ON o.id=oi.order_id
             WHERE o.status='AUTHORIZED' AND o.is_current=true AND o.deleted_at IS NULL
               AND o.order_date >= NOW()-INTERVAL '90 days'
