@@ -937,3 +937,37 @@ DETAIL:  Key (slug)=(getting-started) already exists. at C:/Files/DevelopedApps/
 #38 C:/Files/DevelopedApps/olitemanuapp_21042026/backend/artisan(6): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
 #39 {main}
 "} 
+[2026-04-30 06:10:12] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-30 06:10:12] local.ERROR: [JWT] Token validation failed {"error":"Expired token","code":0,"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","file":"C:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\vendor\\firebase\\php-jwt\\src\\JWT.php","line":188} 
+[2026-04-30 06:10:12] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":417} 
+[2026-04-30 06:10:12] local.ERROR: [JWT] Token validation failed {"error":"Expired token","code":0,"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","file":"C:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\vendor\\firebase\\php-jwt\\src\\JWT.php","line":188} 
+[2026-04-30 06:10:12] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":419} 
+[2026-04-30 06:10:12] local.INFO: [JWT] Token decoded successfully {"sub":"019dc147-a602-7395-b37f-9a691964cdf7","type":"refresh"} 
+[2026-04-30 06:10:12] local.INFO: [Auth] Refresh request received {"has_auth_header":true,"auth_header":"Bearer ...","all_headers":["host","user-agent","accept","accept-language","accept-encoding","content-type","authorization","content-length","origin","connection","referer","sec-fetch-dest","sec-fetch-mode","sec-fetch-site"]} 
+[2026-04-30 06:10:12] local.INFO: [Auth] extractToken called {"has_header":true,"header_starts_with_bearer":true,"header_preview":"Bearer eyJ0eXAiOiJKV..."} 
+[2026-04-30 06:10:12] local.INFO: [Auth] Token extracted successfully {"token_length":419} 
+[2026-04-30 06:10:13] local.ERROR: [Auth] Refresh failed {"error":"No query results for model [App\\Models\\User] 019dc147-a602-7395-b37f-9a691964cdf7","code":0} 
+[2026-04-30 06:11:44] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":2801} 
+[2026-04-30 06:11:44] local.INFO: [JWT] Token decoded successfully {"sub":"019ddd01-8231-73f8-8198-3cea6c0994fa","type":"access"} 
+[2026-04-30 06:11:45] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":2801} 
+[2026-04-30 06:11:45] local.INFO: [JWT] Token decoded successfully {"sub":"019ddd01-8231-73f8-8198-3cea6c0994fa","type":"access"} 
+[2026-04-30 06:11:45] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":2801} 
+[2026-04-30 06:11:45] local.INFO: [JWT] Token decoded successfully {"sub":"019ddd01-8231-73f8-8198-3cea6c0994fa","type":"access"} 
+[2026-04-30 06:11:45] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":2801} 
+[2026-04-30 06:11:45] local.INFO: [JWT] Token decoded successfully {"sub":"019ddd01-8231-73f8-8198-3cea6c0994fa","type":"access"} 
+[2026-04-30 06:11:45] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":2801} 
+[2026-04-30 06:11:45] local.INFO: [JWT] Token decoded successfully {"sub":"019ddd01-8231-73f8-8198-3cea6c0994fa","type":"access"} 
+[2026-04-30 06:11:45] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":2801} 
+[2026-04-30 06:11:45] local.INFO: [JWT] Token decoded successfully {"sub":"019ddd01-8231-73f8-8198-3cea6c0994fa","type":"access"} 
+[2026-04-30 06:11:46] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":2801} 
+[2026-04-30 06:11:46] local.INFO: [JWT] Token decoded successfully {"sub":"019ddd01-8231-73f8-8198-3cea6c0994fa","type":"access"} 
+[2026-04-30 06:11:46] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":2801} 
+[2026-04-30 06:11:46] local.INFO: [JWT] Token decoded successfully {"sub":"019ddd01-8231-73f8-8198-3cea6c0994fa","type":"access"} 
+[2026-04-30 06:11:57] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":2801} 
+[2026-04-30 06:11:57] local.INFO: [JWT] Token decoded successfully {"sub":"019ddd01-8231-73f8-8198-3cea6c0994fa","type":"access"} 
+[2026-04-30 06:11:57] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":2801} 
+[2026-04-30 06:11:57] local.INFO: [JWT] Token decoded successfully {"sub":"019ddd01-8231-73f8-8198-3cea6c0994fa","type":"access"} 
+[2026-04-30 06:12:11] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":2801} 
+[2026-04-30 06:12:11] local.INFO: [JWT] Token decoded successfully {"sub":"019ddd01-8231-73f8-8198-3cea6c0994fa","type":"access"} 
+[2026-04-30 06:12:11] local.INFO: [JWT] Attempting to decode token {"tokenPrefix":"eyJ0eXAiOiJKV1QiLCJh...","tokenLength":2801} 
+[2026-04-30 06:12:11] local.INFO: [JWT] Token decoded successfully {"sub":"019ddd01-8231-73f8-8198-3cea6c0994fa","type":"access"} 
