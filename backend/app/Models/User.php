@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class User extends Model {
     use HasUuids;
 
-    protected $fillable = ['name', 'email', 'password_hash', 'is_active', 'is_sub_admin', 'is_god_admin', 'force_password_reset', 'created_by'];
+    protected $fillable = ['name', 'email', 'password_hash', 'is_active', 'is_sub_admin', 'is_god_admin', 'force_password_reset', 'created_by', 'role'];
     protected $hidden = ['password_hash'];
     protected $appends = ['permissions'];
 
