@@ -116,6 +116,7 @@ class AuthService {
             'email' => $user->email,
             'device_id' => $device->id,
             'groups' => $user->groups()->pluck('id')->toArray(),
+            'role' => $user->role ?? 'user',
             'permissions' => $permissions,
             'locations' => $locations,
             'iat' => now()->timestamp,
