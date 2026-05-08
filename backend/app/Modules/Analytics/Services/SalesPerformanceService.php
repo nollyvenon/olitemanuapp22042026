@@ -101,9 +101,9 @@ class SalesPerformanceService
                 ROUND((SUM(CASE WHEN o.status='AUTHORIZED' THEN 1 ELSE 0 END)::float / NULLIF(COUNT(o.id), 0) * 100)::numeric, 1) AS success_rate
             FROM users u
             LEFT JOIN orders o ON o.created_by = u.id AND o.deleted_at IS NULL AND o.order_date >= NOW() - INTERVAL '90 days'
-            WHERE u.role IN ('sales_officer','manager') AND COUNT(o.id) >= 5
+            WHERE u.role IN ('sales_officer','manager')
             GROUP BY u.id, u.name
-            HAVING (SUM(CASE WHEN o.status='AUTHORIZED' THEN 1 ELSE 0 END)::float / COUNT(o.id) * 100) < 50
+            HAVING COUNT(o.id) >= 5 AND (SUM(CASE WHEN o.status='AUTHORIZED' THEN 1 ELSE 0 END)::float / COUNT(o.id) * 100) < 50
             ORDER BY success_rate ASC
         ");
         return array_map(fn($u) => [

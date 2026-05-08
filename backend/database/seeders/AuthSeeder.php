@@ -71,16 +71,20 @@ class AuthSeeder extends Seeder {
     private function seedUsers(): void {
         $locations = Location::all();
 
-        $admin = User::firstOrCreate(['email' => 'superadmin@omclta.com'], ['name' => 'System Admin', 'password_hash' => Hash::make('Admin@123456'), 'is_active' => true]);
+        $admin = User::firstOrCreate(['email' => 'superadmin@omclta.com'], ['name' => 'System Admin', 'password_hash' => Hash::make('Admin@123456'), 'is_active' => true, 'role' => 'admin']);
         $admin->groups()->sync([Group::where('name', 'Super Admin')->first()?->id]);
         $admin->locations()->sync($locations->pluck('id'));
 
-        $salesMgr = User::firstOrCreate(['email' => 'sales.manager@omclta.com'], ['name' => 'Sales Manager', 'password_hash' => Hash::make('SalesMgr@123'), 'is_active' => true]);
+        $salesMgr = User::firstOrCreate(['email' => 'sales.manager@omclta.com'], ['name' => 'Sales Manager', 'password_hash' => Hash::make('SalesMgr@123'), 'is_active' => true, 'role' => 'manager']);
         $salesMgr->groups()->sync([Group::where('name', 'Sales Manager')->first()?->id]);
         $salesMgr->locations()->sync($locations->first()?->id);
 
-        $storeOps = User::firstOrCreate(['email' => 'storemanager@omclta.com'], ['name' => 'Store Manager', 'password_hash' => Hash::make('StoreMgr@123'), 'is_active' => true]);
+        $storeOps = User::firstOrCreate(['email' => 'storemanager@omclta.com'], ['name' => 'Store Manager', 'password_hash' => Hash::make('StoreMgr@123'), 'is_active' => true, 'role' => 'inventory_officer']);
         $storeOps->groups()->sync([Group::where('name', 'Store Manager')->first()?->id]);
         $storeOps->locations()->sync($locations->first()?->id);
+
+        User::firstOrCreate(['email' => 'admin@example.com'], ['name' => 'Test Admin', 'password_hash' => Hash::make('password'), 'is_active' => true, 'role' => 'admin']);
+        User::firstOrCreate(['email' => 'sales@example.com'], ['name' => 'Test Sales Officer', 'password_hash' => Hash::make('password'), 'is_active' => true, 'role' => 'sales_officer']);
+        User::firstOrCreate(['email' => 'analyst@example.com'], ['name' => 'Test Analyst', 'password_hash' => Hash::make('password'), 'is_active' => true, 'role' => 'analyst']);
     }
 }

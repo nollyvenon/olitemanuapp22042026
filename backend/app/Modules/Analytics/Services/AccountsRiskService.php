@@ -29,7 +29,7 @@ class AccountsRiskService
                 SUM(CASE WHEN i.status NOT IN ('paid','cancelled') AND CURRENT_DATE-i.due_date::date > 30 THEN i.total ELSE 0 END) AS overdue_30,
                 SUM(CASE WHEN i.status NOT IN ('paid','cancelled') AND CURRENT_DATE-i.due_date::date > 90 THEN i.total ELSE 0 END) AS overdue_90,
                 COUNT(DISTINCT CASE WHEN i.status NOT IN ('paid','cancelled') THEN i.id END) AS invoice_count,
-                AVG(EXTRACT(DAY FROM (CURRENT_DATE - i.due_date::date)))::int AS avg_days_overdue
+                AVG((CURRENT_DATE - i.due_date::date))::int AS avg_days_overdue
             FROM customers c
             LEFT JOIN invoices i ON i.customer_id = c.id AND i.deleted_at IS NULL
             GROUP BY c.id, c.name
@@ -43,7 +43,7 @@ class AccountsRiskService
             SELECT v.id, v.reference,
                 CASE WHEN v.type='debit_note' THEN 'Payable' ELSE 'Receivable' END AS type,
                 v.amount, v.due_date, v.status,
-                CASE WHEN CURRENT_DATE > v.due_date::date THEN EXTRACT(DAY FROM (CURRENT_DATE - v.due_date::date)) ELSE 0 END::int AS days_overdue
+                CASE WHEN CURRENT_DATE > v.due_date::date THEN (CURRENT_DATE - v.due_date::date) ELSE 0 END::int AS days_overdue
             FROM vouchers v
             WHERE v.status='posted' AND v.deleted_at IS NULL
               AND v.due_date IS NOT NULL
@@ -72,7 +72,7 @@ class AccountsRiskService
             SELECT c.id, c.name, c.email,
                 SUM(CASE WHEN i.status NOT IN ('paid','cancelled') THEN i.total ELSE 0 END) AS amount_due,
                 COUNT(CASE WHEN CURRENT_DATE > i.due_date::date THEN 1 END) AS overdue_invoices,
-                MAX(EXTRACT(DAY FROM (CURRENT_DATE - i.due_date::date)))::int AS days_overdue,
+                MAX((CURRENT_DATE - i.due_date::date))::int AS days_overdue,
                 ROUND(SUM(CASE WHEN i.status NOT IN ('paid','cancelled') THEN i.total ELSE 0 END)::numeric /
                   NULLIF(SUM(CASE WHEN i.status NOT IN ('paid','cancelled') THEN i.total ELSE 0 END), 0) * 100, 2) AS overdue_percent
             FROM customers c
@@ -91,7 +91,7 @@ class AccountsRiskService
                 SUM(CASE WHEN i.status NOT IN ('paid','cancelled') THEN i.total ELSE 0 END) AS outstanding,
                 SUM(CASE WHEN i.status='paid' THEN i.total ELSE 0 END) AS paid_total,
                 COUNT(DISTINCT CASE WHEN i.status NOT IN ('paid','cancelled') THEN i.id END) AS open_invoices,
-                MAX(EXTRACT(DAY FROM (CURRENT_DATE - i.due_date::date)))::int AS max_days_overdue,
+                MAX((CURRENT_DATE - i.due_date::date))::int AS max_days_overdue,
                 COALESCE(c.credit_limit, 0) AS credit_limit
             FROM customers c
             LEFT JOIN invoices i ON i.customer_id = c.id AND i.deleted_at IS NULL
@@ -122,7 +122,7 @@ class AccountsRiskService
                 COALESCE(SUM(i.total), 0) AS lifetime_sales,
                 COUNT(*) AS total_invoices,
                 COUNT(CASE WHEN i.status='paid' THEN 1 END) AS paid_count,
-                MAX(EXTRACT(DAY FROM (CURRENT_DATE - i.due_date::date)))::int AS max_days_overdue,
+                MAX((CURRENT_DATE - i.due_date::date))::int AS max_days_overdue,
                 COALESCE(c.credit_limit, 0) AS credit_limit
             FROM customers c
             LEFT JOIN invoices i ON i.customer_id = c.id AND i.deleted_at IS NULL

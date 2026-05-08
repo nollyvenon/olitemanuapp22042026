@@ -103,6 +103,7 @@ Route::prefix('v1')->group(function () {
 
         Route::get('reports', [ReportController::class, 'index']);
         Route::post('reports', [ReportController::class, 'store']);
+        Route::get('reports/inventory', [InventoryReportController::class, 'opening']);
         Route::get('reports/{id}', [ReportController::class, 'show']);
         Route::post('reports/{id}/generate', [ReportController::class, 'generate']);
 
@@ -143,9 +144,9 @@ Route::prefix('v1')->group(function () {
         Route::put('settings', [SettingsController::class, 'update']);
 
         Route::get('manuals', [ManualController::class, 'index']);
-        Route::get('manuals/{id}', [ManualController::class, 'show']);
         Route::get('manuals/search', [ManualController::class, 'search']);
         Route::post('manuals', [ManualController::class, 'store']);
+        Route::get('manuals/{id}', [ManualController::class, 'show']);
         Route::patch('manuals/{id}', [ManualController::class, 'update']);
 
         Route::prefix('analytics')->group(function () {
