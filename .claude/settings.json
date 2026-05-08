@@ -125,11 +125,24 @@
       "PowerShell(Stop-Process -Force)",
       "Bash(grep -E \"\\\\.\\(tsx|ts|jsx|js\\)$\")",
       "Bash(rm -rf bootstrap/cache/*)",
-      "Bash(curl -s http://localhost:8000/api/v1/analytics/ai/insights -H \"Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJpYXQiOjE3MTk0NTEyNzYsImV4cCI6MTcxOTQ1Nzc3Niwic3ViIjoiMDk4ZjJkYjAtYzc1Ni00OGVhLTljMDAtYzcxNjcwYWEzZmU5In0.NKwfEz32pAGLhjLm4VG8pMajV6hH37fZdgBj8z9cMTQ\")"
+      "Bash(curl -s http://localhost:8000/api/v1/analytics/ai/insights -H \"Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJpYXQiOjE3MTk0NTEyNzYsImV4cCI6MTcxOTQ1Nzc3Niwic3ViIjoiMDk4ZjJkYjAtYzc1Ni00OGVhLTljMDAtYzcxNjcwYWEzZmU5In0.NKwfEz32pAGLhjLm4VG8pMajV6hH37fZdgBj8z9cMTQ\")",
+      "Bash(PGPASSWORD=postgres psql -h localhost -U postgres -d omclta -c \"TRUNCATE manuals CASCADE;\")",
+      "Bash(PGPASSWORD=postgres psql -h localhost -U postgres -d omclta -c \"SELECT id, title, module, slug, roles_allowed FROM manuals ORDER BY module, slug;\")",
+      "Bash(curl -s -X POST http://localhost:8000/api/v1/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@example.com\",\"password\":\"password\"}')",
+      "Bash(curl -s -H \"Authorization: Bearer $\\(curl -s -X POST http://localhost:8000/api/v1/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@example.com\",\"password\":\"password\"}')",
+      "Bash(PGPASSWORD=postgres psql -h localhost -U postgres -d omclta -c \"SELECT title, module, roles_allowed FROM manuals ORDER BY module, title;\")",
+      "Bash(PGPASSWORD=postgres psql -h localhost -U postgres -d omclta -c \"\\\\d order_items\")"
     ],
     "additionalDirectories": [
       "c:\\Files\\DevelopedApps\\OMCLTA",
-      "\\tmp"
+      "\\tmp",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Modules\\Analytics\\Services",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\database\\migrations",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\routes",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\database\\seeders",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Modules\\Auth\\Services",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Http\\Controllers",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Models"
     ]
   }
 }
