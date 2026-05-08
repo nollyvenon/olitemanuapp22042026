@@ -28,6 +28,9 @@ use App\Modules\Settings\Http\Controllers\SettingsController;
 use App\Modules\Analytics\Http\Controllers\AnalyticsController;
 use App\Modules\GodAdmin\Http\Controllers\GodAdminController;
 use App\Http\Controllers\ManualController;
+use App\Modules\Documentation\Http\Controllers\ManualController as DocManualController;
+use App\Modules\Documentation\Http\Controllers\ManualSearchController;
+use App\Modules\Documentation\Http\Controllers\AIAssistantController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -192,6 +195,18 @@ Route::prefix('v1')->group(function () {
             Route::get('version-history/{entityType}/{entityId}', [GodAdminController::class, 'viewVersionHistory']);
             Route::get('audit-log', [GodAdminController::class, 'viewAuditLog']);
             Route::post('export-log', [GodAdminController::class, 'exportAuditLog']);
+        });
+
+        Route::prefix('documentation')->group(function () {
+            Route::get('manuals', [DocManualController::class, 'index']);
+            Route::get('manuals/{slug}', [DocManualController::class, 'show']);
+            Route::post('manuals', [DocManualController::class, 'store']);
+            Route::patch('manuals/{id}', [DocManualController::class, 'update']);
+            Route::delete('manuals/{id}', [DocManualController::class, 'delete']);
+            Route::post('manuals/{id}/feedback', [DocManualController::class, 'feedback']);
+            Route::get('categories', [DocManualController::class, 'getCategories']);
+            Route::get('search', [ManualSearchController::class, 'search']);
+            Route::post('ai-assistant', [AIAssistantController::class, 'answer']);
         });
     });
 });

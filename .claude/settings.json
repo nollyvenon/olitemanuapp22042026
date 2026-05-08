@@ -131,7 +131,11 @@
       "Bash(curl -s -X POST http://localhost:8000/api/v1/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@example.com\",\"password\":\"password\"}')",
       "Bash(curl -s -H \"Authorization: Bearer $\\(curl -s -X POST http://localhost:8000/api/v1/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@example.com\",\"password\":\"password\"}')",
       "Bash(PGPASSWORD=postgres psql -h localhost -U postgres -d omclta -c \"SELECT title, module, roles_allowed FROM manuals ORDER BY module, title;\")",
-      "Bash(PGPASSWORD=postgres psql -h localhost -U postgres -d omclta -c \"\\\\d order_items\")"
+      "Bash(PGPASSWORD=postgres psql -h localhost -U postgres -d omclta -c \"\\\\d order_items\")",
+      "Bash(grep -n \"public function store\" /c/Files/DevelopedApps\\\\olitemanuapp_21042026\\\\backend\\\\app\\\\Modules\\\\Accounts\\\\Http\\\\Controllers\\\\LedgerController.php)",
+      "Read(//c/Files/**)",
+      "Bash(Get-ChildItem \"c:\\\\Files\\\\DevelopedApps\\\\olitemanuapp22042026\" -Directory)",
+      "Bash(Select-Object Name)"
     ],
     "additionalDirectories": [
       "c:\\Files\\DevelopedApps\\OMCLTA",
@@ -142,7 +146,19 @@
       "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\database\\seeders",
       "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Modules\\Auth\\Services",
       "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Http\\Controllers",
-      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Models"
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Models",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Modules\\Auth\\Http\\Middleware",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Modules\\Auth\\Http\\Controllers",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Policies",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Jobs",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Console",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Modules\\Sales\\Http\\Controllers",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Modules\\Inventory\\Http\\Controllers",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Modules\\Accounts\\Http\\Controllers",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Modules\\Kyc\\Http\\Controllers",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Modules\\Reports\\Http\\Controllers",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Modules\\MarketIntelligence\\Http\\Controllers",
+      "c:\\Files\\DevelopedApps\\olitemanuapp_21042026\\backend\\app\\Modules\\Analytics\\Http\\Controllers"
     ]
   }
 }
