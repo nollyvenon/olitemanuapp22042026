@@ -72,4 +72,13 @@ class ManualController {
         $categories = ManualCategory::where('is_active', true)->with(['manuals' => fn($q) => $q->where('status', 'published')])->get();
         return response()->json(['data' => $categories]);
     }
+
+    public function getContextualHelp(Request $request): JsonResponse {
+        $page = $request->query('page');
+        $mapping = ['dashboard' => 'getting-started', 'sales' => 'sales-orders', 'inventory' => 'inventory-management'];
+        $slug = $mapping[strtolower($page)] ?? null;
+        if (!$slug) return response()->json(['data' => null]);
+        $manual = Manual::where('slug', $slug)->where('status', 'published')->first();
+        return response()->json(['data' => $manual]);
+    }
 }

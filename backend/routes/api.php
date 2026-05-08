@@ -206,6 +206,7 @@ Route::prefix('v1')->group(function () {
             Route::post('manuals/{id}/feedback', [DocManualController::class, 'feedback']);
             Route::get('categories', [DocManualController::class, 'getCategories']);
             Route::get('search', [ManualSearchController::class, 'search']);
+            Route::get('contextual-help', [DocManualController::class, 'getContextualHelp']);
             Route::post('ai-assistant', [AIAssistantController::class, 'answer']);
         });
     });
