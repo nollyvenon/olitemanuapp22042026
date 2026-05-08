@@ -4,6 +4,8 @@ import { useUIStore } from '@/store/ui.store';
 import { AppSidebar } from '@/components/layout/AppSidebar';
 import { Topbar } from '@/components/layout/Topbar';
 import { AuthGuard } from '@/components/providers/AuthGuard';
+import { ContextHelpModal } from '@/components/documentation/ContextHelpModal';
+import { AIManualAssistant } from '@/components/documentation/AIManualAssistant';
 import { cn } from '@/lib/utils';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -24,6 +26,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="max-w-screen-xl mx-auto">{children}</div>
           </main>
         </div>
+        <ContextHelpModal />
+        <AIManualAssistant />
       </div>
     </AuthGuard>
   );
