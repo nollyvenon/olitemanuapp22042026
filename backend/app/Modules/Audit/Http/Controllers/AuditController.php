@@ -3,11 +3,24 @@
 namespace App\Modules\Audit\Http\Controllers;
 
 use App\Models\AuditLog;
+use App\Models\User;
+use App\Modules\Auth\Services\RBACService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AuditController {
+    public function __construct(private RBACService $rbac) {}
+
+    private function checkAuditAccess(Request $request): ?JsonResponse {
+        $user = User::find($request->authUser->sub ?? null);
+        if ($user && !$this->rbac->canAccessModule($user, 'audit')) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+        return null;
+    }
+
     public function index(Request $request): JsonResponse {
+        if ($response = $this->checkAuditAccess($request)) return $response;
         $logs = AuditLog::with('user')
             ->when($request->user_id, fn($q) => $q->where('user_id', $request->user_id))
             ->when($request->entity_type, fn($q) => $q->where('entity_type', $request->entity_type))
@@ -21,11 +34,13 @@ class AuditController {
     }
 
     public function show(Request $request, string $id): JsonResponse {
+        if ($response = $this->checkAuditAccess($request)) return $response;
         $log = AuditLog::with('user')->findOrFail($id);
         return response()->json($log);
     }
 
     public function entityAuditTrail(Request $request, string $entityType, string $entityId): JsonResponse {
+        if ($response = $this->checkAuditAccess($request)) return $response;
         $logs = AuditLog::where('entity_type', $entityType)
             ->where('entity_id', $entityId)
             ->with('user')
@@ -36,6 +51,7 @@ class AuditController {
     }
 
     public function userActions(Request $request, string $userId): JsonResponse {
+        if ($response = $this->checkAuditAccess($request)) return $response;
         $logs = AuditLog::where('user_id', $userId)
             ->with('user')
             ->when($request->from, fn($q) => $q->where('created_at', '>=', $request->from))
@@ -47,6 +63,7 @@ class AuditController {
     }
 
     public function statistics(Request $request): JsonResponse {
+        if ($response = $this->checkAuditAccess($request)) return $response;
         $stats = [
             'total_actions' => AuditLog::count(),
             'actions_by_type' => AuditLog::selectRaw('action_type, COUNT(*) as count')->groupBy('action_type')->pluck('count', 'action_type'),
@@ -58,6 +75,7 @@ class AuditController {
     }
 
     public function export(Request $request): JsonResponse {
+        if ($response = $this->checkAuditAccess($request)) return $response;
         $validated = $request->validate([
             'format' => 'required|in:csv,json',
             'from' => 'nullable|date',
