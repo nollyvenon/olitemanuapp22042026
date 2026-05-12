@@ -42,19 +42,17 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!coords) {
+      setError('Enable device location (GPS) to sign in.');
+      return;
+    }
     setIsLoading(true);
     setLoading(true);
 
     // Get user agent safely
     const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
 
-    // Determine GPS source
-    let gpsSource = 'manual';
-    if (coords) {
-      gpsSource = 'gps';
-    } else if (gpsStatus === 'denied') {
-      gpsSource = 'ip_fallback';
-    }
+    const gpsSource = 'gps';
 
     try {
       const apiUrl = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/auth/login`;
@@ -203,15 +201,13 @@ export default function LoginPage() {
               </button>
             )}
             {gpsStatus === 'denied' && (
-              <p className="text-xs text-orange-600 mt-2">
-                GPS denied. Location will be determined from your IP address.
-              </p>
+              <p className="text-xs text-orange-600 mt-2">Location required — allow GPS in browser settings.</p>
             )}
           </div>
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || !coords}
             className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 font-medium"
           >
             {isLoading ? 'Signing in...' : 'Sign In'}

@@ -17,7 +17,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [globalError, setGlobalError] = useState('');
   const [locationStatus, setLocationStatus] = useState<'pending' | 'granted' | 'denied'>('pending');
-  const locationRef = useRef<{ latitude?: number; longitude?: number; gps_source: string }>({ gps_source: 'ip_fallback' });
+  const locationRef = useRef<{ latitude?: number; longitude?: number; gps_source: string }>({ gps_source: 'pending' });
   const fingerprintRef = useRef<string>('');
   const userAgentRef = useRef<string>('');
 
@@ -30,7 +30,7 @@ export default function LoginPage() {
     userAgentRef.current = navigator.userAgent; // Safe here — inside useEffect
 
     if (!navigator.geolocation) {
-      setLocationStatus('granted'); // No geolocation support, skip to granted
+      setLocationStatus('denied');
       return;
     }
 
@@ -44,10 +44,10 @@ export default function LoginPage() {
         setLocationStatus('granted');
       },
       () => {
-        locationRef.current = { gps_source: 'ip_fallback' };
+        locationRef.current = { gps_source: 'denied' };
         setLocationStatus('denied');
       },
-      { timeout: 10000 }
+      { timeout: 10000, enableHighAccuracy: true }
     );
   }, []);
 
@@ -58,6 +58,10 @@ export default function LoginPage() {
   } = useForm<LoginInput>();
 
   const onSubmit = async (data: LoginInput) => {
+    if (locationStatus !== 'granted' || locationRef.current.gps_source !== 'gps') {
+      setGlobalError('Enable device location (GPS) to sign in.');
+      return;
+    }
     if (locationStatus === 'pending') {
       setGlobalError('Waiting for location access...');
       return;
@@ -149,14 +153,13 @@ export default function LoginPage() {
           >
             <MapPin className="h-3 w-3 shrink-0" />
             {locationStatus === 'pending' && 'Requesting location access...'}
-            {locationStatus === 'granted' &&
-              (locationRef.current.gps_source === 'gps' ? 'GPS location captured' : 'Location: IP fallback')}
-            {locationStatus === 'denied' && 'Location denied — using IP fallback'}
+            {locationStatus === 'granted' && 'GPS location captured'}
+            {locationStatus === 'denied' && 'Location required — allow GPS in browser settings'}
           </div>
 
           <button
             type="submit"
-            disabled={isLoading || locationStatus === 'pending'}
+            disabled={isLoading || locationStatus === 'pending' || locationStatus === 'denied'}
             className="w-full h-10 bg-[#FF9900] hover:bg-[#e88b00] text-[#0f1111] font-bold rounded text-sm transition-colors disabled:opacity-60 cursor-pointer"
           >
             {isLoading

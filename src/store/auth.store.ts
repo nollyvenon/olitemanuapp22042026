@@ -91,12 +91,12 @@ export const useAuthStore = create<AuthState>()(
         const { user } = get();
         if (!user?.permissions) return false;
         if (user.permissions.includes('admin.*')) return true;
-        return (
-          user.permissions.includes(permission) ||
-          user.permissions.some(
-            (p) => p.endsWith('.*') && permission.startsWith(p.slice(0, -2))
-          )
-        );
+        const match = (needle: string) =>
+          user.permissions!.includes(needle) ||
+          user.permissions!.some((p) => p.endsWith('.*') && needle.startsWith(p.slice(0, -2)));
+        if (permission === 'dashboard.read') return user.permissions.length > 0;
+        if (permission === 'dashboard.ai') return match('analytics.read');
+        return match(permission);
       },
 
       setHydrated: (hydrated: boolean) => {

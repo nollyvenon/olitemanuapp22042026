@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import type { ColumnDef, SortingState } from '@tanstack/react-table';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { StatusBadge } from '@/components/shared/StatusBadge';
@@ -11,6 +11,15 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PermissionGuard } from '@/components/shared/PermissionGuard';
 import { getApiClient } from '@/lib/api-client';
+import {
+  type GroupRow,
+  type PermissionRow,
+  enrichGroupPermissions,
+  normalizeGroup,
+  normalizePermission,
+  unwrapList,
+  effectivePermissionKeys,
+} from '@/lib/admin-access';
 import { Edit, Trash2 } from 'lucide-react';
 
 interface Group { id: string; name: string; }
@@ -18,13 +27,14 @@ interface User { id: string; name: string; email: string; is_active: boolean; gr
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
-  const [groups, setGroups] = useState<Group[]>([]);
+  const [groups, setGroups] = useState<GroupRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [sorting, setSorting] = useState<SortingState>([{ id: 'name', desc: false }]);
   const [editUser, setEditUser] = useState<User | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
   const [editGroups, setEditGroups] = useState<string[]>([]);
   const [editActive, setEditActive] = useState(true);
+  const [editNewPassword, setEditNewPassword] = useState('');
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [formGroups, setFormGroups] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
@@ -35,22 +45,48 @@ export default function UsersPage() {
     const { data } = await api.get('/users');
     setUsers(Array.isArray(data) ? data : data.data ?? []);
     setLoading(false);
-  }, []);
+  }, [api]);
+
+  const loadGroups = useCallback(async () => {
+    const [gr, pr] = await Promise.all([api.get('/groups'), api.get('/permissions')]);
+    const perms = unwrapList<unknown>(pr.data).map(normalizePermission).filter(Boolean) as PermissionRow[];
+    const raw = unwrapList<unknown>(gr.data).map(normalizeGroup).filter(Boolean) as GroupRow[];
+    setGroups(enrichGroupPermissions(raw, perms));
+  }, [api]);
 
   useEffect(() => {
     fetchUsers();
-    api.get('/groups').then(({ data }) => setGroups(Array.isArray(data) ? data : data.data ?? []));
-  }, []);
+    loadGroups();
+  }, [fetchUsers, loadGroups]);
 
-  const openEdit = (user: User) => { setEditUser(user); setEditGroups(user.groups?.map(g => g.id) ?? []); setEditActive(user.is_active); };
+  const editEffectiveCount = useMemo(
+    () => effectivePermissionKeys(groups, editGroups).size,
+    [groups, editGroups]
+  );
+  const createEffectiveCount = useMemo(
+    () => effectivePermissionKeys(groups, formGroups).size,
+    [groups, formGroups]
+  );
+
+  const openEdit = (user: User) => {
+    setEditUser(user);
+    setEditGroups(user.groups?.map(g => g.id) ?? []);
+    setEditActive(user.is_active);
+    setEditNewPassword('');
+  };
 
   const saveUser = async () => {
     if (!editUser) return;
     setSaving(true);
     try {
-      await api.patch(`/users/${editUser.id}`, { is_active: editActive, group_ids: editGroups });
+      await api.patch(`/users/${editUser.id}`, {
+        is_active: editActive,
+        group_ids: editGroups,
+        ...(editNewPassword ? { password: editNewPassword } : {}),
+      });
       await fetchUsers();
       setEditUser(null);
+      setEditNewPassword('');
     } finally { setSaving(false); }
   };
 
@@ -144,15 +180,34 @@ export default function UsersPage() {
               </div>
             </div>
             <div>
+              <Label className="text-sm font-medium">New password (optional)</Label>
+              <Input
+                type="password"
+                className="mt-1.5"
+                value={editNewPassword}
+                onChange={(e) => setEditNewPassword(e.target.value)}
+                placeholder="Leave blank to keep"
+              />
+            </div>
+            <div>
               <Label className="text-sm font-medium">Assign Groups</Label>
               <div className="mt-2 space-y-1.5 max-h-64 overflow-y-auto">
-                {groups.map(g => (
-                  <label key={g.id} className="flex items-center gap-2.5 cursor-pointer text-sm hover:bg-gray-50 px-2 py-1.5 rounded">
-                    <input type="checkbox" checked={editGroups.includes(g.id)} onChange={() => toggleGroup(g.id, editGroups, setEditGroups)} className="accent-amber-500 h-3.5 w-3.5" />
-                    {g.name}
+                {groups.map((g) => (
+                  <label key={g.id} className="flex items-center justify-between gap-2 cursor-pointer text-sm hover:bg-gray-50 px-2 py-1.5 rounded">
+                    <span className="flex items-center gap-2.5 min-w-0">
+                      <input
+                        type="checkbox"
+                        checked={editGroups.includes(g.id)}
+                        onChange={() => toggleGroup(g.id, editGroups, setEditGroups)}
+                        className="accent-amber-500 h-3.5 w-3.5 shrink-0"
+                      />
+                      <span className="truncate">{g.name}</span>
+                    </span>
+                    <span className="text-xs text-gray-400 shrink-0">{g.permissions.length} perms</span>
                   </label>
                 ))}
               </div>
+              <p className="text-xs text-gray-500 mt-2">Effective permission keys (union): {editEffectiveCount}</p>
             </div>
           </div>
           <SheetFooter className="mt-6">
@@ -175,13 +230,22 @@ export default function UsersPage() {
             <div>
               <Label>Assign Groups</Label>
               <div className="mt-2 space-y-1.5 max-h-48 overflow-y-auto border rounded-md p-2">
-                {groups.map(g => (
-                  <label key={g.id} className="flex items-center gap-2.5 cursor-pointer text-sm hover:bg-gray-50 px-2 py-1.5 rounded">
-                    <input type="checkbox" checked={formGroups.includes(g.id)} onChange={() => toggleGroup(g.id, formGroups, setFormGroups)} className="accent-amber-500 h-3.5 w-3.5" />
-                    {g.name}
+                {groups.map((g) => (
+                  <label key={g.id} className="flex items-center justify-between gap-2 cursor-pointer text-sm hover:bg-gray-50 px-2 py-1.5 rounded">
+                    <span className="flex items-center gap-2.5 min-w-0">
+                      <input
+                        type="checkbox"
+                        checked={formGroups.includes(g.id)}
+                        onChange={() => toggleGroup(g.id, formGroups, setFormGroups)}
+                        className="accent-amber-500 h-3.5 w-3.5 shrink-0"
+                      />
+                      <span className="truncate">{g.name}</span>
+                    </span>
+                    <span className="text-xs text-gray-400 shrink-0">{g.permissions.length} perms</span>
                   </label>
                 ))}
               </div>
+              <p className="text-xs text-gray-500 mt-2">Effective permission keys (union): {createEffectiveCount}</p>
             </div>
           </div>
           <SheetFooter className="mt-6">

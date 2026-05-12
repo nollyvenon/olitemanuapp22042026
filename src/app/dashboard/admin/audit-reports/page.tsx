@@ -59,6 +59,7 @@ export default function AuditReports() {
     { accessorKey: 'amount', header: 'Amount (₦)', cell: ({ getValue, row }) => <span className={row.original.flag === 'high_value' ? 'text-red-600 font-bold' : ''}>{Number(getValue()).toLocaleString('en-NG')}</span> },
     { accessorKey: 'status', header: 'Status', cell: ({ getValue }) => <span className="text-xs bg-gray-100 px-2 py-1 rounded">{String(getValue())}</span> },
     { accessorKey: 'transaction_date', header: 'Date', cell: ({ getValue }) => <span className="text-xs">{new Date(String(getValue())).toLocaleString()}</span> },
+    { id: 'user_id', header: 'User ID', cell: ({ row }) => <span className="text-xs font-mono">{String(row.original.user_id ?? row.original.created_by_user_id ?? '—')}</span> },
     { accessorKey: 'user_name', header: 'User', cell: ({ getValue }) => <span className="text-xs">{String(getValue() || 'System')}</span> },
   ];
 

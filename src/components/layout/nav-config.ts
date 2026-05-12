@@ -46,8 +46,8 @@ export interface NavGroup {
 export const NAV_GROUPS: NavGroup[] = [
   {
     items: [
-      { label: 'Dashboard', href: '/dashboard/overview', icon: LayoutDashboard },
-      { label: 'AI Dashboard', href: '/dashboard/ai-dashboard', icon: Sparkles },
+      { label: 'Dashboard', href: '/dashboard/overview', icon: LayoutDashboard, permission: 'dashboard.read' },
+      { label: 'AI Dashboard', href: '/dashboard/ai-dashboard', icon: Sparkles, permission: 'dashboard.ai' },
     ],
   },
   {
@@ -294,15 +294,9 @@ export const NAV_GROUPS: NavGroup[] = [
         permission: 'admin.*',
       },
       {
-        label: 'Roles',
-        href: '/dashboard/admin/roles',
-        icon: Shield,
-        permission: 'admin.*',
-      },
-      {
-        label: 'Groups',
+        label: 'User groups & permissions',
         href: '/dashboard/admin/groups',
-        icon: Group,
+        icon: Shield,
         permission: 'admin.*',
       },
       {

@@ -13,7 +13,7 @@ interface AdminCard {
 
 const adminCards: AdminCard[] = [
   { href: '/dashboard/admin/users', title: 'Users', description: 'Manage user accounts and access', icon: <Users className="h-6 w-6" /> },
-  { href: '/dashboard/admin/roles', title: 'Roles & Groups', description: 'Define roles and permission groups', icon: <Shield className="h-6 w-6" /> },
+  { href: '/dashboard/admin/groups', title: 'User groups & permissions', description: 'Define groups, nested membership, and permission sets', icon: <Shield className="h-6 w-6" /> },
   { href: '/dashboard/admin/permissions', title: 'Permissions', description: 'Manage system permissions', icon: <Lock className="h-6 w-6" /> },
   { href: '/dashboard/admin/locations', title: 'Locations', description: 'Configure office locations', icon: <MapPin className="h-6 w-6" /> },
   { href: '/dashboard/admin/settings', title: 'Settings', description: 'System configuration', icon: <Settings className="h-6 w-6" /> },

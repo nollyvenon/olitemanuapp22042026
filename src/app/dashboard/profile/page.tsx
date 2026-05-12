@@ -1,20 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getApiClient } from '@/lib/api-client';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useAuthStore } from '@/store/auth.store';
 import { MapPin, Lock, Shield } from 'lucide-react';
 
 export default function ProfilePage() {
   const { user } = useAuthStore();
   const [expandedSections, setExpandedSections] = useState<string[]>(['groups']);
+  const [curPw, setCurPw] = useState('');
+  const [newPw, setNewPw] = useState('');
+  const [cfPw, setCfPw] = useState('');
+  const [pwMsg, setPwMsg] = useState('');
+  const [pwBusy, setPwBusy] = useState(false);
+  const [notifyOn, setNotifyOn] = useState(false);
 
-  if (!user) {
+  useEffect(() => {
+    if (typeof window !== 'undefined') setNotifyOn(localStorage.getItem('omclta_notify') === '1');
+  }, []);
     return <div className="text-center p-8">Loading...</div>;
   }
 
@@ -188,12 +198,61 @@ export default function ProfilePage() {
           <CardDescription>Manage your account security settings</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button variant="outline" className="w-full">
-            Change Password
+          {pwMsg && <p className="text-xs text-center text-gray-600">{pwMsg}</p>}
+          <Input type="password" placeholder="Current password" value={curPw} onChange={(e) => setCurPw(e.target.value)} className="w-full" />
+          <Input type="password" placeholder="New password" value={newPw} onChange={(e) => setNewPw(e.target.value)} className="w-full" />
+          <Input type="password" placeholder="Confirm new password" value={cfPw} onChange={(e) => setCfPw(e.target.value)} className="w-full" />
+          <Button
+            variant="outline"
+            className="w-full"
+            disabled={pwBusy}
+            onClick={async () => {
+              setPwMsg('');
+              if (!curPw || !newPw) {
+                setPwMsg('Fill all fields');
+                return;
+              }
+              if (newPw !== cfPw) {
+                setPwMsg('New passwords do not match');
+                return;
+              }
+              setPwBusy(true);
+              try {
+                await getApiClient().post('/auth/change-password', { current_password: curPw, new_password: newPw });
+                setPwMsg('Password updated');
+                setCurPw('');
+                setNewPw('');
+                setCfPw('');
+              } catch (e: unknown) {
+                const err = e as { response?: { data?: { message?: string } } };
+                setPwMsg(err.response?.data?.message ?? 'Failed');
+              } finally {
+                setPwBusy(false);
+              }
+            }}
+          >
+            {pwBusy ? 'Saving...' : 'Change Password'}
           </Button>
-          <p className="text-xs text-gray-500 text-center">
-            Password changes are for future implementation
-          </p>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={async () => {
+              if (notifyOn) {
+                localStorage.removeItem('omclta_notify');
+                setNotifyOn(false);
+                return;
+              }
+              if (typeof window !== 'undefined' && 'Notification' in window) {
+                const p = await Notification.requestPermission();
+                if (p === 'granted') {
+                  localStorage.setItem('omclta_notify', '1');
+                  setNotifyOn(true);
+                }
+              }
+            }}
+          >
+            {notifyOn ? 'Turn off app notifications' : 'Enable app notifications'}
+          </Button>
         </CardContent>
       </Card>
     </div>
