@@ -217,7 +217,7 @@ export default function AdminUserGroupsPage() {
     <div className="space-y-6">
       <PageHeader
         title="User groups & permissions"
-        description="Each group defines a permission set. Users can belong to multiple groups; access is the union of those permissions. Optional parent links model group nesting when the API supports it."
+        description="Each group defines a permission set. Users can belong to multiple groups; access is the union of those permissions. Parent links model a subset group under a broader sales org (e.g. area under regional) when the API supports it."
         actions={
           <PermissionGuard permission="admin.*">
             <Button onClick={() => setCreateOpen(true)} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold hover:opacity-90">
@@ -244,8 +244,8 @@ export default function AdminUserGroupsPage() {
               <Input className="mt-1.5" value={editDesc} onChange={(e) => setEditDesc(e.target.value)} />
             </div>
             <div>
-              <Label>Member of groups (optional)</Label>
-              <p className="text-xs text-gray-500 mt-1 mb-2">Links this group to parent groups when supported by the API.</p>
+              <Label>Parent groups — this group is a subset of… (optional)</Label>
+              <p className="text-xs text-gray-500 mt-1 mb-2">Pick supersets (e.g. Regional under Head Office).</p>
               <div className="max-h-32 overflow-y-auto space-y-1 border rounded-md p-2">
                 {parentOptions.length === 0 ? (
                   <span className="text-xs text-gray-400">No other groups</span>
@@ -347,7 +347,7 @@ export default function AdminUserGroupsPage() {
               />
             </div>
             <div>
-              <Label>Member of groups (optional)</Label>
+              <Label>Parent groups — this group is a subset of… (optional)</Label>
               <div className="mt-2 max-h-40 overflow-y-auto space-y-1 border rounded-md p-2">
                 {groups.map((g) => (
                   <label key={g.id} className="flex items-center gap-2 text-sm cursor-pointer">

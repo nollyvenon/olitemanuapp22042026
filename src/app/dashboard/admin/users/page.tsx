@@ -73,11 +73,14 @@ export default function UsersPage() {
     setEditGroups(user.groups?.map(g => g.id) ?? []);
     setEditActive(user.is_active);
     setEditNewPassword('');
+    setError('');
   };
 
   const saveUser = async () => {
     if (!editUser) return;
+    if (!editGroups.length) { setError('Select at least one group'); return; }
     setSaving(true);
+    setError('');
     try {
       await api.patch(`/users/${editUser.id}`, {
         is_active: editActive,
@@ -92,6 +95,7 @@ export default function UsersPage() {
 
   const createUser = async () => {
     if (!form.name || !form.email || !form.password) { setError('Name, email and password are required'); return; }
+    if (!formGroups.length) { setError('Select at least one group'); return; }
     setSaving(true);
     setError('');
     try {
@@ -172,6 +176,7 @@ export default function UsersPage() {
         <SheetContent className="w-[400px] sm:max-w-[400px]">
           <SheetHeader><SheetTitle>Edit User — {editUser?.name}</SheetTitle></SheetHeader>
           <div className="mt-4 space-y-5">
+            {error && <p className="text-xs text-red-600 bg-red-50 px-3 py-2 rounded">{error}</p>}
             <div>
               <Label className="text-sm font-medium">Status</Label>
               <div className="mt-2 flex items-center gap-3">
@@ -190,7 +195,7 @@ export default function UsersPage() {
               />
             </div>
             <div>
-              <Label className="text-sm font-medium">Assign Groups</Label>
+              <Label className="text-sm font-medium">Assign groups *</Label>
               <div className="mt-2 space-y-1.5 max-h-64 overflow-y-auto">
                 {groups.map((g) => (
                   <label key={g.id} className="flex items-center justify-between gap-2 cursor-pointer text-sm hover:bg-gray-50 px-2 py-1.5 rounded">
@@ -228,7 +233,7 @@ export default function UsersPage() {
             <div><Label>Email *</Label><Input type="email" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} placeholder="john@company.com" className="mt-1.5" /></div>
             <div><Label>Password *</Label><Input type="password" value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))} placeholder="Min 8 characters" className="mt-1.5" /></div>
             <div>
-              <Label>Assign Groups</Label>
+              <Label>Assign groups *</Label>
               <div className="mt-2 space-y-1.5 max-h-48 overflow-y-auto border rounded-md p-2">
                 {groups.map((g) => (
                   <label key={g.id} className="flex items-center justify-between gap-2 cursor-pointer text-sm hover:bg-gray-50 px-2 py-1.5 rounded">

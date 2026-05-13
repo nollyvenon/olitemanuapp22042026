@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,7 +8,9 @@ import { Input } from '@/components/ui/input';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { PermissionGuard } from '@/components/shared/PermissionGuard';
 import { getApiClient } from '@/lib/api-client';
-import { ArrowRight, Upload, AlertCircle, CheckCircle, Trash2 } from 'lucide-react';
+import { useAuthStore } from '@/store/auth.store';
+import { usePermission } from '@/hooks/usePermission';
+import { ArrowRight, Upload, AlertCircle, CheckCircle, Trash2, Printer } from 'lucide-react';
 
 interface OrderItem {
   id: string;
@@ -33,9 +35,13 @@ interface Order {
   delivery_note_path?: string;
   invoice?: { id: string };
   metadata?: Record<string, any>;
+  created_by_id?: string;
+  approved_sales_order_id?: string;
   creator?: {
+    id?: string;
     name: string;
-    locations?: Array<{ name: string; city?: string }>;
+    groups?: { id: string; name?: string }[];
+    locations?: Array<{ id?: string; name: string; city?: string }>;
   };
   customer?: {
     name: string;
@@ -77,25 +83,36 @@ export default function OrderDetailPage() {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [showUpload, setShowUpload] = useState(false);
   const [showOverride, setShowOverride] = useState(false);
   const [overrideReason, setOverrideReason] = useState('');
   const [fileError, setFileError] = useState('');
   const [depotOk, setDepotOk] = useState(false);
+  const [authParamsOk, setAuthParamsOk] = useState(false);
+  const [tradeLoc, setTradeLoc] = useState('');
   const [authErr, setAuthErr] = useState('');
   const [editingReview, setEditingReview] = useState(false);
   const [reviewDraft, setReviewDraft] = useState<{ id: string; product_name: string; quantity: number; unit_price: number }[]>([]);
+  const delFileRef = useRef<HTMLInputElement>(null);
+  const invFileRef = useRef<HTMLInputElement>(null);
 
   const api = getApiClient();
+  const user = useAuthStore((s) => s.user);
+  const { canAny } = usePermission();
+  const canApprove = canAny(['sales.orders.approve', 'admin.*']);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const { data } = await api.get(`/orders/${id}?include=creator,creator.locations,customer`);
+        const { data } = await api.get(`/orders/${id}?include=creator,creator.locations,creator.groups,customer`);
+        const d = data as Record<string, unknown>;
+        const cr = (d.creator as Order['creator']) || {};
+        const created_by_id = String(d.created_by_id ?? d.user_id ?? d.creator_id ?? (cr && typeof cr === 'object' && 'id' in cr ? (cr as { id?: string }).id : '') ?? '');
         setOrder({
-          ...data,
-          items: data.items || [],
-        });
+          ...(d as object),
+          created_by_id: created_by_id || undefined,
+          approved_sales_order_id: (d.approved_sales_order_id as string) || (d.metadata as { approved_sales_order_id?: string } | undefined)?.approved_sales_order_id,
+          items: (d.items as OrderItem[]) || [],
+        } as Order);
       } catch (error) {
         console.error('Failed to load order', error);
       } finally {
@@ -105,15 +122,35 @@ export default function OrderDetailPage() {
     load();
   }, [id, api]);
 
+  useEffect(() => {
+    if (!order || order.status !== 'APPROVED') return;
+    const first = String(order.creator?.locations?.[0]?.id ?? user?.locations?.[0]?.id ?? '');
+    setTradeLoc((t) => t || first);
+  }, [order?.id, order?.status, order?.creator?.locations, user?.locations]);
+
+  useEffect(() => {
+    setDepotOk(false);
+    setAuthParamsOk(false);
+  }, [order?.delivery_note_path, order?.tally_invoice_path, order?.id]);
+
   const handleTransition = async (newStatus: string) => {
     if (!order) return;
-    if (newStatus === 'SUBMITTED' && !confirm('Submit for review?')) return;
-    if (newStatus === 'APPROVED' && !confirm('Approve order?')) return;
-    if (newStatus === 'REJECTED' && !confirm('Reject order?')) return;
+    if (newStatus === 'SUBMITTED' && !confirm('Reviewed everything? OK=YES submit, Cancel=NO to edit.')) return;
+    if (newStatus === 'APPROVED' && !confirm('Reviewed everything? OK=YES approve, Cancel=NO to edit.')) return;
+    if (newStatus === 'REJECTED' && !confirm('Reject this order? OK=YES, Cancel=NO.')) return;
     setSubmitting(true);
     try {
       const { data } = await api.patch(`/orders/${id}/transition`, { status: newStatus });
-      setOrder(data);
+      setOrder((prev) =>
+        prev
+          ? {
+              ...prev,
+              ...data,
+              created_by_id: prev.created_by_id || (data as { created_by_id?: string }).created_by_id,
+              items: (data as { items?: OrderItem[] }).items || prev.items,
+            }
+          : null
+      );
     } catch (error) {
       console.error('Transition failed', error);
     } finally {
@@ -121,34 +158,27 @@ export default function OrderDetailPage() {
     }
   };
 
-  const handleUploadDocuments = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleUploadSingle = async (kind: 'tally_invoice' | 'delivery_note', file: File | undefined) => {
+    if (!order || !file) return;
     setFileError('');
-
-    const formData = new FormData(e.currentTarget);
-    const tallyFile = formData.get('tally_invoice') as File;
-    const deliveryFile = formData.get('delivery_note') as File;
-
-    if (!tallyFile || !deliveryFile) {
-      setFileError('Both files are required');
-      return;
-    }
-    if (!confirm('Upload documents?')) return;
-
+    if (!confirm('Upload this file? OK=YES, Cancel=NO.')) return;
     setSubmitting(true);
     try {
-      const uploadFormData = new FormData();
-      uploadFormData.append('tally_invoice', tallyFile);
-      uploadFormData.append('delivery_note', deliveryFile);
-
-      const { data } = await api.post(`/orders/${id}/documents`, uploadFormData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      setOrder(data);
-      setShowUpload(false);
-    } catch (error) {
-      console.error('Upload failed', error);
-      setFileError('Upload failed. Please try again.');
+      const fd = new FormData();
+      fd.append(kind, file);
+      const { data } = await api.post(`/orders/${id}/documents`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+      setOrder((prev) =>
+        prev
+          ? {
+              ...prev,
+              ...(data as object),
+              created_by_id: prev.created_by_id || (data as { created_by_id?: string }).created_by_id,
+              items: (data as { items?: OrderItem[] }).items || prev.items,
+            }
+          : null
+      );
+    } catch {
+      setFileError('Upload failed');
     } finally {
       setSubmitting(false);
     }
@@ -156,20 +186,34 @@ export default function OrderDetailPage() {
 
   const handleAuthorize = async () => {
     if (!order) return;
-    if (!depotOk) {
-      setAuthErr('Confirm store location and parameters');
+    if (!depotOk || !authParamsOk) {
+      setAuthErr('Confirm store location and trading parameters');
       return;
     }
-    if (!confirm('Authorize after verifying documents and stock?')) return;
+    if ((user?.locations?.length ?? 0) > 0 && !tradeLoc) {
+      setAuthErr('Select store location');
+      return;
+    }
+    if (!confirm('Authorization locks corrections after verify. OK=YES authorize, Cancel=NO to adjust.')) return;
     setAuthErr('');
     setSubmitting(true);
     try {
-      const { data } = await api.post(`/orders/${id}/authorize`);
-      setOrder(data);
+      const { data } = await api.post(`/orders/${id}/authorize`, tradeLoc ? { location_id: tradeLoc } : {});
+      setOrder((prev) =>
+        prev
+          ? {
+              ...prev,
+              ...(data as object),
+              created_by_id: prev.created_by_id || (data as { created_by_id?: string }).created_by_id,
+              items: (data as { items?: OrderItem[] }).items || prev.items,
+            }
+          : null
+      );
     } catch (error: unknown) {
       const e = error as { response?: { data?: { message?: string; error?: string } } };
       const m = String(e.response?.data?.message || e.response?.data?.error || '');
-      setAuthErr(m.toLowerCase().includes('stock') ? 'Low Stock Balance Override needed' : m || 'Authorization failed');
+      const low = /stock|balance|insufficient|below|trading|available|qty|quantity/i.test(m);
+      setAuthErr(low ? 'Low Stock Balance Override needed' : m || 'Authorization failed');
     } finally {
       setSubmitting(false);
     }
@@ -220,7 +264,7 @@ export default function OrderDetailPage() {
 
   const saveReviewLines = async () => {
     if (!order || order.status !== 'UNDER_REVIEW' || !reviewDraft.length) return;
-    if (!confirm('Save line changes?')) return;
+    if (!confirm('Reviewed all line changes? OK=YES save, Cancel=NO to edit.')) return;
     setSubmitting(true);
     try {
       const { data } = await api.patch(`/orders/${id}`, {
@@ -230,7 +274,16 @@ export default function OrderDetailPage() {
           unit_price: r.unit_price,
         })),
       });
-      setOrder({ ...data, items: data.items || [] });
+      setOrder((prev) =>
+        prev
+          ? {
+              ...prev,
+              ...data,
+              created_by_id: prev.created_by_id || (data as { created_by_id?: string }).created_by_id,
+              items: data.items || [],
+            }
+          : null
+      );
       setEditingReview(false);
     } catch (error) {
       console.error('Save lines failed', error);
@@ -242,8 +295,27 @@ export default function OrderDetailPage() {
   if (loading) return <div className="p-6">Loading...</div>;
   if (!order) return <div className="p-6">Order not found</div>;
 
+  const creatorId = order.created_by_id || order.creator?.id;
+  const isCreator = !!(user?.id && creatorId && user.id === creatorId);
+  const cg = order.creator?.groups?.map((g) => g.id) ?? [];
+  const isLinePeer =
+    !!user &&
+    !isCreator &&
+    cg.length > 0 &&
+    user.groups?.some((g) => cg.includes(g.id));
+  const viewOnlyBanner =
+    ['SUBMITTED', 'UNDER_REVIEW', 'APPROVED'].includes(order.status) &&
+    !canApprove &&
+    (isCreator || isLinePeer) &&
+    canAny(['sales.orders.read', 'audit.read']);
+
+  const apid = order.approved_sales_order_id || (order.metadata as { approved_sales_order_id?: string } | undefined)?.approved_sales_order_id;
+
   return (
     <div className="space-y-6 p-6">
+      {viewOnlyBanner && (
+        <Card className="p-3 border-amber-200 bg-amber-50 text-sm text-amber-900">View only: submitter and same-group line manager cannot alter this order while it is under review or approved.</Card>
+      )}
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
@@ -256,7 +328,15 @@ export default function OrderDetailPage() {
         </div>
       </div>
 
-      {/* State Flow */}
+        <PermissionGuard permissions={['sales.orders.read', 'audit.read', 'admin.*']}>
+          {apid && (
+            <Card className="p-4 mb-4 border-green-200 bg-green-50">
+              <p className="text-xs font-semibold text-green-900">Approved sales order</p>
+              <p className="text-sm font-mono mt-1">{String(apid)}</p>
+            </Card>
+          )}
+        </PermissionGuard>
+
       <StateFlow current={order.status} />
 
       {/* Customer & Initiator Info */}
@@ -418,57 +498,96 @@ export default function OrderDetailPage() {
 
         {/* Accounts: Document Upload and Authorization */}
         <PermissionGuard permission="accounts.*">
-          {order.status === 'APPROVED' && !order.tally_invoice_path && !order.delivery_note_path && (
+          {order.status === 'APPROVED' && (
             <div className="space-y-3">
-              <div className="flex items-start gap-2 p-3 bg-yellow-50 border border-yellow-200 rounded text-sm text-yellow-800">
-                <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
-                <span>Upload Tally Invoice and Delivery Note to proceed with authorization</span>
-              </div>
-              <Button
-                onClick={() => setShowUpload(!showUpload)}
-                className="w-full bg-amber-600 hover:bg-amber-700 text-white"
-              >
-                <Upload className="h-4 w-4 mr-2" />
-                {showUpload ? 'Cancel' : 'Upload Documents'}
-              </Button>
-
-              {showUpload && (
-                <form onSubmit={handleUploadDocuments} className="space-y-3 p-4 bg-gray-50 rounded border border-gray-200">
-                  {fileError && <p className="text-xs text-red-600">{fileError}</p>}
-                  <div>
-                    <label className="text-xs font-medium block mb-1">Tally Invoice</label>
-                    <input type="file" name="tally_invoice" accept=".pdf,.jpg,.jpeg,.png" required className="w-full text-xs border border-gray-300 rounded p-2" />
+              {apid && (
+                <Card className="p-4 border-green-200 bg-green-50">
+                  <div className="flex flex-wrap justify-between gap-2">
+                    <div>
+                      <p className="text-xs font-semibold text-green-900">Approved sales order — Tally trading</p>
+                      <p className="text-sm font-mono mt-1">{String(apid)}</p>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="shrink-0"
+                      onClick={() => {
+                        const w = window.open('', 'aso');
+                        if (!w || !order) return;
+                        const lines = order.items.map((i) => `${i.product_name}\t${i.quantity}\t${i.unit_price}`).join('\n');
+                        w.document.write(`<pre>${order.order_number}\n${String(apid)}\n${lines}\n${order.total}</pre>`);
+                        w.print();
+                        w.close();
+                      }}
+                    >
+                      <Printer className="h-4 w-4 mr-1 inline" />
+                      Print
+                    </Button>
                   </div>
-                  <div>
-                    <label className="text-xs font-medium block mb-1">Delivery Note</label>
-                    <input type="file" name="delivery_note" accept=".pdf,.jpg,.jpeg,.png" required className="w-full text-xs border border-gray-300 rounded p-2" />
-                  </div>
-                  <Button type="submit" disabled={submitting} className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm">
-                    {submitting ? 'Uploading...' : 'Upload'}
-                  </Button>
-                </form>
+                </Card>
               )}
-            </div>
-          )}
-
-          {order.status === 'APPROVED' && order.tally_invoice_path && order.delivery_note_path && (
-            <div className="space-y-3">
-              {authErr && <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded p-2">{authErr}</p>}
-              <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input type="checkbox" checked={depotOk} onChange={(e) => setDepotOk(e.target.checked)} className="accent-amber-500" />
-                Store location and parameters verified
-              </label>
-              <div className="flex items-start gap-2 p-3 bg-green-50 border border-green-200 rounded text-sm text-green-800">
-                <CheckCircle className="h-4 w-4 mt-0.5 shrink-0" />
-                <span>Documents uploaded. Ready for authorization.</span>
-              </div>
-              <Button
-                onClick={handleAuthorize}
-                disabled={submitting || !depotOk}
-                className="w-full bg-green-600 hover:bg-green-700 text-white"
-              >
-                {submitting ? 'Authorizing...' : 'Authorize Order'}
-              </Button>
+              {(!order.delivery_note_path || !order.tally_invoice_path) && (
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2 p-3 bg-yellow-50 border border-yellow-200 rounded text-sm text-yellow-800">
+                    <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+                    <span>Upload Tally delivery note and Tally invoice separately; authorize unlocks only after both are present.</span>
+                  </div>
+                  {fileError && <p className="text-xs text-red-600">{fileError}</p>}
+                  <input ref={delFileRef} type="file" accept=".pdf,.jpg,.jpeg,.png" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; void handleUploadSingle('delivery_note', f); e.target.value = ''; }} />
+                  <input ref={invFileRef} type="file" accept=".pdf,.jpg,.jpeg,.png" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; void handleUploadSingle('tally_invoice', f); e.target.value = ''; }} />
+                  {!order.delivery_note_path && (
+                    <Button type="button" disabled={submitting} className="w-full bg-amber-600 hover:bg-amber-700 text-white" onClick={() => delFileRef.current?.click()}>
+                      <Upload className="h-4 w-4 mr-2" />
+                      Upload Tally delivery note
+                    </Button>
+                  )}
+                  {order.delivery_note_path && !order.tally_invoice_path && <p className="text-xs text-green-700">Delivery note uploaded</p>}
+                  {!order.tally_invoice_path && (
+                    <Button type="button" disabled={submitting} className="w-full bg-slate-700 text-white" onClick={() => invFileRef.current?.click()}>
+                      <Upload className="h-4 w-4 mr-2" />
+                      Upload Tally invoice
+                    </Button>
+                  )}
+                  {order.tally_invoice_path && !order.delivery_note_path && <p className="text-xs text-green-700">Invoice uploaded</p>}
+                </div>
+              )}
+              {order.tally_invoice_path && order.delivery_note_path && (
+                <div className="space-y-3">
+                  {authErr && <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded p-2">{authErr}</p>}
+                  {(user?.locations?.length ?? 0) > 0 && (
+                    <div>
+                      <label className="text-xs font-medium block mb-1">Store location</label>
+                      <select value={tradeLoc} onChange={(e) => setTradeLoc(e.target.value)} className="w-full text-sm border rounded p-2 bg-white">
+                        <option value="">Select…</option>
+                        {user!.locations!.map((loc) => (
+                          <option key={loc.id} value={loc.id}>
+                            {loc.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                  <label className="flex items-center gap-2 text-sm cursor-pointer">
+                    <input type="checkbox" checked={depotOk} onChange={(e) => setDepotOk(e.target.checked)} className="accent-amber-500" />
+                    Store location and parameters verified
+                  </label>
+                  <label className="flex items-center gap-2 text-sm cursor-pointer">
+                    <input type="checkbox" checked={authParamsOk} onChange={(e) => setAuthParamsOk(e.target.checked)} className="accent-amber-500" />
+                    Trading parameters checked (correct before submit — locks after authorize)
+                  </label>
+                  <div className="flex items-start gap-2 p-3 bg-green-50 border border-green-200 rounded text-sm text-green-800">
+                    <CheckCircle className="h-4 w-4 mt-0.5 shrink-0" />
+                    <span>Both documents uploaded. Complete checks to authorize.</span>
+                  </div>
+                  <Button
+                    onClick={handleAuthorize}
+                    disabled={submitting || !depotOk || !authParamsOk || ((user?.locations?.length ?? 0) > 0 && !tradeLoc)}
+                    className="w-full bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    {submitting ? 'Authorizing...' : 'Authorize Order'}
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </PermissionGuard>

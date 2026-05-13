@@ -53,25 +53,17 @@ export default function NewOrderPage() {
   const canProxy = canAny(['sales.orders.approve', 'admin.*']);
 
   useEffect(() => {
-    const load = async () => {
+        const load = async () => {
       try {
-        console.log('Loading products and customers from API...');
         const [itemsRes, customersRes] = await Promise.all([
           api.get('/stock/items'),
           api.get('/customers'),
         ]);
-        console.log('Items response:', itemsRes);
-        console.log('Customers response:', customersRes);
         const itemsList = Array.isArray(itemsRes.data) ? itemsRes.data : itemsRes.data.data ?? [];
         const customersList = Array.isArray(customersRes.data) ? customersRes.data : customersRes.data.data ?? [];
-        console.log('Processed stock items:', itemsList);
-        console.log('Processed customers:', customersList);
         setStockItems(itemsList);
         setCustomers(customersList);
       } catch (err: any) {
-        console.error('Failed to load data:', err);
-        console.error('Error status:', err?.response?.status);
-        console.error('Error data:', err?.response?.data);
         alert(`Failed to load products and customers. Error: ${err?.response?.data?.message || err?.message || 'Unknown error'}`);
       } finally {
         setLoading(false);
@@ -152,11 +144,11 @@ export default function NewOrderPage() {
       setError('Expected delivery date is required');
       return;
     }
-    if (items.some(item => !item.product_name || item.quantity < 1 || item.unit_price < 0)) {
-      setError('All items must have a product, quantity, and price');
+    if (items.some((item) => !item.product_id || item.quantity < 1 || !(item.unit_price > 0))) {
+      setError('Each line needs product, qty ≥ 1, and unit price > 0');
       return;
     }
-    if (!confirm('Confirm all details are correct before submit?')) return;
+    if (!confirm('Reviewed everything? OK = YES submit, Cancel = NO to edit.')) return;
 
     setSubmitting(true);
     try {
@@ -167,7 +159,7 @@ export default function NewOrderPage() {
         expected_delivery: expectedDelivery,
         notes: notes.trim(),
         manual_form_filename: formStatus === 'manual_captured' ? manualFileName : null,
-        items: items.map(item => ({
+        items: items.map((item) => ({
           product_name: item.product_name,
           quantity: item.quantity,
           unit_price: item.unit_price,
@@ -248,6 +240,7 @@ export default function NewOrderPage() {
               onChange={(e) => setCustomerId(e.target.value)}
               className="w-full mt-1.5 p-2 border border-gray-300 rounded"
               disabled={submitting}
+              required
             >
               <option value="">Select a customer</option>
               {customers.map((c) => (
@@ -283,6 +276,7 @@ export default function NewOrderPage() {
               onChange={(e) => setExpectedDelivery(e.target.value)}
               disabled={submitting}
               className="w-full mt-1.5"
+              required
             />
           </div>
 
