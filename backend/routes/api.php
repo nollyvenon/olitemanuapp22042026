@@ -151,6 +151,7 @@ Route::prefix('v1')->group(function () {
         Route::get('market/customer-insights', [MarketIntelligenceController::class, 'customerInsights']);
         Route::post('market/refresh-insights/{customerId}', [MarketIntelligenceController::class, 'refreshInsights']);
 
+        Route::get('inventory-reports/unified', [InventoryReportController::class, 'unified']);
         Route::get('inventory-reports/opening', [InventoryReportController::class, 'opening']);
         Route::get('inventory-reports/inwards', [InventoryReportController::class, 'inwards']);
         Route::get('inventory-reports/outwards', [InventoryReportController::class, 'outwards']);

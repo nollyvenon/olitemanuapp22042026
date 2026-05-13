@@ -2,6 +2,7 @@
 
 namespace App\Modules\Reporting\Http\Controllers;
 
+use App\Models\User;
 use App\Modules\Reporting\Services\InventoryReportService;
 use App\Modules\Reporting\Services\ExportService;
 use Illuminate\Http\JsonResponse;
@@ -9,6 +10,38 @@ use Illuminate\Http\Request;
 
 class InventoryReportController {
     public function __construct(private InventoryReportService $reportService, private ExportService $exportService) {}
+
+    private function assertLocation(Request $request, string $locationId): void {
+        $u = User::with('locations')->find($request->authUser->sub ?? null);
+        if (!$u) {
+            abort(401);
+        }
+        if (!empty($u->is_god_admin)) {
+            return;
+        }
+        if ($u->locations->isEmpty()) {
+            return;
+        }
+        if (!$u->locations->contains('id', $locationId)) {
+            abort(403, 'Location not allowed');
+        }
+    }
+
+    public function unified(Request $request): JsonResponse {
+        $validated = $request->validate([
+            'location_id' => 'required|uuid|exists:locations,id',
+            'from' => 'required|date',
+            'to' => 'required|date|after_or_equal:from',
+            'category_id' => 'nullable|uuid|exists:stock_categories,id',
+            'group_id' => 'nullable|uuid|exists:stock_groups,id',
+            'item_id' => 'nullable|uuid|exists:stock_items,id',
+            'exclude_zero' => 'sometimes|boolean',
+            'transaction_only' => 'sometimes|boolean',
+        ]);
+        $this->assertLocation($request, $validated['location_id']);
+        $data = $this->reportService->unified($validated);
+        return response()->json(['data' => $data]);
+    }
 
     public function opening(Request $request): JsonResponse {
         $validated = $request->validate([

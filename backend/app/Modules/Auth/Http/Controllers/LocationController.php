@@ -3,15 +3,25 @@
 namespace App\Modules\Auth\Http\Controllers;
 
 use App\Models\Location;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class LocationController
 {
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $locations = Location::all();
-        return response()->json($locations);
+        $auth = $request->authUser ?? null;
+        if ($auth && isset($auth->sub)) {
+            $u = User::with('locations')->find($auth->sub);
+            if ($u && !empty($u->is_god_admin)) {
+                return response()->json(Location::all());
+            }
+            if ($u && $u->locations->isNotEmpty()) {
+                return response()->json($u->locations->values());
+            }
+        }
+        return response()->json(Location::all());
     }
 
     public function store(Request $request): JsonResponse
