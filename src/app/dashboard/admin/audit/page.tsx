@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { getApiClient } from '@/lib/api-client';
+import { unwrapList } from '@/lib/admin-access';
 
 interface AuditLog {
   id: string;
@@ -25,32 +27,23 @@ export default function AuditPage() {
   }, []);
 
   async function fetchLogs() {
-    const params = new URLSearchParams(Object.entries(filters).filter(([, v]) => v));
-    const res = await fetch(`/api/v1/audit-logs?${params}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
-    });
-    const data = await res.json();
-    setLogs(data.data || []);
+    const api = getApiClient();
+    const { data } = await api.get('/audit-logs', { params: Object.fromEntries(Object.entries(filters).filter(([, v]) => v)) });
+    setLogs(unwrapList(data).length ? unwrapList(data) : (data as { data?: AuditLog[] }).data ?? []);
   }
 
   async function fetchStats() {
-    const res = await fetch('/api/v1/audit-statistics', {
-      headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
-    });
-    const data = await res.json();
-    setStats(data);
+    try {
+      const { data } = await getApiClient().get('/audit-statistics');
+      setStats(data);
+    } catch {
+      setStats(null);
+    }
   }
 
   async function handleExport(format: 'csv' | 'json') {
-    const res = await fetch('/api/v1/audit-logs/export', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ...filters, format }),
-    });
-    const blob = await res.blob();
+    const res = await getApiClient().post('/audit-logs/export', { ...filters, format }, { responseType: 'blob' });
+    const blob = res.data as Blob;
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;

@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useState } from 'react';
 import type { ColumnDef, SortingState } from '@tanstack/react-table';
 import { PageHeader } from '@/components/shared/PageHeader';
@@ -48,7 +49,19 @@ export default function KycApplicationsPage() {
   const [sorting, setSorting] = useState<SortingState>([{ id: 'submitted_date', desc: true }]);
   return (
     <div className="space-y-6">
-      <PageHeader title="KYC Applications" description="Customer onboarding and compliance verification" />
+      <PageHeader
+        title="KYC Applications"
+        description="Customer onboarding and compliance verification"
+        actions={
+          <Link
+            href="/dashboard/kyc/applications/new"
+            className="inline-flex h-8 items-center rounded-lg px-3 text-sm font-semibold"
+            style={{ background: '#FF9900', color: '#0f1111' }}
+          >
+            New KYC
+          </Link>
+        }
+      />
       <DataTable
         columns={columns}
         data={APPLICATIONS}

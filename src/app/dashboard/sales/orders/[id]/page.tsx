@@ -4,10 +4,11 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { PermissionGuard } from '@/components/shared/PermissionGuard';
 import { getApiClient } from '@/lib/api-client';
-import { ArrowRight, Upload, AlertCircle, CheckCircle } from 'lucide-react';
+import { ArrowRight, Upload, AlertCircle, CheckCircle, Trash2 } from 'lucide-react';
 
 interface OrderItem {
   id: string;
@@ -80,6 +81,10 @@ export default function OrderDetailPage() {
   const [showOverride, setShowOverride] = useState(false);
   const [overrideReason, setOverrideReason] = useState('');
   const [fileError, setFileError] = useState('');
+  const [depotOk, setDepotOk] = useState(false);
+  const [authErr, setAuthErr] = useState('');
+  const [editingReview, setEditingReview] = useState(false);
+  const [reviewDraft, setReviewDraft] = useState<{ id: string; product_name: string; quantity: number; unit_price: number }[]>([]);
 
   const api = getApiClient();
 
@@ -102,6 +107,9 @@ export default function OrderDetailPage() {
 
   const handleTransition = async (newStatus: string) => {
     if (!order) return;
+    if (newStatus === 'SUBMITTED' && !confirm('Submit for review?')) return;
+    if (newStatus === 'APPROVED' && !confirm('Approve order?')) return;
+    if (newStatus === 'REJECTED' && !confirm('Reject order?')) return;
     setSubmitting(true);
     try {
       const { data } = await api.patch(`/orders/${id}/transition`, { status: newStatus });
@@ -125,6 +133,7 @@ export default function OrderDetailPage() {
       setFileError('Both files are required');
       return;
     }
+    if (!confirm('Upload documents?')) return;
 
     setSubmitting(true);
     try {
@@ -147,12 +156,20 @@ export default function OrderDetailPage() {
 
   const handleAuthorize = async () => {
     if (!order) return;
+    if (!depotOk) {
+      setAuthErr('Confirm store location and parameters');
+      return;
+    }
+    if (!confirm('Authorize after verifying documents and stock?')) return;
+    setAuthErr('');
     setSubmitting(true);
     try {
       const { data } = await api.post(`/orders/${id}/authorize`);
       setOrder(data);
-    } catch (error) {
-      console.error('Authorization failed', error);
+    } catch (error: unknown) {
+      const e = error as { response?: { data?: { message?: string; error?: string } } };
+      const m = String(e.response?.data?.message || e.response?.data?.error || '');
+      setAuthErr(m.toLowerCase().includes('stock') ? 'Low Stock Balance Override needed' : m || 'Authorization failed');
     } finally {
       setSubmitting(false);
     }
@@ -160,6 +177,7 @@ export default function OrderDetailPage() {
 
   const handleOverride = async () => {
     if (!order || !overrideReason.trim()) return;
+    if (!confirm('Submit override?')) return;
     setSubmitting(true);
     try {
       const { data } = await api.post(`/orders/${id}/override`, { override_reason: overrideReason });
@@ -175,12 +193,47 @@ export default function OrderDetailPage() {
 
   const handleGenerateInvoice = async () => {
     if (!order) return;
+    if (!confirm('Generate invoice?')) return;
     setSubmitting(true);
     try {
       const { data } = await api.post(`/orders/${id}/invoices`);
       setOrder(data);
     } catch (error) {
       console.error('Invoice generation failed', error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const startReviewEdit = () => {
+    if (!order?.items?.length) return;
+    setReviewDraft(
+      order.items.map((i) => ({
+        id: i.id,
+        product_name: i.product_name,
+        quantity: Number(i.quantity),
+        unit_price: Number(i.unit_price),
+      }))
+    );
+    setEditingReview(true);
+  };
+
+  const saveReviewLines = async () => {
+    if (!order || order.status !== 'UNDER_REVIEW' || !reviewDraft.length) return;
+    if (!confirm('Save line changes?')) return;
+    setSubmitting(true);
+    try {
+      const { data } = await api.patch(`/orders/${id}`, {
+        items: reviewDraft.map((r) => ({
+          id: r.id,
+          quantity: r.quantity,
+          unit_price: r.unit_price,
+        })),
+      });
+      setOrder({ ...data, items: data.items || [] });
+      setEditingReview(false);
+    } catch (error) {
+      console.error('Save lines failed', error);
     } finally {
       setSubmitting(false);
     }
@@ -246,6 +299,26 @@ export default function OrderDetailPage() {
       {/* Order Items */}
       <Card className="p-6">
         <h2 className="font-bold mb-4">Order Items</h2>
+        <PermissionGuard permissions={['sales.orders.approve', 'admin.*']}>
+          {order.status === 'UNDER_REVIEW' && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {!editingReview ? (
+                <Button type="button" variant="outline" onClick={startReviewEdit} disabled={submitting}>
+                  Adjust lines
+                </Button>
+              ) : (
+                <>
+                  <Button type="button" onClick={saveReviewLines} disabled={submitting} className="bg-amber-600 text-white">
+                    Save lines
+                  </Button>
+                  <Button type="button" variant="outline" onClick={() => setEditingReview(false)} disabled={submitting}>
+                    Cancel
+                  </Button>
+                </>
+              )}
+            </div>
+          )}
+        </PermissionGuard>
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-200">
@@ -253,15 +326,43 @@ export default function OrderDetailPage() {
               <th className="text-right py-2 font-semibold text-gray-700">Qty</th>
               <th className="text-right py-2 font-semibold text-gray-700">Unit Price</th>
               <th className="text-right py-2 font-semibold text-gray-700">Total</th>
+              {order.status === 'UNDER_REVIEW' && editingReview && <th className="w-10" />}
             </tr>
           </thead>
           <tbody>
-            {order.items?.map(item => (
-              <tr key={item.id} className="border-b border-gray-100">
+            {(order.status === 'UNDER_REVIEW' && editingReview ? reviewDraft : order.items || []).map((item, idx) => (
+              <tr key={item.id || idx} className="border-b border-gray-100">
                 <td className="py-3">{item.product_name}</td>
-                <td className="text-right py-3 tabular-nums">{item.quantity}</td>
+                <td className="text-right py-3 tabular-nums">
+                  {order.status === 'UNDER_REVIEW' && editingReview ? (
+                    <Input
+                      type="number"
+                      min={1}
+                      className="w-20 ml-auto text-right"
+                      value={item.quantity}
+                      onChange={(e) => {
+                        const q = Math.max(1, parseInt(e.target.value, 10) || 1);
+                        setReviewDraft((d) => d.map((row) => (row.id === item.id ? { ...row, quantity: q } : row)));
+                      }}
+                    />
+                  ) : (
+                    item.quantity
+                  )}
+                </td>
                 <td className="text-right py-3 tabular-nums">{fmt(item.unit_price)}</td>
-                <td className="text-right py-3 tabular-nums font-semibold">{fmt(item.total_price)}</td>
+                <td className="text-right py-3 tabular-nums font-semibold">{fmt(item.quantity * item.unit_price)}</td>
+                {order.status === 'UNDER_REVIEW' && editingReview && (
+                  <td className="py-3 w-10">
+                    <button
+                      type="button"
+                      className="p-1 text-red-600"
+                      onClick={() => setReviewDraft((d) => d.filter((row) => row.id !== item.id))}
+                      disabled={reviewDraft.length < 2}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
@@ -294,7 +395,7 @@ export default function OrderDetailPage() {
         </PermissionGuard>
 
         {/* Sales Admin: Approve / Reject */}
-        <PermissionGuard permission="sales.orders.approve">
+        <PermissionGuard permissions={['sales.orders.approve', 'admin.*']}>
           {order.status === 'UNDER_REVIEW' && (
             <div className="flex gap-2">
               <Button
@@ -352,13 +453,18 @@ export default function OrderDetailPage() {
 
           {order.status === 'APPROVED' && order.tally_invoice_path && order.delivery_note_path && (
             <div className="space-y-3">
+              {authErr && <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded p-2">{authErr}</p>}
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <input type="checkbox" checked={depotOk} onChange={(e) => setDepotOk(e.target.checked)} className="accent-amber-500" />
+                Store location and parameters verified
+              </label>
               <div className="flex items-start gap-2 p-3 bg-green-50 border border-green-200 rounded text-sm text-green-800">
                 <CheckCircle className="h-4 w-4 mt-0.5 shrink-0" />
                 <span>Documents uploaded. Ready for authorization.</span>
               </div>
               <Button
                 onClick={handleAuthorize}
-                disabled={submitting}
+                disabled={submitting || !depotOk}
                 className="w-full bg-green-600 hover:bg-green-700 text-white"
               >
                 {submitting ? 'Authorizing...' : 'Authorize Order'}
@@ -414,7 +520,7 @@ export default function OrderDetailPage() {
                 <p className="font-semibold mt-1">INV-{order.invoice.id.slice(0, 8).toUpperCase()}</p>
               </div>
               <Button
-                onClick={() => router.push(`/sales/invoices/${order.invoice!.id}`)}
+                onClick={() => router.push(`/dashboard/sales/invoices/${order.invoice!.id}`)}
                 className="bg-green-600 hover:bg-green-700 text-white"
               >
                 View Invoice

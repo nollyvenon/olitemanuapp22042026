@@ -4,7 +4,10 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { StatusBadge } from '@/components/shared/StatusBadge';
+import { PermissionGuard } from '@/components/shared/PermissionGuard';
 import { getApiClient } from '@/lib/api-client';
 
 interface KycApplicationDetail {
@@ -46,6 +49,9 @@ export default function KycApplicationDetailPage() {
   const [application, setApplication] = useState<KycApplicationDetail | null>(null);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
+  const [draft, setDraft] = useState<Partial<KycApplicationDetail>>({});
+  const [rejectReason, setRejectReason] = useState('');
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -56,6 +62,7 @@ export default function KycApplicationDetailPage() {
         ]);
         const appData = appRes.data.data || appRes.data;
         setApplication(appData);
+        setDraft(appData);
         const docsList = Array.isArray(docsRes.data) ? docsRes.data : docsRes.data.data || [];
         setDocuments(docsList);
       } catch (err) {
@@ -66,6 +73,61 @@ export default function KycApplicationDetailPage() {
     };
     load();
   }, [id, api]);
+
+  const isPending =
+    !!application && ['pending', 'submitted', 'under_review'].includes(String(application.status).toLowerCase());
+
+  const saveAmend = async () => {
+    if (!application || !isPending) return;
+    if (!confirm('Save amendments?')) return;
+    setBusy(true);
+    try {
+      const { data } = await api.patch(`/kyc/applications/${id}`, {
+        business_name: draft.business_name,
+        industry: draft.industry,
+        registration_number: draft.registration_number,
+        tax_id: draft.tax_id,
+        contact_person: draft.contact_person,
+        email: draft.email,
+        phone: draft.phone,
+        address: draft.address,
+      });
+      const appData = data.data || data;
+      setApplication(appData);
+      setDraft(appData);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const approveKyc = async () => {
+    if (!application || !isPending) return;
+    if (!confirm('Approve KYC?')) return;
+    setBusy(true);
+    try {
+      const { data } = await api.post(`/kyc/applications/${id}/approve`);
+      const appData = data.data || data;
+      setApplication(appData);
+      setDraft(appData);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const rejectKyc = async () => {
+    if (!application || !isPending || !rejectReason.trim()) return;
+    if (!confirm('Reject KYC?')) return;
+    setBusy(true);
+    try {
+      const { data } = await api.post(`/kyc/applications/${id}/reject`, { rejection_reason: rejectReason });
+      const appData = data.data || data;
+      setApplication(appData);
+      setDraft(appData);
+      setRejectReason('');
+    } finally {
+      setBusy(false);
+    }
+  };
 
   if (loading) return <div className="p-6">Loading...</div>;
   if (!application) return <div className="p-6">Application not found</div>;
@@ -162,6 +224,48 @@ export default function KycApplicationDetailPage() {
           )}
         </div>
       </Card>
+
+      <PermissionGuard permission="kyc.read">
+        {isPending && (
+          <Card className="p-6 space-y-4">
+            <h2 className="font-bold">Amend & decision</h2>
+            <div className="grid grid-cols-2 gap-3">
+              {(
+                [
+                  ['business_name', 'Business name'],
+                  ['industry', 'Industry'],
+                  ['registration_number', 'Registration'],
+                  ['tax_id', 'Tax ID'],
+                  ['contact_person', 'Contact'],
+                  ['email', 'Email'],
+                  ['phone', 'Phone'],
+                  ['address', 'Address'],
+                ] as const
+              ).map(([k, lab]) => (
+                <div key={k}>
+                  <Label className="text-xs">{lab}</Label>
+                  <Input className="mt-1" value={String(draft[k] ?? '')} onChange={(e) => setDraft((d) => ({ ...d, [k]: e.target.value }))} />
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" disabled={busy} onClick={saveAmend} className="bg-amber-600 text-white">
+                Save amendments
+              </Button>
+              <Button type="button" disabled={busy} onClick={approveKyc} className="bg-green-600 text-white">
+                Approve
+              </Button>
+            </div>
+            <div>
+              <Label className="text-xs">Reject reason</Label>
+              <textarea className="w-full mt-1 border rounded p-2 text-sm" rows={3} value={rejectReason} onChange={(e) => setRejectReason(e.target.value)} />
+            </div>
+            <Button type="button" disabled={busy || !rejectReason.trim()} variant="destructive" onClick={rejectKyc}>
+              Reject
+            </Button>
+          </Card>
+        )}
+      </PermissionGuard>
 
       <Card className="p-6 space-y-4">
         <h2 className="font-bold">Documents</h2>

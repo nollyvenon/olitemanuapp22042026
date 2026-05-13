@@ -38,6 +38,7 @@ export default function NewOrderPage() {
   const [customerId, setCustomerId] = useState('');
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [formStatus, setFormStatus] = useState<'manual_captured' | 'no_manual_form' | ''>('');
+  const [manualFileName, setManualFileName] = useState('');
   const [expectedDelivery, setExpectedDelivery] = useState('');
   const [notes, setNotes] = useState('');
   const [items, setItems] = useState<OrderItem[]>([{ product_name: '', product_id: '', quantity: 1, unit_price: 0 }]);
@@ -123,6 +124,14 @@ export default function NewOrderPage() {
       setError('Form status is required');
       return;
     }
+    if (formStatus === 'manual_captured' && !manualFileName) {
+      setError('Attach manual order form');
+      return;
+    }
+    if (!notes.trim()) {
+      setError('Notes are required');
+      return;
+    }
     if (!expectedDelivery) {
       setError('Expected delivery date is required');
       return;
@@ -131,6 +140,7 @@ export default function NewOrderPage() {
       setError('All items must have a product, quantity, and price');
       return;
     }
+    if (!confirm('Confirm all details are correct before submit?')) return;
 
     setSubmitting(true);
     try {
@@ -139,7 +149,8 @@ export default function NewOrderPage() {
         form_status: formStatus,
         order_date: new Date().toISOString().split('T')[0],
         expected_delivery: expectedDelivery,
-        notes: notes || null,
+        notes: notes.trim(),
+        manual_form_filename: formStatus === 'manual_captured' ? manualFileName : null,
         items: items.map(item => ({
           product_name: item.product_name,
           quantity: item.quantity,
@@ -172,7 +183,44 @@ export default function NewOrderPage() {
           </div>
         )}
 
-        {/* Customer & Form Status */}
+        <Card className="p-6 space-y-4">
+          <h2 className="font-bold">Manual order form</h2>
+          {!formStatus ? (
+            <div className="space-y-3">
+              <Button
+                type="button"
+                className="w-full bg-slate-700 text-white"
+                onClick={() => document.getElementById('manual-scan')?.click()}
+              >
+                Click to capture manual order form
+              </Button>
+              <input
+                id="manual-scan"
+                type="file"
+                accept=".pdf,.png,.jpg,.jpeg"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) {
+                    setManualFileName(f.name);
+                    setFormStatus('manual_captured');
+                  }
+                }}
+              />
+              {manualFileName && <p className="text-xs text-green-700">{manualFileName}</p>}
+              <Button type="button" variant="outline" className="w-full" onClick={() => { setFormStatus('no_manual_form'); setManualFileName(''); }}>
+                No manual order form
+              </Button>
+            </div>
+          ) : (
+            <p className="text-sm text-gray-600">
+              {formStatus === 'manual_captured' ? `Manual captured: ${manualFileName || 'file'}` : 'No manual form selected'}
+            </p>
+          )}
+        </Card>
+
+        {!!formStatus && (
+        <>
         <Card className="p-6 space-y-4">
           <h2 className="font-bold">Order Information</h2>
 
@@ -192,36 +240,6 @@ export default function NewOrderPage() {
           </div>
 
           <div>
-            <Label className="text-sm font-medium">Form Status *</Label>
-            <div className="mt-2 space-y-2">
-              <label className="flex items-center gap-3 p-3 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
-                <input
-                  type="radio"
-                  name="formStatus"
-                  value="manual_captured"
-                  checked={formStatus === 'manual_captured'}
-                  onChange={(e) => setFormStatus(e.target.value as 'manual_captured')}
-                  disabled={submitting}
-                  className="accent-amber-500"
-                />
-                <span className="text-sm font-medium">Manual Form Captured</span>
-              </label>
-              <label className="flex items-center gap-3 p-3 border border-gray-300 rounded cursor-pointer hover:bg-gray-50">
-                <input
-                  type="radio"
-                  name="formStatus"
-                  value="no_manual_form"
-                  checked={formStatus === 'no_manual_form'}
-                  onChange={(e) => setFormStatus(e.target.value as 'no_manual_form')}
-                  disabled={submitting}
-                  className="accent-amber-500"
-                />
-                <span className="text-sm font-medium">No Manual Form</span>
-              </label>
-            </div>
-          </div>
-
-          <div>
             <Label className="text-sm font-medium">Expected Delivery Date *</Label>
             <Input
               type="date"
@@ -233,7 +251,7 @@ export default function NewOrderPage() {
           </div>
 
           <div>
-            <Label className="text-sm font-medium">Notes</Label>
+            <Label className="text-sm font-medium">Notes *</Label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
@@ -241,11 +259,11 @@ export default function NewOrderPage() {
               className="w-full mt-1.5 p-2 border border-gray-300 rounded text-sm"
               rows={3}
               placeholder="Any additional notes or special instructions..."
+              required
             />
           </div>
         </Card>
 
-        {/* Order Items */}
         <Card className="p-6 space-y-4">
           <h2 className="font-bold">Order Items</h2>
 
@@ -287,7 +305,8 @@ export default function NewOrderPage() {
                     onChange={(e) => updateItem(idx, 'unit_price', parseFloat(e.target.value) || 0)}
                     min="0"
                     step="0.01"
-                    disabled={submitting}
+                    disabled={submitting || !!item.product_id}
+                    readOnly={!!item.product_id}
                     className="text-sm"
                   />
                 </div>
@@ -322,7 +341,6 @@ export default function NewOrderPage() {
           </Button>
         </Card>
 
-        {/* Summary */}
         <Card className="p-6">
           <div className="space-y-2 ml-auto w-56">
             <div className="flex justify-between text-sm">
@@ -340,7 +358,6 @@ export default function NewOrderPage() {
           </div>
         </Card>
 
-        {/* Actions */}
         <div className="flex gap-2">
           <Button
             type="button"
@@ -359,6 +376,8 @@ export default function NewOrderPage() {
             {submitting ? 'Creating...' : 'Create Order'}
           </Button>
         </div>
+        </>
+        )}
       </form>
     </div>
   );
