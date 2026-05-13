@@ -12,12 +12,21 @@ class VoucherService {
     private array $DEBIT_TYPES = ['debit_note', 'sales_reverse'];
     private array $CREDIT_TYPES = ['receipt', 'credit_note', 'discount'];
 
-    public function post(array $data, string $userId): Voucher {
+    public function post(array $data, object $authUser): Voucher {
         $txDate = $data['transaction_date'];
-
-        if ($txDate < now()->startOfDay()->toDateString() && empty($data['override_reason'])) {
-            throw new \Exception('Backdated transactions require an override reason', 422);
+        $perm = match ($data['type']) {
+            'receipt' => 'accounts.receipts.backdate',
+            'credit_note' => 'accounts.credit_notes.backdate',
+            'debit_note' => 'accounts.debit_notes.backdate',
+            'discount' => 'accounts.discount_vouchers.backdate',
+            'sales_reverse' => 'sales.sales_reverses.backdate',
+            default => 'accounts.vouchers.backdate',
+        };
+        if ($txDate < now()->toDateString() && !\App\Helpers\hasOverridePermission($authUser, $perm)) {
+            throw new \Exception('Backdated transactions are not allowed without override permission.', 403);
         }
+
+        $userId = $authUser->sub ?? '';
 
         return DB::transaction(function () use ($data, $userId, $txDate) {
             $ledger = LedgerAccount::lockForUpdate()->findOrFail($data['ledger_id']);
@@ -34,7 +43,7 @@ class VoucherService {
                 'transaction_date' => $txDate,
                 'posted_at' => now(),
                 'created_by' => $userId,
-                'override_by' => $txDate < now()->startOfDay()->toDateString() ? $userId : null,
+                'override_by' => $txDate < now()->toDateString() ? $userId : null,
                 'override_reason' => $data['override_reason'] ?? null,
             ]);
 

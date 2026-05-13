@@ -27,8 +27,12 @@ class InvoiceController {
             $validated = $request->validate([
                 'order_id' => 'required|uuid|exists:orders,id',
                 'invoice_date' => 'required|date',
-                'due_date' => 'required|date|after:invoice_date',
+                'due_date' => 'required|date|after_or_equal:invoice_date',
             ]);
+
+            if ($validated['invoice_date'] < now()->toDateString() && !\App\Helpers\hasOverridePermission($request->authUser, 'sales.invoices.backdate')) {
+                return response()->json(['error' => 'Backdating invoices is not allowed without override permission.'], 403);
+            }
 
             $order = Order::with('customer', 'items')->findOrFail($validated['order_id']);
 

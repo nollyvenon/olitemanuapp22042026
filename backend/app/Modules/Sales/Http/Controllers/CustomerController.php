@@ -16,7 +16,7 @@ class CustomerController {
     }
 
     public function show(Request $request, string $id): JsonResponse {
-        $customer = Customer::with('orders', 'invoices')->findOrFail($id);
+        $customer = Customer::with('orders', 'invoices', 'viewGroups')->findOrFail($id);
         return response()->json($customer);
     }
 
@@ -32,11 +32,14 @@ class CustomerController {
                 'state' => 'nullable|string',
                 'country' => 'nullable|string',
                 'ledger_category' => 'nullable|in:debtor,creditor',
+                'view_group_ids' => 'nullable|array',
+                'view_group_ids.*' => 'uuid|exists:groups,id',
             ]);
 
             $authUser = $request->attributes->get('authUser');
             $validated['ledger_category'] = $validated['ledger_category'] ?? 'debtor';
             $customer = Customer::create([...$validated, 'created_by' => $authUser?->sub ?? $authUser['sub'] ?? null]);
+            $customer->viewGroups()->sync($validated['view_group_ids'] ?? []);
 
             $this->auditService->log([
                 'user_id' => $authUser?->sub ?? $authUser['sub'] ?? null,
@@ -54,6 +57,11 @@ class CustomerController {
 
     public function update(Request $request, string $id): JsonResponse {
         try {
+            if (!$request->attributes->get('authUser')->hasPermission('sales.customers.override') && !$request->attributes->get('authUser')->hasPermission('admin.*')) {
+                return response()->json(['error' => 'Unauthorized to edit customer parameters'], 403);
+            }
+            $this->authorize('sales.customers.override', 'admin.*');
+
             $customer = Customer::findOrFail($id);
             $before = $customer->toArray();
 
@@ -68,9 +76,12 @@ class CustomerController {
                 'country' => 'nullable|string',
                 'status' => 'nullable|in:active,inactive,suspended',
                 'ledger_category' => 'nullable|in:debtor,creditor',
+                'view_group_ids' => 'nullable|array',
+                'view_group_ids.*' => 'uuid|exists:groups,id',
             ]);
 
             $customer->update($validated);
+            $customer->viewGroups()->sync($validated['view_group_ids'] ?? []);
 
             $authUser = $request->attributes->get('authUser');
             $this->auditService->log([

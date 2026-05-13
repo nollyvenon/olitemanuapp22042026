@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { getApiClient } from '@/lib/api-client';
 import { usePermission } from '@/hooks/usePermission';
+import { useVoucherTxnDate } from '@/hooks/useVoucherTxnDate';
 import { Trash2, Plus } from 'lucide-react';
 
 interface StockItem {
@@ -49,8 +50,10 @@ export default function NewOrderPage() {
   const [error, setError] = useState('');
   const [onBehalf, setOnBehalf] = useState('');
   const [userOpts, setUserOpts] = useState<{ id: string; name: string }[]>([]);
+  const [orderDate, setOrderDate] = useState(() => new Date().toISOString().split('T')[0]);
   const { canAny } = usePermission();
   const canProxy = canAny(['sales.orders.approve', 'admin.*']);
+  const { today: orderDateMin, allowPast: ordAllowPast } = useVoucherTxnDate('sales.orders.backdate');
 
   useEffect(() => {
         const load = async () => {
@@ -155,7 +158,7 @@ export default function NewOrderPage() {
       const payload = {
         customer_id: customerId,
         form_status: formStatus,
-        order_date: new Date().toISOString().split('T')[0],
+        order_date: orderDate,
         expected_delivery: expectedDelivery,
         notes: notes.trim(),
         manual_form_filename: formStatus === 'manual_captured' ? manualFileName : null,
@@ -247,6 +250,19 @@ export default function NewOrderPage() {
                 <option key={c.id} value={c.id}>{c.name} {c.company ? `— ${c.company}` : ''}</option>
               ))}
             </select>
+          </div>
+
+          <div>
+            <Label className="text-sm font-medium">Order date *</Label>
+            <Input
+              type="date"
+              value={orderDate}
+              onChange={(e) => setOrderDate(e.target.value)}
+              min={ordAllowPast ? undefined : orderDateMin}
+              disabled={submitting}
+              className="w-full mt-1.5"
+              required
+            />
           </div>
 
           {canProxy && userOpts.length > 0 && (

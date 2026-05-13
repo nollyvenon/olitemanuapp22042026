@@ -35,7 +35,7 @@ class VoucherController {
                 'override_reason' => 'nullable|string',
             ]);
 
-            $voucher = $this->voucherService->post($validated, $request->authUser->sub);
+            $voucher = $this->voucherService->post($validated, $request->authUser);
 
             return response()->json($voucher, 201);
         } catch (\Exception $e) {

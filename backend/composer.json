@@ -6,7 +6,10 @@
             "Hp\\Api\\": "src/",
             "App\\": "app/",
             "Database\\": "database/"
-        }
+        },
+        "files": [
+            "app/Helpers/hasOverridePermission.php"
+        ]
     },
     "authors": [
         {

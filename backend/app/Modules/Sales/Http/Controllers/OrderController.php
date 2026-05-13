@@ -39,6 +39,10 @@ class OrderController {
                 'notes' => 'nullable|string',
             ]);
 
+            if ($validated['order_date'] < now()->toDateString() && !\App\Helpers\hasOverridePermission($request->authUser, 'sales.orders.backdate')) {
+                return response()->json(['error' => 'Backdating sales orders is not allowed without override permission.'], 403);
+            }
+
             $order = Order::create([
                 'order_number' => 'ORD-' . now()->format('YmdHis'),
                 'customer_id' => $validated['customer_id'],

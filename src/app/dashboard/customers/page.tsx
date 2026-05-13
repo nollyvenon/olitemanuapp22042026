@@ -11,6 +11,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { PermissionGuard } from '@/components/shared/PermissionGuard';
 import { getApiClient } from '@/lib/api-client';
 import { Trash2 } from 'lucide-react';
+import { usePermission } from '@/hooks/usePermission';
+import { useAuthStore } from '@/store/auth.store';
+import Select from 'react-select';
 
 interface Customer {
   id: string;
@@ -22,6 +25,9 @@ interface Customer {
   type?: string;
   ledger_category?: string;
   created_at?: string;
+  created_by?: string;
+  view_group_ids?: string[];
+  viewGroups?: { id: string; name: string }[];
 }
 
 const columns: ColumnDef<Customer>[] = [
@@ -42,7 +48,12 @@ export default function CustomersPage() {
   const [openEdit, setOpenEdit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
-  const [form, setForm] = useState({ name: '', company: '', email: '', phone: '', address: '', type: 'individual', ledger_category: 'debtor' });
+  const [form, setForm] = useState({ name: '', company: '', email: '', phone: '', address: '', type: 'individual', ledger_category: 'debtor', view_group_ids: [] });
+  const [userGroups, setUserGroups] = useState<{ id: string; name: string }[]>([]);
+  const { user } = useAuthStore();
+  const { can, canAny } = usePermission();
+  const canCreateCust = can('sales.customers.create');
+  const canEditCust = canAny(['sales.customers.override', 'admin.*']);
 
   const exportData = () => {
     const headers = ['Name', 'Company', 'Email', 'Phone', 'Address', 'Ledger', 'Type'];
@@ -72,11 +83,16 @@ export default function CustomersPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const { data } = await api.get('/customers');
-        const customersList = Array.isArray(data) ? data : (data as { data?: Customer[] }).data ?? [];
+        const [{ data: customersData }, { data: groupsData }] = await Promise.all([
+          api.get('/customers'),
+          api.get('/groups'),
+        ]);
+        const customersList = Array.isArray(customersData) ? customersData : (customersData as { data?: Customer[] }).data ?? [];
+        const groupsList = Array.isArray(groupsData) ? groupsData : (groupsData as { data?: { id: string; name: string }[] }).data ?? [];
         setCustomers(customersList);
+        setUserGroups(groupsList);
       } catch (err) {
-        console.error('Failed to load customers', err);
+        console.error('Failed to load customers or groups', err);
       } finally {
         setLoading(false);
       }
@@ -95,12 +111,13 @@ export default function CustomersPage() {
         phone: form.phone || null,
         address: form.address || null,
         ledger_category: form.ledger_category,
+        view_group_ids: form.view_group_ids,
       });
       const { data } = await api.get('/customers');
       const customersList = Array.isArray(data) ? data : (data as { data?: Customer[] }).data ?? [];
       setCustomers(customersList);
       setOpenAdd(false);
-      setForm({ name: '', company: '', email: '', phone: '', address: '', type: 'individual', ledger_category: 'debtor' });
+      setForm({ name: '', company: '', email: '', phone: '', address: '', type: 'individual', ledger_category: 'debtor', view_group_ids: [] });
     } catch (err: any) {
       alert('❌ Failed to create customer: ' + (err.response?.data?.message || err.message || 'Unknown error'));
       console.error('Failed to create customer', err);
@@ -121,13 +138,14 @@ export default function CustomersPage() {
         phone: form.phone || null,
         address: form.address || null,
         ledger_category: form.ledger_category,
+        view_group_ids: form.view_group_ids,
       });
       const { data } = await api.get('/customers');
       const customersList = Array.isArray(data) ? data : (data as { data?: Customer[] }).data ?? [];
       setCustomers(customersList);
       setOpenEdit(false);
       setSelectedCustomer(null);
-      setForm({ name: '', company: '', email: '', phone: '', address: '', type: 'individual', ledger_category: 'debtor' });
+      setForm({ name: '', company: '', email: '', phone: '', address: '', type: 'individual', ledger_category: 'debtor', view_group_ids: [] });
     } catch (err: any) {
       alert('❌ Failed to update customer: ' + (err.response?.data?.message || err.message || 'Unknown error'));
       console.error('Failed to update customer', err);
@@ -199,6 +217,7 @@ export default function CustomersPage() {
       address: customer.address || '',
       type: customer.type || 'individual',
       ledger_category: customer.ledger_category || 'debtor',
+      view_group_ids: customer.view_group_ids || [],
     });
     setOpenEdit(true);
   };
@@ -238,10 +257,10 @@ export default function CustomersPage() {
             <p className="text-xs text-gray-500 mt-2">{customer.email}</p>
             <p className="text-xs text-gray-600 mt-1">Ledger: {customer.ledger_category || 'debtor'}</p>
             <div className="flex gap-2 mt-3">
-              <Button onClick={() => openEditDialog(customer)} size="sm" variant="outline">
+              <Button onClick={() => openEditDialog(customer)} size="sm" variant="outline" disabled={!canEditCust}>
                 Edit
               </Button>
-              <Button onClick={() => handleDelete(customer.id)} size="sm" variant="ghost">
+              <Button onClick={() => handleDelete(customer.id)} size="sm" variant="ghost" disabled={!canEditCust}>
                 <Trash2 className="w-4 h-4" />
               </Button>
             </div>
@@ -257,30 +276,30 @@ export default function CustomersPage() {
           <form onSubmit={handleAdd} className="space-y-4">
             <div>
               <Label>Name *</Label>
-              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required disabled={submitting} />
+              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required disabled={submitting || !canCreateCust} />
             </div>
             <div>
               <Label>Company</Label>
-              <Input value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} disabled={submitting} />
+              <Input value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} disabled={submitting || !canCreateCust} />
             </div>
             <div>
               <Label>Email</Label>
-              <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} disabled={submitting} />
+              <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} disabled={submitting || !canCreateCust} />
             </div>
             <div>
               <Label>Phone</Label>
-              <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} disabled={submitting} />
+              <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} disabled={submitting || !canCreateCust} />
             </div>
             <div>
               <Label>Ledger category *</Label>
-              <select value={form.ledger_category} onChange={(e) => setForm({ ...form, ledger_category: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
+              <select value={form.ledger_category} onChange={(e) => setForm({ ...form, ledger_category: e.target.value })} className="w-full p-2 border rounded" disabled={submitting || !canCreateCust}>
                 <option value="debtor">Debtors (sales)</option>
                 <option value="creditor">Creditors</option>
               </select>
             </div>
             <div>
               <Label>Type</Label>
-              <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
+              <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} className="w-full p-2 border rounded" disabled={submitting || !canCreateCust}>
                 <option value="individual">Individual</option>
                 <option value="corporate">Corporate</option>
               </select>
@@ -289,7 +308,7 @@ export default function CustomersPage() {
               <Button type="button" variant="outline" onClick={() => setOpenAdd(false)} disabled={submitting}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={submitting}>
+              <Button type="submit" disabled={submitting || !canCreateCust}>
                 {submitting ? 'Creating...' : 'Create'}
               </Button>
             </DialogFooter>
@@ -305,30 +324,30 @@ export default function CustomersPage() {
           <form onSubmit={handleEdit} className="space-y-4">
             <div>
               <Label>Name *</Label>
-              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required disabled={submitting} />
+              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required disabled={submitting || !canEditCust} />
             </div>
             <div>
               <Label>Company</Label>
-              <Input value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} disabled={submitting} />
+              <Input value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} disabled={submitting || !canEditCust} />
             </div>
             <div>
               <Label>Email</Label>
-              <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} disabled={submitting} />
+              <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} disabled={submitting || !canEditCust} />
             </div>
             <div>
               <Label>Phone</Label>
-              <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} disabled={submitting} />
+              <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} disabled={submitting || !canEditCust} />
             </div>
             <div>
               <Label>Ledger category *</Label>
-              <select value={form.ledger_category} onChange={(e) => setForm({ ...form, ledger_category: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
+              <select value={form.ledger_category} onChange={(e) => setForm({ ...form, ledger_category: e.target.value })} className="w-full p-2 border rounded" disabled={submitting || !canEditCust}>
                 <option value="debtor">Debtors (sales)</option>
                 <option value="creditor">Creditors</option>
               </select>
             </div>
             <div>
               <Label>Type</Label>
-              <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
+              <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} className="w-full p-2 border rounded" disabled={submitting || !canEditCust}>
                 <option value="individual">Individual</option>
                 <option value="corporate">Corporate</option>
               </select>
@@ -337,7 +356,7 @@ export default function CustomersPage() {
               <Button type="button" variant="outline" onClick={() => setOpenEdit(false)} disabled={submitting}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={submitting}>
+              <Button type="submit" disabled={submitting || !canEditCust}>
                 {submitting ? 'Saving...' : 'Save'}
               </Button>
             </DialogFooter>

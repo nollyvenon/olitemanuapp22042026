@@ -15,7 +15,13 @@ use App\Modules\Inventory\Http\Controllers\StockLedgerController;
 use App\Modules\Accounts\Http\Controllers\LedgerController;
 use App\Modules\Accounts\Http\Controllers\VoucherController;
 use App\Modules\Accounts\Http\Controllers\PriceListController;
+use App\Modules\Accounts\Http\Controllers\PriceCategoryController;
 use App\Modules\Accounts\Http\Controllers\TerritoryController;
+use App\Modules\Accounts\Http\Controllers\ReceiptController;
+use App\Modules\Accounts\Http\Controllers\CreditNoteController;
+use App\Modules\Accounts\Http\Controllers\DebitNoteController;
+use App\Modules\Accounts\Http\Controllers\DiscountVoucherController;
+use App\Modules\Sales\Http\Controllers\SalesReverseController;
 use App\Modules\Kyc\Http\Controllers\KycController;
 use App\Modules\Reports\Http\Controllers\ReportController;
 use App\Modules\Reports\Http\Controllers\ExportController;
@@ -96,6 +102,14 @@ Route::prefix('v1')->group(function () {
         Route::get('price-lists/price', [PriceListController::class, 'price']);
         Route::get('price-lists/{id}', [PriceListController::class, 'show']);
         Route::post('price-lists/{id}/activate', [PriceListController::class, 'activate']);
+
+        Route::apiResource('receipts', ReceiptController::class)->except(['update', 'destroy']);
+        Route::apiResource('credit-notes', CreditNoteController::class)->except(['update', 'destroy']);
+        Route::apiResource('debit-notes', DebitNoteController::class)->except(['update', 'destroy']);
+        Route::apiResource('discount-vouchers', DiscountVoucherController::class)->except(['update', 'destroy']);
+        Route::apiResource('sales-reverses', SalesReverseController::class)->except(['update', 'destroy']);
+
+        Route::apiResource('price-categories', PriceCategoryController::class);
 
         Route::apiResource('territories', TerritoryController::class);
 

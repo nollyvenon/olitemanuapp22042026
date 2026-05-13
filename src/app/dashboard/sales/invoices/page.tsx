@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { PermissionGuard } from '@/components/shared/PermissionGuard';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { getApiClient } from '@/lib/api-client';
+import { useVoucherTxnDate } from '@/hooks/useVoucherTxnDate';
 
 interface Invoice {
   id: string;
@@ -59,6 +60,7 @@ export default function InvoicesPage() {
   });
 
   const api = getApiClient();
+  const { today, allowPast } = useVoucherTxnDate('sales.invoices.backdate');
 
   const exportData = () => {
     const headers = ['Invoice #', 'Customer', 'Initiator', 'Depot', 'Territory', 'Issue Date', 'Due Date', 'Total', 'Status'];
@@ -327,6 +329,7 @@ export default function InvoicesPage() {
               <input
                 type="date"
                 value={formData.invoice_date}
+                min={allowPast ? undefined : today}
                 onChange={(e) => setFormData({ ...formData, invoice_date: e.target.value })}
                 required
                 className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
@@ -337,6 +340,7 @@ export default function InvoicesPage() {
               <input
                 type="date"
                 value={formData.due_date}
+                min={formData.invoice_date || (allowPast ? undefined : today)}
                 onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
                 required
                 className="w-full border border-gray-300 rounded px-3 py-2 text-sm"

@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PermissionGuard } from '@/components/shared/PermissionGuard';
 import { getApiClient } from '@/lib/api-client';
+import { useVoucherTxnDate } from '@/hooks/useVoucherTxnDate';
 
 interface InventoryItem {
   id: string;
@@ -27,7 +28,9 @@ export default function CreateStockJournalPage() {
   const [submitting, setSubmitting] = useState(false);
   const [journalType, setJournalType] = useState('add');
   const [form, setForm] = useState({ item_id: '', location_id: '', to_location_id: '', quantity: '', notes: '' });
+  const [journalDate, setJournalDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [error, setError] = useState('');
+  const { today: jdMin, allowPast: jdAllowPast } = useVoucherTxnDate('inventory.stock_journals.backdate');
 
   useEffect(() => {
     void (async () => {
@@ -45,13 +48,15 @@ export default function CreateStockJournalPage() {
     setError('');
     try {
       const endpoint = journalType === 'add' ? '/stock/journals/add' : journalType === 'transfer' ? '/stock/journals/transfer' : '/stock/journals/remove';
+      const jd = { journal_date: journalDate };
       const payload =
         journalType === 'transfer'
-          ? { item_id: form.item_id, from_location: form.location_id, to_location: form.to_location_id, quantity: parseInt(form.quantity, 10), notes: form.notes }
-          : { item_id: form.item_id, location_id: form.location_id, quantity: parseInt(form.quantity, 10), notes: form.notes };
+          ? { ...jd, item_id: form.item_id, from_location: form.location_id, to_location: form.to_location_id, quantity: parseInt(form.quantity, 10), notes: form.notes }
+          : { ...jd, item_id: form.item_id, location_id: form.location_id, quantity: parseInt(form.quantity, 10), notes: form.notes };
       await api.post(endpoint, payload);
       setJournalType('add');
       setForm({ item_id: '', location_id: '', to_location_id: '', quantity: '', notes: '' });
+      setJournalDate(new Date().toISOString().slice(0, 10));
     } catch (err: unknown) {
       const x = err as { response?: { data?: { error?: string; message?: string } } };
       setError(x.response?.data?.error || x.response?.data?.message || 'Failed');
@@ -69,6 +74,10 @@ export default function CreateStockJournalPage() {
         </Link>
         {error && <div className="p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm">{error}</div>}
         <form onSubmit={handleSubmit} className="space-y-4 border rounded p-4">
+          <div>
+            <Label>Journal date *</Label>
+            <Input type="date" value={journalDate} min={jdAllowPast ? undefined : jdMin} onChange={(e) => setJournalDate(e.target.value)} disabled={submitting} className="mt-1" required />
+          </div>
           <div>
             <Label>Movement Type *</Label>
             <div className="flex gap-4 mt-2 flex-wrap">

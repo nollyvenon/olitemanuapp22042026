@@ -11,18 +11,19 @@ class LedgerController {
     public function __construct(private AuditService $auditService) {}
 
     public function index(Request $request): JsonResponse {
-        $ledgers = LedgerAccount::with('customer', 'location', 'territory', 'salesOfficer')
+        $ledgers = LedgerAccount::with('customer', 'location', 'territory', 'salesOfficer', 'priceCategory')
             ->when($request->type, fn($q) => $q->where('type', $request->type))
             ->when($request->location_id, fn($q) => $q->where('location_id', $request->location_id))
             ->when($request->territory_id, fn($q) => $q->where('territory_id', $request->territory_id))
             ->when($request->sales_officer_id, fn($q) => $q->where('sales_officer_id', $request->sales_officer_id))
+            ->when($request->price_category_id, fn($q) => $q->where('price_category_id', $request->price_category_id))
             ->paginate(20);
 
         return response()->json($ledgers);
     }
 
     public function show(Request $request, string $id): JsonResponse {
-        $ledger = LedgerAccount::with('customer', 'location', 'territory', 'salesOfficer', 'priceList')->findOrFail($id);
+        $ledger = LedgerAccount::with('customer', 'location', 'territory', 'salesOfficer', 'priceList', 'priceCategory')->findOrFail($id);
         return response()->json($ledger);
     }
 
@@ -34,11 +35,17 @@ class LedgerController {
                 'customer_id' => 'nullable|uuid|exists:customers,id',
                 'location_id' => 'required|uuid|exists:locations,id',
                 'territory_id' => 'nullable|uuid|exists:territories,id',
-                'price_list_version_id' => 'nullable|uuid|exists:price_list_versions,id',
+                'price_category_id' => 'nullable|uuid|exists:price_categories,id',
                 'sales_officer_id' => 'nullable|uuid|exists:users,id',
                 'credit_limit' => 'nullable|numeric|min:0',
                 'opening_balance' => 'nullable|numeric',
+                'date' => 'required|date',
             ]);
+
+            if ($validated['date'] < now()->toDateString() && !\App\Helpers\hasOverridePermission($request->authUser, 'accounts.ledgers.backdate')) {
+                return response()->json(['error' => 'Backdating ledgers is not allowed without override permission.'], 403);
+            }
+            unset($validated['date']);
 
             $validated['account_number'] = 'ACC-' . now()->format('YmdHis');
             $validated['current_balance'] = $validated['opening_balance'] ?? 0;
@@ -62,10 +69,10 @@ class LedgerController {
             $validated = $request->validate([
                 'name' => 'nullable|string|max:255',
                 'territory_id' => 'nullable|uuid|exists:territories,id',
-                'price_list_version_id' => 'nullable|uuid|exists:price_list_versions,id',
                 'sales_officer_id' => 'nullable|uuid|exists:users,id',
                 'credit_limit' => 'nullable|numeric|min:0',
                 'is_active' => 'nullable|boolean',
+                'price_category_id' => 'nullable|uuid|exists:price_categories,id',
             ]);
 
             $ledger->update($validated);

@@ -43,7 +43,25 @@ const columns: ColumnDef<PriceList>[] = [
 ];
 
 export default function PriceListsPage() {
+  const api = getApiClient();
+  const [priceLists, setPriceLists] = useState<PriceList[]>([]);
+  const [loading, setLoading] = useState(true);
   const [sorting, setSorting] = useState<SortingState>([{ id: 'effective_from', desc: true }]);
+  
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const { data } = await api.get('/price-lists');
+        const list = Array.isArray(data) ? data : (data as { data?: PriceList[] }).data ?? [];
+        setPriceLists(list);
+      } catch (err) {
+        console.error('Failed to load price lists', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, [api]);
   return (
     <div className="space-y-6">
       <PageHeader
@@ -55,7 +73,7 @@ export default function PriceListsPage() {
           </PermissionGuard>
         }
       />
-      <DataTable columns={columns} data={PRICE_LISTS} sorting={sorting} onSortingChange={setSorting} />
+      <DataTable columns={columns} data={priceLists} sorting={sorting} onSortingChange={setSorting} />
     </div>
   );
 }

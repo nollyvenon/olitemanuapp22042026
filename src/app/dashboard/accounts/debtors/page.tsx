@@ -7,7 +7,13 @@ import { PageHeader } from '@/components/shared/PageHeader';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { DataTable } from '@/components/data-table/DataTable';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import Select from 'react-select';
 import { getApiClient } from '@/lib/api-client';
+import { usePermission } from '@/hooks/usePermission';
+import { PermissionGuard } from '@/components/shared/PermissionGuard';
 
 interface Debtor {
   id: string;
@@ -19,6 +25,9 @@ interface Debtor {
   overdue: number;
   last_payment: string;
   status: string;
+  location?: { id: string; name: string };
+  territory?: { id: string; name: string };
+  salesOfficer?: { id: string; name: string };
 }
 
 const fmt = (v: number) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(v);
@@ -40,13 +49,33 @@ export default function DebtorsPage() {
   const [debtors, setDebtors] = useState<Debtor[]>([]);
   const [loading, setLoading] = useState(true);
   const [sorting, setSorting] = useState<SortingState>([{ id: 'overdue', desc: true }]);
+  const [openAdd, setOpenAdd] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState({ name: '', type: 'debtor', customer_id: '', location_id: '', territory_id: '', sales_officer_id: '', price_category_id: '', credit_limit: 0, opening_balance: 0 });
+  const [locations, setLocations] = useState<{ id: string; name: string }[]>([]);
+  const [priceCategories, setPriceCategories] = useState<{ id: string; name: string }[]>([]);
+  const [territories, setTerritories] = useState<{ id: string; name: string }[]>([]);
+  const [salesOfficers, setSalesOfficers] = useState<{ id: string; name: string }[]>([]);
+  const [customers, setCustomers] = useState<{ id: string; name: string }[]>([]);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const { data } = await api.get('/accounts/debtors');
+        const [{ data }, { data: locationsData }, { data: priceCategoriesData }, { data: territoriesData }, { data: usersData }, { data: customersData }] = await Promise.all([
+          api.get('/accounts/debtors'),
+          api.get('/locations'),
+          api.get('/price-categories'),
+          api.get('/territories'),
+          api.get('/users'),
+          api.get('/customers'),
+        ]);
         const list = Array.isArray(data) ? data : data.data ?? [];
         setDebtors(list);
+        setLocations(locationsData.data || []);
+        setPriceCategories(priceCategoriesData.data || []);
+        setTerritories(territoriesData.data || []);
+        setSalesOfficers(usersData.data || []);
+        setCustomers(customersData.data || []);
       } catch (err) {
         console.error('Failed to load debtors', err);
       } finally {
@@ -55,6 +84,34 @@ export default function DebtorsPage() {
     };
     load();
   }, [api]);
+
+  const handleAddLedger = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      await api.post('/ledgers', {
+        name: form.name,
+        type: 'debtor',
+        customer_id: form.customer_id || null,
+        location_id: form.location_id,
+        territory_id: form.territory_id || null,
+        sales_officer_id: form.sales_officer_id || null,
+        price_category_id: form.price_category_id || null,
+        credit_limit: form.credit_limit,
+        opening_balance: form.opening_balance,
+      });
+      const { data } = await api.get('/accounts/debtors');
+      const list = Array.isArray(data) ? data : data.data ?? [];
+      setDebtors(list);
+      setOpenAdd(false);
+      setForm({ name: '', type: 'debtor', customer_id: '', location_id: '', territory_id: '', sales_officer_id: '', price_category_id: '', credit_limit: 0, opening_balance: 0 });
+    } catch (err: any) {
+      alert('❌ Failed to create ledger: ' + (err.response?.data?.message || err.message || 'Unknown error'));
+      console.error('Failed to create ledger', err);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const exportCSV = () => {
     const headers = ['Account #', 'Customer', 'Contact', 'Credit Limit', 'Balance', 'Overdue', 'Last Payment', 'Status'];
@@ -74,6 +131,9 @@ export default function DebtorsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <PageHeader title="Debtors" description="Debtor ledgers: sales invoices debit, customer payments credit." />
+        <Button onClick={() => setOpenAdd(true)} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold">
+          + Add Ledger
+        </Button>
         {debtors.length > 0 && <Button onClick={exportCSV} variant="outline" className="text-xs">📥 Export CSV</Button>}
       </div>
       <DataTable
@@ -86,3 +146,64 @@ export default function DebtorsPage() {
     </div>
   );
 }
+
+<Dialog open={openAdd} onOpenChange={setOpenAdd}>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Add New Debtor Ledger</DialogTitle>
+    </DialogHeader>
+    <form onSubmit={handleAddLedger} className="space-y-4">
+      <div>
+        <Label>Ledger Name *</Label>
+        <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required disabled={submitting} />
+      </div>
+      <div>
+        <Label>Customer (optional)</Label>
+        <select value={form.customer_id} onChange={(e) => setForm({ ...form, customer_id: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
+          <option value="">Select Customer</option>
+          {customers.map(customer => <option key={customer.id} value={customer.id}>{customer.name}</option>)}
+        </select>
+      </div>
+      <div>
+        <Label>Store Location *</Label>
+        <select value={form.location_id} onChange={(e) => setForm({ ...form, location_id: e.target.value })} className="w-full p-2 border rounded" required disabled={submitting}>
+          <option value="">Select Location</option>
+          {locations.map(loc => <option key={loc.id} value={loc.id}>{loc.name}</option>)}
+        </select>
+      </div>
+      <div>
+        <Label>Account Domicile Territory (optional)</Label>
+        <select value={form.territory_id} onChange={(e) => setForm({ ...form, territory_id: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
+          <option value="">Select Territory</option>
+          {territories.map(terr => <option key={terr.id} value={terr.id}>{terr.name}</option>)}
+        </select>
+      </div>
+      <div>
+        <Label>Sales Officer (optional)</Label>
+        <select value={form.sales_officer_id} onChange={(e) => setForm({ ...form, sales_officer_id: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
+          <option value="">Select Sales Officer</option>
+          {salesOfficers.map(officer => <option key={officer.id} value={officer.id}>{officer.name}</option>)}
+        </select>
+      </div>
+      <div>
+        <Label>Price Category (optional)</Label>
+        <select value={form.price_category_id} onChange={(e) => setForm({ ...form, price_category_id: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
+          <option value="">Select Price Category</option>
+          {priceCategories.map(pc => <option key={pc.id} value={pc.id}>{pc.name}</option>)}
+        </select>
+      </div>
+      <div>
+        <Label>Credit Limit</Label>
+        <Input type="number" value={form.credit_limit} onChange={(e) => setForm({ ...form, credit_limit: parseFloat(e.target.value) })} disabled={submitting} />
+      </div>
+      <div>
+        <Label>Opening Balance</Label>
+        <Input type="number" value={form.opening_balance} onChange={(e) => setForm({ ...form, opening_balance: parseFloat(e.target.value) })} disabled={submitting} />
+      </div>
+      <DialogFooter>
+        <Button type="button" variant="outline" onClick={() => setOpenAdd(false)} disabled={submitting}>Cancel</Button>
+        <Button type="submit" disabled={submitting}>{submitting ? 'Creating...' : 'Create'}</Button>
+      </DialogFooter>
+    </form>
+  </DialogContent>
+</Dialog>
