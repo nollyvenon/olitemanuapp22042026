@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from '@/components/ui/sheet';
 import { Label } from '@/components/ui/label';
@@ -29,6 +30,15 @@ export default function MarketPage() {
   const [vetRep, setVetRep] = useState<Report | null>(null);
   const [vetRemark, setVetRemark] = useState('');
   const [busy, setBusy] = useState(false);
+  const [newPlanOpen, setNewPlanOpen] = useState(false);
+  const [planFreq, setPlanFreq] = useState('daily');
+  const [planDate, setPlanDate] = useState('');
+  const [planNotes, setPlanNotes] = useState('');
+  const [newRepOpen, setNewRepOpen] = useState(false);
+  const [repTitle, setRepTitle] = useState('');
+  const [repPeriod, setRepPeriod] = useState('');
+  const [repComp, setRepComp] = useState('');
+  const [repAct, setRepAct] = useState('');
 
   const load = useCallback(async () => {
     const [p, r] = await Promise.all([api.get('/market/planning'), api.get('/market/reports')]);
@@ -56,6 +66,43 @@ export default function MarketPage() {
     }
   };
 
+  const submitNewPlan = async () => {
+    if (!planDate.trim() || !planNotes.trim()) return;
+    if (!confirm('Submit plan?')) return;
+    setBusy(true);
+    try {
+      await api.post('/market/planning', { frequency: planFreq, plan_date: planDate, summary: planNotes });
+      setNewPlanOpen(false);
+      setPlanDate('');
+      setPlanNotes('');
+      await load();
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const submitNewReport = async () => {
+    if (!repTitle.trim() || !repPeriod.trim() || !repComp.trim() || !repAct.trim()) return;
+    if (!confirm('Submit report?')) return;
+    setBusy(true);
+    try {
+      await api.post('/market/reports', {
+        report_title: repTitle,
+        period: repPeriod,
+        competitors: repComp,
+        market_activities: repAct,
+      });
+      setNewRepOpen(false);
+      setRepTitle('');
+      setRepPeriod('');
+      setRepComp('');
+      setRepAct('');
+      await load();
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">Market Intelligence</h1>
@@ -66,7 +113,9 @@ export default function MarketPage() {
         </TabsList>
         <TabsContent value="planning">
           <Card className="p-6">
-            <Button className="mb-4 bg-blue-600 text-white">New Plan</Button>
+            <Button className="mb-4 bg-blue-600 text-white" onClick={() => setNewPlanOpen(true)}>
+              New Plan
+            </Button>
             <div className="space-y-2">
               {planning.map((p) => (
                 <div key={p.id} className="p-3 border rounded flex items-center justify-between gap-2">
@@ -78,7 +127,7 @@ export default function MarketPage() {
                       {p.frequency} - {p.plan_date}
                     </p>
                   </div>
-                  <PermissionGuard permission="sales.orders.approve">
+                  <PermissionGuard permissions={['sales.orders.approve', 'admin.*']}>
                     {p.vetting_status !== 'VETTED' && (
                       <Button size="sm" variant="outline" onClick={() => { setVetPlan(p); setVetRep(null); setVetRemark(''); }}>
                         Vet
@@ -92,7 +141,9 @@ export default function MarketPage() {
         </TabsContent>
         <TabsContent value="reports">
           <Card className="p-6">
-            <Button className="mb-4 bg-blue-600 text-white">New Report</Button>
+            <Button className="mb-4 bg-blue-600 text-white" onClick={() => setNewRepOpen(true)}>
+              New Report
+            </Button>
             {reports.length === 0 ? (
               <p>No reports</p>
             ) : (
@@ -104,7 +155,7 @@ export default function MarketPage() {
                       <span className={`text-xs px-2 py-1 rounded ${r.vetting_status === 'VETTED' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                         {r.vetting_status === 'VETTED' ? 'vetted' : 'not vetted'}
                       </span>
-                      <PermissionGuard permission="sales.orders.approve">
+                      <PermissionGuard permissions={['sales.orders.approve', 'admin.*']}>
                         {r.vetting_status !== 'VETTED' && (
                           <Button size="sm" variant="outline" onClick={() => { setVetRep(r); setVetPlan(null); setVetRemark(''); }}>
                             Vet
@@ -130,6 +181,48 @@ export default function MarketPage() {
           <SheetFooter className="mt-4">
             <Button disabled={busy || !vetRemark.trim() || (!vetPlan && !vetRep)} onClick={submitVet} className="w-full bg-amber-600 text-white">
               {busy ? '…' : 'Submit vet'}
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+      <Sheet open={newPlanOpen} onOpenChange={setNewPlanOpen}>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>New market plan</SheetTitle>
+          </SheetHeader>
+          <Label className="mt-4">Frequency</Label>
+          <select className="w-full mt-1 border rounded p-2 text-sm" value={planFreq} onChange={(e) => setPlanFreq(e.target.value)}>
+            <option value="daily">daily</option>
+            <option value="weekly">weekly</option>
+            <option value="monthly">monthly</option>
+          </select>
+          <Label className="mt-3">Plan date *</Label>
+          <Input type="date" className="mt-1" value={planDate} onChange={(e) => setPlanDate(e.target.value)} />
+          <Label className="mt-3">Plan details *</Label>
+          <textarea className="w-full mt-1 border rounded p-2 text-sm min-h-[100px]" value={planNotes} onChange={(e) => setPlanNotes(e.target.value)} />
+          <SheetFooter className="mt-4">
+            <Button disabled={busy} className="w-full bg-blue-600 text-white" onClick={submitNewPlan}>
+              Submit
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+      <Sheet open={newRepOpen} onOpenChange={setNewRepOpen}>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>New market report</SheetTitle>
+          </SheetHeader>
+          <Label className="mt-4">Title *</Label>
+          <Input className="mt-1" value={repTitle} onChange={(e) => setRepTitle(e.target.value)} />
+          <Label className="mt-3">Period *</Label>
+          <Input className="mt-1" placeholder="e.g. 2026-W02" value={repPeriod} onChange={(e) => setRepPeriod(e.target.value)} />
+          <Label className="mt-3">Competitors *</Label>
+          <textarea className="w-full mt-1 border rounded p-2 text-sm min-h-[72px]" value={repComp} onChange={(e) => setRepComp(e.target.value)} />
+          <Label className="mt-3">Market activities *</Label>
+          <textarea className="w-full mt-1 border rounded p-2 text-sm min-h-[72px]" value={repAct} onChange={(e) => setRepAct(e.target.value)} />
+          <SheetFooter className="mt-4">
+            <Button disabled={busy} className="w-full bg-blue-600 text-white" onClick={submitNewReport}>
+              Submit
             </Button>
           </SheetFooter>
         </SheetContent>

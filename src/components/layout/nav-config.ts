@@ -78,6 +78,12 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: CheckSquare,
         permission: 'sales.orders.read',
       },
+      {
+        label: 'Market',
+        href: '/dashboard/market',
+        icon: BarChart2,
+        permission: 'sales.orders.read',
+      },
     ],
   },
   {
@@ -152,6 +158,12 @@ export const NAV_GROUPS: NavGroup[] = [
         label: 'Override / Adjustment',
         href: '/dashboard/accounts/override',
         icon: Scale,
+        permission: 'accounts.ledger.read',
+      },
+      {
+        label: 'KYC for trading',
+        href: '/dashboard/accounts/kyc-trading',
+        icon: UserCheck,
         permission: 'accounts.ledger.read',
       },
     ],

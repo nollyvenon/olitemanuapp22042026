@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { PermissionGuard } from '@/components/shared/PermissionGuard';
 import { getApiClient } from '@/lib/api-client';
+import { unwrapList } from '@/lib/admin-access';
 
 interface KycApplicationDetail {
   id: string;
@@ -52,6 +53,7 @@ export default function KycApplicationDetailPage() {
   const [draft, setDraft] = useState<Partial<KycApplicationDetail>>({});
   const [rejectReason, setRejectReason] = useState('');
   const [busy, setBusy] = useState(false);
+  const [audits, setAudits] = useState<{ id: string; user_name?: string; action_type?: string; created_at?: string }[]>([]);
 
   useEffect(() => {
     const load = async () => {
@@ -73,6 +75,14 @@ export default function KycApplicationDetailPage() {
     };
     load();
   }, [id, api]);
+
+  useEffect(() => {
+    if (!application) return;
+    api
+      .get('/audit-logs', { params: { entity_type: 'kyc_application', entity_id: id, limit: 50 } })
+      .then(({ data }) => setAudits(unwrapList(data)))
+      .catch(() => setAudits([]));
+  }, [application, id, api]);
 
   const isPending =
     !!application && ['pending', 'submitted', 'under_review'].includes(String(application.status).toLowerCase());
@@ -225,7 +235,7 @@ export default function KycApplicationDetailPage() {
         </div>
       </Card>
 
-      <PermissionGuard permission="kyc.read">
+      <PermissionGuard permissions={['kyc.read', 'admin.*']}>
         {isPending && (
           <Card className="p-6 space-y-4">
             <h2 className="font-bold">Amend & decision</h2>
@@ -266,6 +276,32 @@ export default function KycApplicationDetailPage() {
           </Card>
         )}
       </PermissionGuard>
+
+      <Card className="p-6 space-y-2">
+        <h2 className="font-bold">Audit trail</h2>
+        {audits.length === 0 ? (
+          <p className="text-sm text-gray-500">No audit rows</p>
+        ) : (
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b">
+                <th className="text-left py-2">User</th>
+                <th className="text-left py-2">Action</th>
+                <th className="text-left py-2">Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {audits.map((a) => (
+                <tr key={a.id} className="border-b">
+                  <td className="py-2">{a.user_name ?? '—'}</td>
+                  <td className="py-2">{a.action_type ?? '—'}</td>
+                  <td className="py-2">{a.created_at ? fmtDate(a.created_at) : '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </Card>
 
       <Card className="p-6 space-y-4">
         <h2 className="font-bold">Documents</h2>

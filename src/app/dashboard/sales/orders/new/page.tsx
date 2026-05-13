@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { getApiClient } from '@/lib/api-client';
+import { usePermission } from '@/hooks/usePermission';
 import { Trash2, Plus } from 'lucide-react';
 
 interface StockItem {
@@ -46,6 +47,10 @@ export default function NewOrderPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [onBehalf, setOnBehalf] = useState('');
+  const [userOpts, setUserOpts] = useState<{ id: string; name: string }[]>([]);
+  const { canAny } = usePermission();
+  const canProxy = canAny(['sales.orders.approve', 'admin.*']);
 
   useEffect(() => {
     const load = async () => {
@@ -74,6 +79,17 @@ export default function NewOrderPage() {
     };
     load();
   }, [api]);
+
+  useEffect(() => {
+    if (!canProxy) return;
+    api
+      .get('/users')
+      .then(({ data }) => {
+        const list = Array.isArray(data) ? data : (data as { data?: { id: string; name: string }[] })?.data ?? [];
+        setUserOpts(list.map((u: { id: string; name: string }) => ({ id: u.id, name: u.name })));
+      })
+      .catch(() => setUserOpts([]));
+  }, [api, canProxy]);
 
   const updateItem = (idx: number, field: keyof OrderItem, value: any) => {
     const updated = [...items];
@@ -156,6 +172,7 @@ export default function NewOrderPage() {
           quantity: item.quantity,
           unit_price: item.unit_price,
         })),
+        ...(onBehalf ? { on_behalf_user_id: onBehalf, created_as_proxy: true } : {}),
       };
 
       const { data } = await api.post('/orders', payload);
@@ -238,6 +255,25 @@ export default function NewOrderPage() {
               ))}
             </select>
           </div>
+
+          {canProxy && userOpts.length > 0 && (
+            <div>
+              <Label className="text-sm font-medium">On behalf of (optional)</Label>
+              <select
+                value={onBehalf}
+                onChange={(e) => setOnBehalf(e.target.value)}
+                className="w-full mt-1.5 p-2 border border-gray-300 rounded"
+                disabled={submitting}
+              >
+                <option value="">—</option>
+                {userOpts.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <div>
             <Label className="text-sm font-medium">Expected Delivery Date *</Label>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { getApiClient } from '@/lib/api-client';
+import { usePermission } from '@/hooks/usePermission';
 
 export default function NewKycApplicationPage() {
   const router = useRouter();
@@ -26,6 +27,21 @@ export default function NewKycApplicationPage() {
   const [address, setAddress] = useState('');
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
+  const [onBehalf, setOnBehalf] = useState('');
+  const [userOpts, setUserOpts] = useState<{ id: string; name: string }[]>([]);
+  const { canAny } = usePermission();
+  const canProxy = canAny(['sales.orders.approve', 'admin.*']);
+
+  useEffect(() => {
+    if (!canProxy) return;
+    api
+      .get('/users')
+      .then(({ data }) => {
+        const list = Array.isArray(data) ? data : (data as { data?: { id: string; name: string }[] })?.data ?? [];
+        setUserOpts(list.map((u: { id: string; name: string }) => ({ id: u.id, name: u.name })));
+      })
+      .catch(() => setUserOpts([]));
+  }, [api, canProxy]);
 
   const gateOk = sig === 'none' || (sig === 'file' && !!sigName);
 
@@ -58,6 +74,10 @@ export default function NewKycApplicationPage() {
       fd.append('signed_form_status', sig);
       if (sig === 'file' && (document.getElementById('kyc-sig') as HTMLInputElement)?.files?.[0]) {
         fd.append('signed_account_opening_form', (document.getElementById('kyc-sig') as HTMLInputElement).files![0]);
+      }
+      if (onBehalf) {
+        fd.append('on_behalf_user_id', onBehalf);
+        fd.append('created_as_proxy', '1');
       }
       await api.post('/kyc/applications', fd);
       router.push('/dashboard/kyc/applications');
@@ -103,6 +123,19 @@ export default function NewKycApplicationPage() {
       </Card>
       {gateOk && (
         <form onSubmit={submit} className="space-y-3">
+          {canProxy && userOpts.length > 0 && (
+            <div>
+              <Label>On behalf of (optional)</Label>
+              <select className="w-full mt-1 border rounded p-2 text-sm" value={onBehalf} onChange={(e) => setOnBehalf(e.target.value)}>
+                <option value="">—</option>
+                {userOpts.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           <div>
             <Label>Applicant *</Label>
             <Input className="mt-1" required value={applicant} onChange={(e) => setApplicant(e.target.value)} />
