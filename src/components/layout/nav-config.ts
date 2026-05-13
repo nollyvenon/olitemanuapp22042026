@@ -28,6 +28,7 @@ import {
   LineChart,
   HelpCircle,
   Sparkles,
+  MapPin,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -87,22 +88,22 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: 'Inventory',
+    label: 'Stock Center',
     items: [
       {
-        label: 'Items',
+        label: 'Stock Items',
         href: '/dashboard/inventory/items',
         icon: Package,
         permission: 'inventory.products.read',
       },
       {
-        label: 'Categories',
+        label: 'Stock Categories',
         href: '/dashboard/inventory/categories',
         icon: Tag,
         permission: 'inventory.products.read',
       },
       {
-        label: 'Groups',
+        label: 'Stock Groups',
         href: '/dashboard/inventory/groups',
         icon: Layers,
         permission: 'inventory.products.read',
@@ -114,9 +115,21 @@ export const NAV_GROUPS: NavGroup[] = [
         permission: 'inventory.products.read',
       },
       {
-        label: 'Journals',
-        href: '/dashboard/inventory/journals',
+        label: 'View Store Centers',
+        href: '/dashboard/inventory/store-centers/view',
+        icon: MapPin,
+        permission: 'inventory.products.read',
+      },
+      {
+        label: 'View Stock Journal',
+        href: '/dashboard/inventory/journals/view',
         icon: BookOpen,
+        permission: 'inventory.products.read',
+      },
+      {
+        label: 'Create Stock Journal',
+        href: '/dashboard/inventory/journals/create',
+        icon: ScrollText,
         permission: 'inventory.stock.movement',
       },
       {
@@ -128,8 +141,14 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: 'Account Center',
+    label: 'ACCOUNTS',
     items: [
+      {
+        label: 'Override / Adjustment',
+        href: '/dashboard/accounts/override',
+        icon: Scale,
+        permission: 'accounts.ledger.read',
+      },
       {
         label: 'Debtors',
         href: '/dashboard/accounts/debtors',
@@ -152,12 +171,6 @@ export const NAV_GROUPS: NavGroup[] = [
         label: 'Price Lists',
         href: '/dashboard/accounts/price-lists',
         icon: DollarSign,
-        permission: 'accounts.ledger.read',
-      },
-      {
-        label: 'Override / Adjustment',
-        href: '/dashboard/accounts/override',
-        icon: Scale,
         permission: 'accounts.ledger.read',
       },
       {

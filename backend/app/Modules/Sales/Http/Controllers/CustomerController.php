@@ -31,9 +31,11 @@ class CustomerController {
                 'city' => 'nullable|string',
                 'state' => 'nullable|string',
                 'country' => 'nullable|string',
+                'ledger_category' => 'nullable|in:debtor,creditor',
             ]);
 
             $authUser = $request->attributes->get('authUser');
+            $validated['ledger_category'] = $validated['ledger_category'] ?? 'debtor';
             $customer = Customer::create([...$validated, 'created_by' => $authUser?->sub ?? $authUser['sub'] ?? null]);
 
             $this->auditService->log([
@@ -65,6 +67,7 @@ class CustomerController {
                 'state' => 'nullable|string',
                 'country' => 'nullable|string',
                 'status' => 'nullable|in:active,inactive,suspended',
+                'ledger_category' => 'nullable|in:debtor,creditor',
             ]);
 
             $customer->update($validated);

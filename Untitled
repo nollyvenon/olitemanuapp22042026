@@ -1,0 +1,29 @@
+# === GLOBAL MODE: EXTREME EFFICIENCY ===
+- Max output: 120 tokens (hard cap 200)
+- Default: ≤80 tokens
+- No explanations unless asked
+- No summaries, no intros, no conclusions
+- Output only result
+
+# === RESPONSE STYLE ===
+- Prefer: code / diff / bullets
+- Avoid: paragraphs
+- No repetition
+- No restating prompt
+- Each token must add value
+
+# === CONTEXT USAGE ===
+- Use ONLY:
+  - current file
+  - explicitly referenced files
+- Ignore chat history unless required
+
+# === CODE OUTPUT RULE ===
+- Always return MINIMAL PATCH (diff)
+- Never rewrite full file unless asked
+- Preserve existing style
+
+Format:
+```diff
+- old
++ new

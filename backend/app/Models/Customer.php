@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 class Customer extends Model {
     use HasUuids;
 
-    protected $fillable = ['name', 'email', 'phone', 'company', 'address', 'city', 'state', 'country', 'status', 'created_by'];
+    protected $fillable = ['name', 'email', 'phone', 'company', 'address', 'city', 'state', 'country', 'status', 'ledger_category', 'created_by'];
 
     public function orders(): HasMany {
         return $this->hasMany(Order::class);

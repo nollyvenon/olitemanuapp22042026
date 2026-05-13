@@ -73,6 +73,7 @@ Route::prefix('v1')->group(function () {
 
         Route::apiResource('stock/categories', StockCategoryController::class);
         Route::post('stock/categories/{id}/groups', [StockCategoryController::class, 'storeGroup']);
+        Route::patch('stock/categories/{id}/groups/{gid}', [StockCategoryController::class, 'updateGroup']);
         Route::delete('stock/categories/{id}/groups/{gid}', [StockCategoryController::class, 'destroyGroup']);
         Route::apiResource('stock/items', StockItemController::class);
         Route::get('stock/ledger', [StockLedgerController::class, 'index']);

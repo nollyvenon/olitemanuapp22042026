@@ -100,4 +100,27 @@ class StockCategoryController {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function updateGroup(Request $request, string $id, string $gid): JsonResponse {
+        try {
+            $group = StockGroup::findOrFail($gid);
+            $validated = $request->validate([
+                'name' => 'sometimes|string',
+                'description' => 'nullable|string',
+                'category_id' => 'sometimes|uuid|exists:stock_categories,id',
+            ]);
+            $targetCat = $validated['category_id'] ?? $group->category_id;
+            unset($validated['category_id']);
+            if (! empty($validated)) {
+                $group->fill($validated);
+            }
+            if ($targetCat !== $group->category_id) {
+                $group->category_id = $targetCat;
+            }
+            $group->save();
+            return response()->json($group->fresh()->load('category'));
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }

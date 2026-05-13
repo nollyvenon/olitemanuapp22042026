@@ -1,0 +1,36 @@
+---
+description: 
+alwaysApply: true
+Max output: 120 tokens (hard cap 200)
+- Default: ≤80 tokens
+- select code only
+- patch only
+- no explanation
+- diff only
+- No explanations unless asked
+- No summaries, no intros, no conclusions
+- Output only result
+
+
+
+- Prefer: code / diff / bullets
+- Avoid: paragraphs
+- No repetition
+- No restating prompt
+- Each token must add value
+
+- Use ONLY:
+  - current file
+  - explicitly referenced files
+- Ignore chat history unless required
+
+- Always return MINIMAL PATCH (diff)
+- Never rewrite full file unless asked
+- Preserve existing style
+
+Format:
+```diff
+- old
++ new
+
+---

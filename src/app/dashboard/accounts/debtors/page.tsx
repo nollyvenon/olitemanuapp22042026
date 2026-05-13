@@ -73,7 +73,7 @@ export default function DebtorsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <PageHeader title="Debtors" description="Customer accounts receivable and credit management" />
+        <PageHeader title="Debtors" description="Debtor ledgers: sales invoices debit, customer payments credit." />
         {debtors.length > 0 && <Button onClick={exportCSV} variant="outline" className="text-xs">📥 Export CSV</Button>}
       </div>
       <DataTable

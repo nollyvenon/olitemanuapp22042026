@@ -1,10 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import type { ColumnDef, SortingState } from '@tanstack/react-table';
 import { ChevronDown, ChevronRight, Edit2, Trash2 } from 'lucide-react';
 import { PageHeader } from '@/components/shared/PageHeader';
-import { DataTable } from '@/components/data-table/DataTable';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,29 +24,16 @@ interface Category {
   groups?: StockGroup[];
 }
 
-const columns: ColumnDef<Category>[] = [
-  { accessorKey: 'name', header: 'Name', cell: i => <span className="font-medium text-sm">{String(i.getValue())}</span> },
-  { accessorKey: 'description', header: 'Description', cell: i => <span className="text-sm text-gray-600">{String(i.getValue() || '—')}</span> },
-  {
-    id: 'groups',
-    header: 'Groups',
-    cell: i => {
-      const cat = i.row.original;
-      return <span className="text-sm">{cat.groups?.length || 0} groups</span>;
-    }
-  },
-];
-
 export default function CategoriesPage() {
   const api = getApiClient();
   const { can } = usePermission();
   const [categories, setCategories] = useState<Category[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [sorting, setSorting] = useState<SortingState>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [mode, setMode] = useState<'new' | 'adjust'>('new');
   const [form, setForm] = useState({ name: '', description: '' });
 
   const handleDelete = async (id: string) => {
@@ -61,24 +46,52 @@ export default function CategoriesPage() {
     }
   };
 
-  const handleEdit = (category: Category) => {
-    setEditingId(category.id);
-    setForm({ name: category.name, description: category.description || '' });
+  const hydrateCat = (id: string) => {
+    if (!id) {
+      setEditingId(null);
+      setForm({ name: '', description: '' });
+      return;
+    }
+    const c = categories.find((x) => x.id === id);
+    if (!c) return;
+    setEditingId(id);
+    setForm({ name: c.name, description: c.description || '' });
+  };
+
+  const openCreate = () => {
+    setMode('new');
+    setEditingId(null);
+    setForm({ name: '', description: '' });
     setOpen(true);
   };
 
-  const handleSaveEdit = async (e: React.FormEvent) => {
+  const openAdjustRow = (category: Category) => {
+    setMode('adjust');
+    hydrateCat(category.id);
+    setOpen(true);
+  };
+
+  const saveCategory = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editingId) return;
     setSubmitting(true);
     try {
-      await api.patch(`/stock/categories/${editingId}`, form);
-      setCategories(categories.map(c => c.id === editingId ? { ...c, ...form } : c));
+      if (mode === 'adjust' && editingId) {
+        await api.patch(`/stock/categories/${editingId}`, form);
+        const { data } = await api.get('/stock/categories');
+        const list = Array.isArray(data) ? data : data.data ?? [];
+        setCategories(list);
+      } else {
+        await api.post('/stock/categories', form);
+        const { data } = await api.get('/stock/categories');
+        const list = Array.isArray(data) ? data : data.data ?? [];
+        setCategories(list);
+      }
       setOpen(false);
       setEditingId(null);
+      setMode('new');
       setForm({ name: '', description: '' });
     } catch (err) {
-      console.error('Failed to update category', err);
+      console.error('Failed to save category', err);
     } finally {
       setSubmitting(false);
     }
@@ -98,23 +111,6 @@ export default function CategoriesPage() {
     };
     load();
   }, [api]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    try {
-      await api.post('/stock/categories', form);
-      setOpen(false);
-      setForm({ name: '', description: '' });
-      const { data } = await api.get('/stock/categories');
-      const list = Array.isArray(data) ? data : data.data ?? [];
-      setCategories(list);
-    } catch (err) {
-      console.error('Failed to create category', err);
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   const exportData = () => {
     const headers = ['Name', 'Description', 'Groups Count'];
@@ -179,8 +175,8 @@ export default function CategoriesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Inventory Categories"
-        description="Organise inventory items by category"
+        title="Stock Categories"
+        description="Top level of Stock Center; groups are subsets of a category."
         actions={
           <div className="flex gap-2">
             <PermissionGuard permission="inventory.categories.export">
@@ -193,8 +189,8 @@ export default function CategoriesPage() {
               )}
             </PermissionGuard>
             <PermissionGuard permission="inventory.products.create">
-              <Button onClick={() => setOpen(true)} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold">
-                + Add Category
+              <Button onClick={openCreate} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold">
+                Create Stock Category
               </Button>
             </PermissionGuard>
           </div>
@@ -223,7 +219,7 @@ export default function CategoriesPage() {
               <div className="flex gap-2">
                 {can('inventory.categories.edit') && (
                   <button
-                    onClick={() => handleEdit(cat)}
+                    onClick={() => openAdjustRow(cat)}
                     className="text-blue-600 hover:text-blue-700 p-1"
                     title="Edit"
                   >
@@ -258,12 +254,33 @@ export default function CategoriesPage() {
         ))}
       </div>
 
-      <Dialog open={open} onOpenChange={(newOpen) => { setOpen(newOpen); if (!newOpen) { setEditingId(null); setForm({ name: '', description: '' }); } }}>
+      <Dialog open={open} onOpenChange={(newOpen) => { setOpen(newOpen); if (!newOpen) { setEditingId(null); setMode('new'); setForm({ name: '', description: '' }); } }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editingId ? 'Edit Category' : 'Add Category'}</DialogTitle>
+            <DialogTitle>Create Stock Category</DialogTitle>
           </DialogHeader>
-          <form onSubmit={editingId ? handleSaveEdit : handleSubmit} className="space-y-4">
+          <form onSubmit={saveCategory} className="space-y-4">
+            <div className="flex gap-4 text-sm">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" checked={mode === 'new'} onChange={() => { setMode('new'); setEditingId(null); setForm({ name: '', description: '' }); }} />
+                New category
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" checked={mode === 'adjust'} onChange={() => setMode('adjust')} />
+                Adjust existing
+              </label>
+            </div>
+            {mode === 'adjust' && (
+              <div>
+                <Label>Category</Label>
+                <select className="mt-1 w-full border rounded p-2 text-sm" value={editingId ?? ''} required onChange={(e) => hydrateCat(e.target.value)}>
+                  <option value="">Select…</option>
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div>
               <Label>Name *</Label>
               <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required disabled={submitting} />
@@ -273,11 +290,11 @@ export default function CategoriesPage() {
               <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} disabled={submitting} />
             </div>
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => { setOpen(false); setEditingId(null); setForm({ name: '', description: '' }); }} disabled={submitting}>
+              <Button type="button" variant="outline" onClick={() => { setOpen(false); setEditingId(null); setMode('new'); setForm({ name: '', description: '' }); }} disabled={submitting}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={submitting}>
-                {submitting ? (editingId ? 'Saving...' : 'Creating...') : (editingId ? 'Save' : 'Create')}
+              <Button type="submit" disabled={submitting || (mode === 'adjust' && !editingId)}>
+                {submitting ? 'Saving…' : mode === 'adjust' ? 'Save' : 'Create'}
               </Button>
             </DialogFooter>
           </form>

@@ -17,7 +17,7 @@ class StockItemController {
     }
     public function update(Request $request, string $id): JsonResponse {
         $item = StockItem::findOrFail($id);
-        $v = $request->validate(['name' => 'string', 'description' => 'string', 'unit_cost' => 'numeric|min:0', 'reorder_level' => 'numeric|min:0', 'is_active' => 'boolean']);
+        $v = $request->validate(['group_id' => 'sometimes|uuid|exists:stock_groups,id', 'name' => 'string', 'description' => 'string', 'unit' => 'string', 'unit_cost' => 'numeric|min:0', 'reorder_level' => 'numeric|min:0', 'is_active' => 'boolean']);
         return response()->json($item->update($v) ? $item->refresh() : $item);
     }
     public function destroy(Request $request, string $id): JsonResponse {

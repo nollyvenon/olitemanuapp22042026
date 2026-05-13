@@ -8,7 +8,7 @@ const ACTIONS = [
   { label: 'Create Sales Order',    shortcut: 'Alt+O', key: 'o', icon: ShoppingCart, href: '/dashboard/sales/orders',         color: '#FF9900', bg: '#FF990018' },
   { label: 'Add Customer',          shortcut: 'Alt+C', key: 'c', icon: UserPlus,     href: '/dashboard/kyc/applications',     color: '#067d62', bg: '#067d6218' },
   { label: 'Upload Price List',     shortcut: 'Alt+P', key: 'p', icon: Upload,       href: '/dashboard/accounts/price-lists', color: '#146eb4', bg: '#146eb418' },
-  { label: 'Create Stock Journal',  shortcut: 'Alt+J', key: 'j', icon: BookOpen,     href: '/dashboard/inventory/journals',   color: '#c45500', bg: '#c4550018' },
+  { label: 'Create Stock Journal',  shortcut: 'Alt+J', key: 'j', icon: BookOpen,     href: '/dashboard/inventory/journals/create',   color: '#c45500', bg: '#c4550018' },
 ];
 
 export function QuickActions() {

@@ -20,6 +20,7 @@ interface Customer {
   phone?: string;
   address?: string;
   type?: string;
+  ledger_category?: string;
   created_at?: string;
 }
 
@@ -28,7 +29,8 @@ const columns: ColumnDef<Customer>[] = [
   { accessorKey: 'company', header: 'Company', cell: i => <span className="text-sm text-gray-600">{String(i.getValue() || '—')}</span> },
   { accessorKey: 'email', header: 'Email', cell: i => <span className="text-sm">{String(i.getValue() || '—')}</span> },
   { accessorKey: 'phone', header: 'Phone', cell: i => <span className="text-sm">{String(i.getValue() || '—')}</span> },
-  { accessorKey: 'type', header: 'Type', cell: i => <span className="text-xs px-2 py-1 bg-gray-100 rounded">{String(i.getValue() || 'general')}</span> },
+  { accessorKey: 'ledger_category', header: 'Ledger', cell: (i) => <span className="text-xs px-2 py-1 bg-gray-100 rounded">{String(i.getValue() || 'debtor')}</span> },
+  { accessorKey: 'type', header: 'Type', cell: i => <span className="text-xs px-2 py-1 bg-gray-100 rounded">{String(i.getValue() || 'individual')}</span> },
 ];
 
 export default function CustomersPage() {
@@ -40,16 +42,17 @@ export default function CustomersPage() {
   const [openEdit, setOpenEdit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
-  const [form, setForm] = useState({ name: '', company: '', email: '', phone: '', address: '', type: 'individual' });
+  const [form, setForm] = useState({ name: '', company: '', email: '', phone: '', address: '', type: 'individual', ledger_category: 'debtor' });
 
   const exportData = () => {
-    const headers = ['Name', 'Company', 'Email', 'Phone', 'Address', 'Type'];
+    const headers = ['Name', 'Company', 'Email', 'Phone', 'Address', 'Ledger', 'Type'];
     const rows = customers.map(c => [
       c.name,
       c.company || '-',
       c.email || '-',
       c.phone || '-',
       c.address || '-',
+      c.ledger_category || 'debtor',
       c.type || 'individual'
     ]);
     return { headers, rows };
@@ -70,7 +73,7 @@ export default function CustomersPage() {
     const load = async () => {
       try {
         const { data } = await api.get('/customers');
-        const customersList = Array.isArray(data) ? data : data.data ?? [];
+        const customersList = Array.isArray(data) ? data : (data as { data?: Customer[] }).data ?? [];
         setCustomers(customersList);
       } catch (err) {
         console.error('Failed to load customers', err);
@@ -91,13 +94,13 @@ export default function CustomersPage() {
         email: form.email || null,
         phone: form.phone || null,
         address: form.address || null,
-        type: form.type,
+        ledger_category: form.ledger_category,
       });
       const { data } = await api.get('/customers');
-      const customersList = Array.isArray(data) ? data : data.data ?? [];
+      const customersList = Array.isArray(data) ? data : (data as { data?: Customer[] }).data ?? [];
       setCustomers(customersList);
       setOpenAdd(false);
-      setForm({ name: '', company: '', email: '', phone: '', address: '', type: 'individual' });
+      setForm({ name: '', company: '', email: '', phone: '', address: '', type: 'individual', ledger_category: 'debtor' });
     } catch (err: any) {
       alert('❌ Failed to create customer: ' + (err.response?.data?.message || err.message || 'Unknown error'));
       console.error('Failed to create customer', err);
@@ -117,14 +120,14 @@ export default function CustomersPage() {
         email: form.email || null,
         phone: form.phone || null,
         address: form.address || null,
-        type: form.type,
+        ledger_category: form.ledger_category,
       });
       const { data } = await api.get('/customers');
-      const customersList = Array.isArray(data) ? data : data.data ?? [];
+      const customersList = Array.isArray(data) ? data : (data as { data?: Customer[] }).data ?? [];
       setCustomers(customersList);
       setOpenEdit(false);
       setSelectedCustomer(null);
-      setForm({ name: '', company: '', email: '', phone: '', address: '', type: 'individual' });
+      setForm({ name: '', company: '', email: '', phone: '', address: '', type: 'individual', ledger_category: 'debtor' });
     } catch (err: any) {
       alert('❌ Failed to update customer: ' + (err.response?.data?.message || err.message || 'Unknown error'));
       console.error('Failed to update customer', err);
@@ -138,7 +141,7 @@ export default function CustomersPage() {
     try {
       await api.delete(`/customers/${id}`);
       const { data } = await api.get('/customers');
-      const customersList = Array.isArray(data) ? data : data.data ?? [];
+      const customersList = Array.isArray(data) ? data : (data as { data?: Customer[] }).data ?? [];
       setCustomers(customersList);
     } catch (err) {
       console.error('Failed to delete customer', err);
@@ -195,6 +198,7 @@ export default function CustomersPage() {
       phone: customer.phone || '',
       address: customer.address || '',
       type: customer.type || 'individual',
+      ledger_category: customer.ledger_category || 'debtor',
     });
     setOpenEdit(true);
   };
@@ -206,7 +210,7 @@ export default function CustomersPage() {
       <div className="flex items-center justify-between">
         <PageHeader
           title="Customers"
-          description="Manage customer accounts and information"
+          description="Debtors vs creditors ledger category at signup; sales-led accounts default debtor."
         />
         <div className="flex gap-2">
           <PermissionGuard permission="sales.customers.export">
@@ -232,6 +236,7 @@ export default function CustomersPage() {
             <h3 className="font-semibold">{customer.name}</h3>
             <p className="text-xs text-gray-600 mt-1">{customer.company}</p>
             <p className="text-xs text-gray-500 mt-2">{customer.email}</p>
+            <p className="text-xs text-gray-600 mt-1">Ledger: {customer.ledger_category || 'debtor'}</p>
             <div className="flex gap-2 mt-3">
               <Button onClick={() => openEditDialog(customer)} size="sm" variant="outline">
                 Edit
@@ -265,6 +270,13 @@ export default function CustomersPage() {
             <div>
               <Label>Phone</Label>
               <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} disabled={submitting} />
+            </div>
+            <div>
+              <Label>Ledger category *</Label>
+              <select value={form.ledger_category} onChange={(e) => setForm({ ...form, ledger_category: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
+                <option value="debtor">Debtors (sales)</option>
+                <option value="creditor">Creditors</option>
+              </select>
             </div>
             <div>
               <Label>Type</Label>
@@ -306,6 +318,13 @@ export default function CustomersPage() {
             <div>
               <Label>Phone</Label>
               <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} disabled={submitting} />
+            </div>
+            <div>
+              <Label>Ledger category *</Label>
+              <select value={form.ledger_category} onChange={(e) => setForm({ ...form, ledger_category: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
+                <option value="debtor">Debtors (sales)</option>
+                <option value="creditor">Creditors</option>
+              </select>
             </div>
             <div>
               <Label>Type</Label>

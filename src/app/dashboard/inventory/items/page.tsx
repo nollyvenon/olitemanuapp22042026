@@ -30,6 +30,12 @@ interface ItemGroup {
   name: string;
 }
 
+interface StockCategoryTree {
+  id: string;
+  name: string;
+  groups?: ItemGroup[];
+}
+
 const fmt = (v: number, decimals = 0) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(v);
 
 const getColumns = (router: ReturnType<typeof useRouter>, onDelete: (id: string) => void): ColumnDef<InventoryItem>[] => [
@@ -58,12 +64,16 @@ export default function InventoryItemsPage() {
   const router = useRouter();
   const api = getApiClient();
   const [items, setItems] = useState<InventoryItem[]>([]);
-  const [groups, setGroups] = useState<ItemGroup[]>([]);
+  const [categories, setCategories] = useState<StockCategoryTree[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [formData, setFormData] = useState({ group_id: '', sku: '', name: '', unit: '', unit_cost: '', reorder_level: '' });
+  const [mode, setMode] = useState<'new' | 'adjust'>('new');
+  const [editItemId, setEditItemId] = useState('');
+  const [formData, setFormData] = useState({ category_id: '', group_id: '', sku: '', name: '', unit: '', unit_cost: '', reorder_level: '' });
+
+  const groupsInCat = categories.find((c) => c.id === formData.category_id)?.groups ?? [];
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this item?')) return;
@@ -86,16 +96,7 @@ export default function InventoryItemsPage() {
         setItems(itemsList);
         // Extract groups from categories or use categories directly as groups
         const catsData = Array.isArray(catsRes.data) ? catsRes.data : catsRes.data.data ?? [];
-        const allGroups: ItemGroup[] = [];
-        catsData.forEach((cat: any) => {
-          if (cat.groups && Array.isArray(cat.groups)) {
-            allGroups.push(...cat.groups);
-          } else {
-            // If category doesn't have groups, add it as a group itself
-            allGroups.push({ id: cat.id, name: cat.name });
-          }
-        });
-        setGroups(allGroups);
+        setCategories(catsData as StockCategoryTree[]);
       } catch (err) {
         console.error('Failed to load items', err);
       } finally {
@@ -105,25 +106,68 @@ export default function InventoryItemsPage() {
     load();
   }, [api]);
 
+  const hydrateItem = (itemId: string) => {
+    if (!itemId) {
+      setEditItemId('');
+      setFormData({ category_id: '', group_id: '', sku: '', name: '', unit: '', unit_cost: '', reorder_level: '' });
+      return;
+    }
+    const row = items.find((x) => x.id === itemId);
+    if (!row?.group_id) return;
+    let catId = '';
+    categories.forEach((c) => {
+      if (c.groups?.some((g) => g.id === row.group_id)) catId = c.id;
+    });
+    setEditItemId(itemId);
+    setFormData({
+      category_id: catId,
+      group_id: row.group_id || '',
+      sku: row.sku,
+      name: row.name,
+      unit: row.unit || '',
+      unit_cost: row.unit_cost != null ? String(row.unit_cost) : '',
+      reorder_level: row.reorder_level != null ? String(row.reorder_level) : '',
+    });
+  };
+
+  const openCreate = () => {
+    setMode('new');
+    setEditItemId('');
+    setFormData({ category_id: '', group_id: '', sku: '', name: '', unit: '', unit_cost: '', reorder_level: '' });
+    setOpen(true);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await api.post('/stock/items', {
-        group_id: formData.group_id,
-        sku: formData.sku,
-        name: formData.name,
-        unit: formData.unit,
-        unit_cost: formData.unit_cost ? parseFloat(formData.unit_cost) : null,
-        reorder_level: formData.reorder_level ? parseFloat(formData.reorder_level) : null,
-      });
+      if (mode === 'adjust' && editItemId) {
+        await api.patch(`/stock/items/${editItemId}`, {
+          group_id: formData.group_id,
+          name: formData.name,
+          unit: formData.unit,
+          unit_cost: formData.unit_cost ? parseFloat(formData.unit_cost) : null,
+          reorder_level: formData.reorder_level ? parseFloat(formData.reorder_level) : null,
+        });
+      } else {
+        await api.post('/stock/items', {
+          group_id: formData.group_id,
+          sku: formData.sku,
+          name: formData.name,
+          unit: formData.unit,
+          unit_cost: formData.unit_cost ? parseFloat(formData.unit_cost) : null,
+          reorder_level: formData.reorder_level ? parseFloat(formData.reorder_level) : null,
+        });
+      }
       setOpen(false);
-      setFormData({ group_id: '', sku: '', name: '', unit: '', unit_cost: '', reorder_level: '' });
+      setMode('new');
+      setEditItemId('');
+      setFormData({ category_id: '', group_id: '', sku: '', name: '', unit: '', unit_cost: '', reorder_level: '' });
       const { data } = await api.get('/stock/items');
       const itemsList = Array.isArray(data) ? data : data.data ?? [];
       setItems(itemsList);
     } catch (err) {
-      console.error('Failed to create item', err);
+      console.error('Failed to save item', err);
     } finally {
       setSubmitting(false);
     }
@@ -192,10 +236,7 @@ export default function InventoryItemsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <PageHeader
-          title="Inventory Items"
-          description="Manage stock levels, costs, and reorder points"
-        />
+        <PageHeader title="Stock Items" description="Subset of stock group; pick category then group." />
         <div className="flex gap-2">
           <PermissionGuard permission="inventory.items.export">
             {items.length > 0 && (
@@ -206,13 +247,11 @@ export default function InventoryItemsPage() {
               </div>
             )}
           </PermissionGuard>
-          <Button
-            onClick={() => setOpen(true)}
-            style={{ background: '#FF9900', color: '#0f1111' }}
-            className="font-semibold hover:opacity-90"
-          >
-            + Add Item
-          </Button>
+          <PermissionGuard permission="inventory.products.create">
+            <Button onClick={openCreate} style={{ background: '#FF9900', color: '#0f1111' }} className="font-semibold hover:opacity-90">
+              Create Stock Item
+            </Button>
+          </PermissionGuard>
         </div>
       </div>
       <DataTable
@@ -222,23 +261,61 @@ export default function InventoryItemsPage() {
         onSortingChange={setSorting}
       />
 
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) { setMode('new'); setEditItemId(''); setFormData({ category_id: '', group_id: '', sku: '', name: '', unit: '', unit_cost: '', reorder_level: '' }); } }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add New Item</DialogTitle>
+            <DialogTitle>Create Stock Item</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex gap-4 text-sm flex-wrap">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" checked={mode === 'new'} onChange={() => { setMode('new'); setEditItemId(''); setFormData((f) => ({ ...f, sku: '', name: '', unit: '', unit_cost: '', reorder_level: '' })); }} />
+                New item
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" checked={mode === 'adjust'} onChange={() => setMode('adjust')} />
+                Adjust existing
+              </label>
+            </div>
+            {mode === 'adjust' && (
+              <div>
+                <Label>Item</Label>
+                <select className="mt-1 w-full border rounded p-2 text-sm" value={editItemId} required onChange={(e) => hydrateItem(e.target.value)}>
+                  <option value="">Select…</option>
+                  {items.map((it) => (
+                    <option key={it.id} value={it.id}>
+                      {it.sku} — {it.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div>
-              <Label>Group *</Label>
+              <Label>Stock category *</Label>
               <select
-                value={formData.group_id}
-                onChange={(e) => setFormData({ ...formData, group_id: e.target.value })}
-                className="w-full p-2 border border-gray-300 rounded"
+                value={formData.category_id}
+                onChange={(e) => setFormData({ ...formData, category_id: e.target.value, group_id: '' })}
+                className="w-full p-2 border border-gray-300 rounded mt-1"
                 required
                 disabled={submitting}
               >
-                <option value="">Select a group</option>
-                {groups.map(g => (
+                <option value="">Select category</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <Label>Stock group *</Label>
+              <select
+                value={formData.group_id}
+                onChange={(e) => setFormData({ ...formData, group_id: e.target.value })}
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+                required
+                disabled={submitting || !formData.category_id}
+              >
+                <option value="">Select group</option>
+                {groupsInCat.map((g) => (
                   <option key={g.id} value={g.id}>{g.name}</option>
                 ))}
               </select>
@@ -248,8 +325,8 @@ export default function InventoryItemsPage() {
               <Input
                 value={formData.sku}
                 onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
-                required
-                disabled={submitting}
+                required={mode === 'new'}
+                disabled={submitting || mode === 'adjust'}
               />
             </div>
             <div>
@@ -293,8 +370,8 @@ export default function InventoryItemsPage() {
               <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={submitting}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={submitting}>
-                {submitting ? 'Creating...' : 'Create'}
+              <Button type="submit" disabled={submitting || (mode === 'adjust' && !editItemId)}>
+                {submitting ? 'Saving…' : mode === 'adjust' ? 'Save' : 'Create'}
               </Button>
             </DialogFooter>
           </form>

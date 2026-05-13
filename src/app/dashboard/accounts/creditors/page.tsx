@@ -71,7 +71,7 @@ export default function CreditorsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <PageHeader title="Creditors" description="Supplier accounts payable and payment scheduling" />
+        <PageHeader title="Creditors" description="Creditor ledgers: purchase invoices credit, supplier payments debit." />
         {creditors.length > 0 && <Button onClick={exportCSV} variant="outline" className="text-xs">📥 Export CSV</Button>}
       </div>
       <DataTable columns={columns} data={creditors} sorting={sorting} onSortingChange={setSorting} />
