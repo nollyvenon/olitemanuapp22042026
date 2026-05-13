@@ -121,6 +121,12 @@ export const NAV_GROUPS: NavGroup[] = [
         permission: 'inventory.products.read',
       },
       {
+        label: 'Stock Balance Report',
+        href: '/dashboard/reporting/inventory',
+        icon: FileBarChart,
+        permission: 'inventory.products.read',
+      },
+      {
         label: 'View Stock Journal',
         href: '/dashboard/inventory/journals/view',
         icon: BookOpen,

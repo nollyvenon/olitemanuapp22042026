@@ -31,7 +31,7 @@ export default function DocumentationPage() {
   const [editManual, setEditManual] = useState<Manual | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [newManual, setNewManual] = useState({ title: '', slug: '', category_id: '', type: 'user' as const, excerpt: '', status: 'draft' as const });
+  const [newManual, setNewManual] = useState<{ title: string; slug: string; category_id: string; type: 'user' | 'admin'; excerpt: string; status: 'draft' }>({ title: '', slug: '', category_id: '', type: 'user', excerpt: '', status: 'draft' });
   const api = getApiClient();
 
   const fetchManuals = useCallback(async () => {

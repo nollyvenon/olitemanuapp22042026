@@ -23,11 +23,11 @@ export default function MovementsPage() {
     const load = async () => {
       try {
         const [itemRes, centerRes] = await Promise.all([
-          api.get('/api/v1/inventory/items'),
-          api.get('/api/v1/inventory/store-centers'),
+          api.get('/stock/items'),
+          api.get('/locations'),
         ]);
-        setItems(itemRes.data.data);
-        setCenters(centerRes.data.data);
+        setItems(Array.isArray(itemRes.data) ? itemRes.data : itemRes.data?.data ?? []);
+        setCenters(Array.isArray(centerRes.data) ? centerRes.data : centerRes.data?.data ?? []);
       } catch (error) {
         console.error('Failed to load', error);
       }
@@ -42,8 +42,15 @@ export default function MovementsPage() {
     }
     setLoading(true);
     try {
-      const res = await api.get('/api/v1/reporting/inventory/movements', { params: filters });
-      setMovements(res.data.data);
+      const res = await api.get('/stock/journals');
+      const all = res.data?.data ?? (Array.isArray(res.data) ? res.data : []);
+      setMovements(
+        all.filter(
+          (m: any) =>
+            m.item_id === filters.item_id &&
+            (m.to_location === filters.store_center_id || m.from_location === filters.store_center_id),
+        ),
+      );
     } catch (error) {
       console.error('Failed to load', error);
     } finally {

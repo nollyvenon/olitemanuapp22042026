@@ -90,7 +90,7 @@ function mapRow(raw: Record<string, unknown>, i: number): AuditLog {
   return {
     id: String(raw.id ?? i),
     user_id: String(raw.user_id ?? raw.userId ?? raw.actor_id ?? '—'),
-    user: String(raw.user_name ?? raw.user?.name ?? raw.user ?? '—'),
+    user: String(raw.user_name ?? (raw.user as { name?: string } | undefined)?.name ?? raw.user ?? '—'),
     action,
     module: String(raw.entity_type ?? raw.module ?? '—'),
     target: String(raw.entity_id ?? raw.target ?? raw.reference ?? '—'),

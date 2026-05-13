@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import Select from 'react-select';
 import { getApiClient } from '@/lib/api-client';
 import { usePermission } from '@/hooks/usePermission';
 import { PermissionGuard } from '@/components/shared/PermissionGuard';
@@ -143,11 +142,7 @@ export default function DebtorsPage() {
         onSortingChange={setSorting}
         onRowClick={row => router.push(`/dashboard/accounts/debtors/${row.id}`)}
       />
-    </div>
-  );
-}
-
-<Dialog open={openAdd} onOpenChange={setOpenAdd}>
+      <Dialog open={openAdd} onOpenChange={setOpenAdd}>
   <DialogContent>
     <DialogHeader>
       <DialogTitle>Add New Debtor Ledger</DialogTitle>
@@ -206,4 +201,7 @@ export default function DebtorsPage() {
       </DialogFooter>
     </form>
   </DialogContent>
-</Dialog>
+      </Dialog>
+    </div>
+  );
+}

@@ -13,7 +13,6 @@ import { getApiClient } from '@/lib/api-client';
 import { Trash2 } from 'lucide-react';
 import { usePermission } from '@/hooks/usePermission';
 import { useAuthStore } from '@/store/auth.store';
-import Select from 'react-select';
 
 interface Customer {
   id: string;
@@ -48,7 +47,7 @@ export default function CustomersPage() {
   const [openEdit, setOpenEdit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
-  const [form, setForm] = useState({ name: '', company: '', email: '', phone: '', address: '', type: 'individual', ledger_category: 'debtor', view_group_ids: [] });
+  const [form, setForm] = useState({ name: '', company: '', email: '', phone: '', address: '', type: 'individual', ledger_category: 'debtor', view_group_ids: [] as string[] });
   const [userGroups, setUserGroups] = useState<{ id: string; name: string }[]>([]);
   const { user } = useAuthStore();
   const { can, canAny } = usePermission();

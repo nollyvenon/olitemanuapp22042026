@@ -121,7 +121,9 @@ Route::prefix('v1')->group(function () {
 
         Route::get('reports', [ReportController::class, 'index']);
         Route::post('reports', [ReportController::class, 'store']);
-        Route::get('reports/inventory', [InventoryReportController::class, 'opening']);
+        Route::get('reports/inventory', [ReportController::class, 'inventorySummary']);
+        Route::get('reports/aging', [ReportController::class, 'aging']);
+        Route::get('reports/movements', [ReportController::class, 'movements']);
         Route::get('reports/{id}', [ReportController::class, 'show']);
         Route::post('reports/{id}/generate', [ReportController::class, 'generate']);
 
@@ -151,6 +153,7 @@ Route::prefix('v1')->group(function () {
         Route::get('market/customer-insights', [MarketIntelligenceController::class, 'customerInsights']);
         Route::post('market/refresh-insights/{customerId}', [MarketIntelligenceController::class, 'refreshInsights']);
 
+        Route::get('inventory-reports/unified', [InventoryReportController::class, 'unified']);
         Route::get('inventory-reports/opening', [InventoryReportController::class, 'opening']);
         Route::get('inventory-reports/inwards', [InventoryReportController::class, 'inwards']);
         Route::get('inventory-reports/outwards', [InventoryReportController::class, 'outwards']);

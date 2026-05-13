@@ -112,7 +112,7 @@ export function Topbar() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80 max-h-80 overflow-y-auto" style={{ background: '#232f3e', border: '1px solid #37475a' }}>
             {notifications.length === 0 ? (
-              <div className="px-3 py-4 text-xs" style={{ color: '#aab7c4 }}>
+              <div className="px-3 py-4 text-xs" style={{ color: '#aab7c4' }}>
                 No notifications
               </div>
             ) : (

@@ -1,4 +1,15 @@
----
+Rules:
+- Production-grade only
+- No mock code
+- No toy implementations
+- Maintain existing architecture
+- Keep responses concise
+- Optimize for low token usage
+- Do not regenerate unchanged files
+- Use scalable architecture
+- Follow fintech best practices
+- Use secure coding standards
+
 description: 
 alwaysApply: true
 Max output: 120 tokens (hard cap 200)

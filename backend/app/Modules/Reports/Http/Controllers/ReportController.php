@@ -3,12 +3,16 @@
 namespace App\Modules\Reports\Http\Controllers;
 
 use App\Models\Report;
+use App\Modules\Reports\Services\DashboardReportService;
 use App\Modules\Reports\Services\ReportService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ReportController {
-    public function __construct(private ReportService $reportService) {}
+    public function __construct(
+        private ReportService $reportService,
+        private DashboardReportService $dashboardReportService,
+    ) {}
 
     public function index(Request $request): JsonResponse {
         $reports = Report::with('createdBy', 'schedules')
@@ -37,6 +41,30 @@ class ReportController {
     public function show(Request $request, string $id): JsonResponse {
         $report = Report::with('schedules')->findOrFail($id);
         return response()->json($report);
+    }
+
+    public function inventorySummary(): JsonResponse
+    {
+        return response()->json(['data' => $this->dashboardReportService->inventorySummary()]);
+    }
+
+    public function aging(): JsonResponse
+    {
+        return response()->json(['data' => $this->dashboardReportService->aging()]);
+    }
+
+    public function movements(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'from' => 'nullable|date',
+            'to' => 'nullable|date',
+        ]);
+        return response()->json([
+            'data' => $this->dashboardReportService->movements(
+                $validated['from'] ?? null,
+                $validated['to'] ?? null,
+            ),
+        ]);
     }
 
     public function generate(Request $request, string $id): JsonResponse {

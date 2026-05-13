@@ -29,7 +29,7 @@ class StockJournalController {
         }
         unset($v['journal_date']);
         return DB::transaction(function () use ($v, $request, $jd) {
-            $journal = StockJournal::create([...$v, 'type' => 'add', 'journal_date' => $jd, 'created_by' => $request->authUser->sub]);
+            $journal = StockJournal::create(['item_id' => $v['item_id'], 'to_location' => $v['location_id'], 'quantity' => $v['quantity'], 'notes' => $v['notes'] ?? null, 'type' => 'add', 'journal_date' => $jd, 'created_by' => $request->authUser->sub]);
             StockLedger::updateOrCreate(['item_id' => $v['item_id'], 'location_id' => $v['location_id']], ['quantity' => DB::raw("COALESCE(quantity, 0) + {$v['quantity']}")]);
             return response()->json($journal, 201);
         });
@@ -66,7 +66,7 @@ class StockJournalController {
             if (!$ledger || $ledger->quantity < $v['quantity']) {
                 return response()->json(['error' => 'Insufficient stock'], 422);
             }
-            StockJournal::create([...$v, 'type' => 'remove', 'journal_date' => $jd, 'created_by' => $request->authUser->sub]);
+            StockJournal::create(['item_id' => $v['item_id'], 'from_location' => $v['location_id'], 'quantity' => $v['quantity'], 'notes' => $v['notes'] ?? null, 'type' => 'remove', 'journal_date' => $jd, 'created_by' => $request->authUser->sub]);
             $ledger->decrement('quantity', $v['quantity']);
             return response()->json(['success' => true], 201);
         });

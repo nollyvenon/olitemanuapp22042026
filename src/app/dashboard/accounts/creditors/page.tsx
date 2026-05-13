@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import Select from 'react-select';
 import { getApiClient } from '@/lib/api-client';
 import { usePermission } from '@/hooks/usePermission';
 import { PermissionGuard } from '@/components/shared/PermissionGuard';
@@ -135,11 +134,7 @@ export default function CreditorsPage() {
         {creditors.length > 0 && <Button onClick={exportCSV} variant="outline" className="text-xs">📥 Export CSV</Button>}
       </div>
       <DataTable columns={columns} data={creditors} sorting={sorting} onSortingChange={setSorting} />
-    </div>
-  );
-}
-
-<Dialog open={openAdd} onOpenChange={setOpenAdd}>
+      <Dialog open={openAdd} onOpenChange={setOpenAdd}>
   <DialogContent>
     <DialogHeader>
       <DialogTitle>Add New Creditor Ledger</DialogTitle>
@@ -198,4 +193,7 @@ export default function CreditorsPage() {
       </DialogFooter>
     </form>
   </DialogContent>
-</Dialog>
+      </Dialog>
+    </div>
+  );
+}

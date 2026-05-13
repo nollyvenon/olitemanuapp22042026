@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { getApiClient } from '@/lib/api-client';
 import { Trash2 } from 'lucide-react';
 import { usePermission } from '@/hooks/usePermission';
-import { usePermission } from '@/hooks/usePermission';
+import { PermissionGuard } from '@/components/shared/PermissionGuard';
 
 interface PriceCategory {
   id: string;
