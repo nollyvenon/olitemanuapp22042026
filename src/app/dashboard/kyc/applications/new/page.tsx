@@ -57,7 +57,7 @@ export default function NewKycApplicationPage() {
       setErr('All fields required');
       return;
     }
-    if (!confirm('Confirm KYC details?')) return;
+    if (!confirm('All KYC fields correct? OK=YES submit, Cancel=NO to edit.')) return;
     setBusy(true);
     try {
       const fd = new FormData();

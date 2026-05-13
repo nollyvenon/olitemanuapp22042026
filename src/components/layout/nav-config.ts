@@ -128,7 +128,7 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: 'Accounts',
+    label: 'Account Center',
     items: [
       {
         label: 'Debtors',

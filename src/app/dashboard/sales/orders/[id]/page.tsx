@@ -75,6 +75,13 @@ const StateFlow = ({ current }: { current: string }) => {
 
 const fmt = (v: number) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(v);
 
+function assetUrl(p?: string) {
+  if (!p) return '#';
+  if (p.startsWith('http')) return p;
+  const b = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '');
+  return `${b}${p.startsWith('/') ? p : `/${p}`}`;
+}
+
 export default function OrderDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -630,31 +637,46 @@ export default function OrderDetailPage() {
 
       {/* Invoice Section */}
       {order.status === 'AUTHORIZED' && (
-        <Card className="p-6 space-y-4 bg-green-50 border border-green-200">
-          <h2 className="font-bold">Invoice</h2>
-          {order.invoice ? (
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Invoice Created</p>
-                <p className="font-semibold mt-1">INV-{order.invoice.id.slice(0, 8).toUpperCase()}</p>
-              </div>
-              <Button
-                onClick={() => router.push(`/dashboard/sales/invoices/${order.invoice!.id}`)}
-                className="bg-green-600 hover:bg-green-700 text-white"
-              >
-                View Invoice
+        <PermissionGuard permissions={['accounts.*', 'sales.orders.approve', 'sales.orders.read', 'sales.orders.create', 'audit.read', 'admin.*']}>
+          <Card id="auth-invoice-card" className="p-6 space-y-4 bg-green-50 border border-green-200">
+            <h2 className="font-bold">Invoice & Tally documents</h2>
+            {order.invoice ? (
+              <>
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm text-gray-600">Sales invoice</p>
+                    <p className="font-semibold mt-1">INV-{order.invoice.id.slice(0, 8).toUpperCase()}</p>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <Button onClick={() => router.push(`/dashboard/sales/invoices/${order.invoice!.id}`)} className="bg-green-600 hover:bg-green-700 text-white">
+                      View / download
+                    </Button>
+                    <Button type="button" variant="outline" onClick={() => window.print()}>
+                      <Printer className="h-4 w-4 mr-1 inline" />
+                      Print
+                    </Button>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-3 text-sm">
+                  {order.tally_invoice_path ? (
+                    <a href={assetUrl(order.tally_invoice_path)} target="_blank" rel="noreferrer" className="text-blue-600 underline">
+                      Tally invoice file
+                    </a>
+                  ) : null}
+                  {order.delivery_note_path ? (
+                    <a href={assetUrl(order.delivery_note_path)} target="_blank" rel="noreferrer" className="text-blue-600 underline">
+                      Tally delivery note file
+                    </a>
+                  ) : null}
+                </div>
+              </>
+            ) : (
+              <Button onClick={handleGenerateInvoice} disabled={submitting} className="w-full bg-green-600 hover:bg-green-700 text-white">
+                {submitting ? 'Generating...' : 'Generate Invoice'}
               </Button>
-            </div>
-          ) : (
-            <Button
-              onClick={handleGenerateInvoice}
-              disabled={submitting}
-              className="w-full bg-green-600 hover:bg-green-700 text-white"
-            >
-              {submitting ? 'Generating...' : 'Generate Invoice'}
-            </Button>
-          )}
-        </Card>
+            )}
+          </Card>
+        </PermissionGuard>
       )}
     </div>
   );
