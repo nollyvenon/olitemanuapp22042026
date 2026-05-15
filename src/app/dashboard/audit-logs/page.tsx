@@ -16,6 +16,7 @@ interface AuditLog {
   ip: string;
   timestamp: string;
   result: string;
+  name:string;
 }
 
 const ACTION_COLORS: Record<string, { bg: string; color: string }> = {

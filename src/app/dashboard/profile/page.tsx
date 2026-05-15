@@ -25,6 +25,8 @@ export default function ProfilePage() {
   useEffect(() => {
     if (typeof window !== 'undefined') setNotifyOn(localStorage.getItem('omclta_notify') === '1');
   }, []);
+
+  if (!user) {
     return <div className="text-center p-8">Loading...</div>;
   }
 

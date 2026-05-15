@@ -111,19 +111,19 @@ export default function LocationsPage() {
             <div className="mt-4 space-y-4">
               <div>
                 <Label>Name *</Label>
-                <Input value={editLocation.name} onChange={e => setEditLocation(p => ({ ...p, name: e.target.value }))} className="mt-1.5" />
+                <Input value={editLocation.name} onChange={e => setEditLocation(p => p ? { ...p, name: e.target.value } : p)} className="mt-1.5" />
               </div>
               <div>
                 <Label>Address *</Label>
-                <Input value={editLocation.address} onChange={e => setEditLocation(p => ({ ...p, address: e.target.value }))} className="mt-1.5" />
+                <Input value={editLocation.address} onChange={e => setEditLocation(p => p ? { ...p, address: e.target.value } : p)} className="mt-1.5" />
               </div>
               <div>
                 <Label>City</Label>
-                <Input value={editLocation.city} onChange={e => setEditLocation(p => ({ ...p, city: e.target.value }))} className="mt-1.5" />
+                <Input value={editLocation.city} onChange={e => setEditLocation(p => p ? { ...p, city: e.target.value } : p)} className="mt-1.5" />
               </div>
               <div>
                 <Label>State</Label>
-                <Input value={editLocation.state} onChange={e => setEditLocation(p => ({ ...p, state: e.target.value }))} className="mt-1.5" />
+                <Input value={editLocation.state} onChange={e => setEditLocation(p => p ? { ...p, state: e.target.value } : p)} className="mt-1.5" />
               </div>
             </div>
           )}

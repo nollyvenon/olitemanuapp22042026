@@ -58,12 +58,12 @@ export default function LoginPage() {
   } = useForm<LoginInput>();
 
   const onSubmit = async (data: LoginInput) => {
-    if (locationStatus !== 'granted' || locationRef.current.gps_source !== 'gps') {
-      setGlobalError('Enable device location (GPS) to sign in.');
-      return;
-    }
     if (locationStatus === 'pending') {
       setGlobalError('Waiting for location access...');
+      return;
+    }
+    if (locationStatus !== 'granted' || locationRef.current.gps_source !== 'gps') {
+      setGlobalError('Enable device location (GPS) to sign in.');
       return;
     }
     setGlobalError('');
