@@ -129,7 +129,7 @@ export default function DocumentationPage() {
           <div className="mt-4 space-y-4">
             <div><Label>Title *</Label><Input value={newManual.title} onChange={e => setNewManual(p => ({ ...p, title: e.target.value }))} placeholder="e.g. Creating Sales Orders" className="mt-1.5" /></div>
             <div><Label>URL Slug *</Label><Input value={newManual.slug} onChange={e => setNewManual(p => ({ ...p, slug: e.target.value }))} placeholder="e.g. creating-sales-orders" className="mt-1.5" /></div>
-            <div><Label>Type *</Label><select value={newManual.type} onChange={e => setNewManual(p => ({ ...p, type: e.target.value as 'user' | 'admin' }))} className="mt-1.5 w-full px-3 py-2 border border-gray-300 rounded-md">
+            <div><Label>Type *</Label><select value={newManual.type}  className="mt-1.5 w-full px-3 py-2 border border-gray-300 rounded-md">
               <option value="user">User Guide</option>
               <option value="admin">Admin Guide</option>
             </select></div>

@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import Select from 'react-select';
 import { getApiClient } from '@/lib/api-client';
 import { usePermission } from '@/hooks/usePermission';
 import { PermissionGuard } from '@/components/shared/PermissionGuard';
@@ -135,64 +136,64 @@ export default function CreditorsPage() {
       </div>
       <DataTable columns={columns} data={creditors} sorting={sorting} onSortingChange={setSorting} />
       <Dialog open={openAdd} onOpenChange={setOpenAdd}>
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Add New Creditor Ledger</DialogTitle>
-    </DialogHeader>
-    <form onSubmit={handleAddLedger} className="space-y-4">
-      <div>
-        <Label>Ledger Name *</Label>
-        <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required disabled={submitting} />
-      </div>
-      <div>
-        <Label>Customer (optional)</Label>
-        <select value={form.customer_id} onChange={(e) => setForm({ ...form, customer_id: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
-          <option value="">Select Customer</option>
-          {customers.map(customer => <option key={customer.id} value={customer.id}>{customer.name}</option>)}
-        </select>
-      </div>
-      <div>
-        <Label>Store Location *</Label>
-        <select value={form.location_id} onChange={(e) => setForm({ ...form, location_id: e.target.value })} className="w-full p-2 border rounded" required disabled={submitting}>
-          <option value="">Select Location</option>
-          {locations.map(loc => <option key={loc.id} value={loc.id}>{loc.name}</option>)}
-        </select>
-      </div>
-      <div>
-        <Label>Account Domicile Territory (optional)</Label>
-        <select value={form.territory_id} onChange={(e) => setForm({ ...form, territory_id: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
-          <option value="">Select Territory</option>
-          {territories.map(terr => <option key={terr.id} value={terr.id}>{terr.name}</option>)}
-        </select>
-      </div>
-      <div>
-        <Label>Sales Officer (optional)</Label>
-        <select value={form.sales_officer_id} onChange={(e) => setForm({ ...form, sales_officer_id: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
-          <option value="">Select Sales Officer</option>
-          {salesOfficers.map(officer => <option key={officer.id} value={officer.id}>{officer.name}</option>)}
-        </select>
-      </div>
-      <div>
-        <Label>Price Category (optional)</Label>
-        <select value={form.price_category_id} onChange={(e) => setForm({ ...form, price_category_id: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
-          <option value="">Select Price Category</option>
-          {priceCategories.map(pc => <option key={pc.id} value={pc.id}>{pc.name}</option>)}
-        </select>
-      </div>
-      <div>
-        <Label>Credit Limit</Label>
-        <Input type="number" value={form.credit_limit} onChange={(e) => setForm({ ...form, credit_limit: parseFloat(e.target.value) })} disabled={submitting} />
-      </div>
-      <div>
-        <Label>Opening Balance</Label>
-        <Input type="number" value={form.opening_balance} onChange={(e) => setForm({ ...form, opening_balance: parseFloat(e.target.value) })} disabled={submitting} />
-      </div>
-      <DialogFooter>
-        <Button type="button" variant="outline" onClick={() => setOpenAdd(false)} disabled={submitting}>Cancel</Button>
-        <Button type="submit" disabled={submitting}>{submitting ? 'Creating...' : 'Create'}</Button>
-      </DialogFooter>
-    </form>
-  </DialogContent>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New Creditor Ledger</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleAddLedger} className="space-y-4">
+            <div>
+              <Label>Ledger Name *</Label>
+              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required disabled={submitting} />
+            </div>
+            <div>
+              <Label>Customer (optional)</Label>
+              <select value={form.customer_id} onChange={(e) => setForm({ ...form, customer_id: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
+                <option value="">Select Customer</option>
+                {customers.map(customer => <option key={customer.id} value={customer.id}>{customer.name}</option>)}
+              </select>
+            </div>
+            <div>
+              <Label>Store Location *</Label>
+              <select value={form.location_id} onChange={(e) => setForm({ ...form, location_id: e.target.value })} className="w-full p-2 border rounded" required disabled={submitting}>
+                <option value="">Select Location</option>
+                {locations.map(loc => <option key={loc.id} value={loc.id}>{loc.name}</option>)}
+              </select>
+            </div>
+            <div>
+              <Label>Account Domicile Territory (optional)</Label>
+              <select value={form.territory_id} onChange={(e) => setForm({ ...form, territory_id: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
+                <option value="">Select Territory</option>
+                {territories.map(terr => <option key={terr.id} value={terr.id}>{terr.name}</option>)}
+              </select>
+            </div>
+            <div>
+              <Label>Sales Officer (optional)</Label>
+              <select value={form.sales_officer_id} onChange={(e) => setForm({ ...form, sales_officer_id: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
+                <option value="">Select Sales Officer</option>
+                {salesOfficers.map(officer => <option key={officer.id} value={officer.id}>{officer.name}</option>)}
+              </select>
+            </div>
+            <div>
+              <Label>Price Category (optional)</Label>
+              <select value={form.price_category_id} onChange={(e) => setForm({ ...form, price_category_id: e.target.value })} className="w-full p-2 border rounded" disabled={submitting}>
+                <option value="">Select Price Category</option>
+                {priceCategories.map(pc => <option key={pc.id} value={pc.id}>{pc.name}</option>)}
+              </select>
+            </div>
+            <div>
+              <Label>Credit Limit</Label>
+              <Input type="number" value={form.credit_limit} onChange={(e) => setForm({ ...form, credit_limit: parseFloat(e.target.value) })} disabled={submitting} />
+            </div>
+            <div>
+              <Label>Opening Balance</Label>
+              <Input type="number" value={form.opening_balance} onChange={(e) => setForm({ ...form, opening_balance: parseFloat(e.target.value) })} disabled={submitting} />
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setOpenAdd(false)} disabled={submitting}>Cancel</Button>
+              <Button type="submit" disabled={submitting}>{submitting ? 'Creating...' : 'Create'}</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
       </Dialog>
     </div>
   );

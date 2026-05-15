@@ -105,7 +105,7 @@ export function Topbar() {
           <DropdownMenuTrigger className="relative p-2 rounded hover:bg-[#37475a] transition-colors text-white">
             <Bell className="h-4 w-4" />
             {unreadCount > 0 && (
-              <span className="absolute top-0.5 right-0.5 min-w-[14px] h-3.5 px-0.5 text-[9px] font-bold rounded-full bg-[#FF9900] text-[#0f1111] flex items-center justify-center">
+              <span className="absolute top-0.5 right-0.5 min-w-3.5 h-3.5 px-0.5 text-[9px] font-bold rounded-full bg-[#FF9900] text-[#0f1111] flex items-center justify-center">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
@@ -157,7 +157,7 @@ export function Topbar() {
             <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: '#FF9900', color: '#0f1111' }}>
               {initials}
             </div>
-            {user?.name && <span className="hidden sm:block text-sm font-medium text-white max-w-[120px] truncate">{user.name}</span>}
+            {user?.name && <span className="hidden sm:block text-sm font-medium text-white max-w-30 truncate">{user.name}</span>}
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56" style={{ background: '#232f3e', border: '1px solid #37475a' }}>
             <div className="px-2 py-2">
