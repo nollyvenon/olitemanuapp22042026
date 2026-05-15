@@ -16,7 +16,7 @@ interface AuditLog {
   ip: string;
   timestamp: string;
   result: string;
-  name:string;
+  name: string;
 }
 
 const ACTION_COLORS: Record<string, { bg: string; color: string }> = {
@@ -98,6 +98,7 @@ function mapRow(raw: Record<string, unknown>, i: number): AuditLog {
     ip: String(raw.ip_address ?? raw.ip ?? '—'),
     timestamp: String(raw.created_at ?? raw.timestamp ?? new Date().toISOString()),
     result: String(raw.result ?? (raw.success === false ? 'failed' : 'success')),
+    name: String(raw.user_name ?? (raw.user as { name?: string } | undefined)?.name ?? raw.name ?? '—'),
   };
 }
 
