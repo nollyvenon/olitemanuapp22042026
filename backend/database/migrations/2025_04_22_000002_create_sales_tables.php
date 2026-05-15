@@ -17,6 +17,10 @@ return new class extends Migration {
             $table->string('state')->nullable();
             $table->string('country')->nullable();
             $table->enum('status', ['active', 'inactive', 'suspended'])->default('active');
+            $table->string('ledger_category', 16)->default('debtor');
+            $table->uuid('location_id')->nullable()->references('id')->on('locations');
+            $table->decimal('credit_limit', 15, 2)->default(0);
+            $table->uuid('assigned_to')->nullable()->references('id')->on('users');
             $table->uuid('created_by')->references('id')->on('users');
             $table->timestamps();
         });
@@ -45,6 +49,8 @@ return new class extends Migration {
             $table->string('sku')->nullable();
             $table->integer('quantity');
             $table->decimal('unit_price', 15, 2);
+            $table->decimal('discount', 15, 2)->nullable()->default(0);
+            $table->decimal('discount_percent', 5, 2)->nullable()->default(0);
             $table->decimal('total_price', 15, 2);
             $table->text('notes')->nullable();
             $table->timestamps();

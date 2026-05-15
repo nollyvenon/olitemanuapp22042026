@@ -14,6 +14,14 @@ return new class extends Migration {
             $table->timestamps();
         });
 
+        Schema::create('price_categories', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name')->unique();
+            $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+
         Schema::create('price_list_versions', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
@@ -47,6 +55,7 @@ return new class extends Migration {
             $table->uuid('territory_id')->nullable()->references('id')->on('territories');
             $table->uuid('price_list_version_id')->nullable()->references('id')->on('price_list_versions');
             $table->uuid('sales_officer_id')->nullable()->references('id')->on('users');
+            $table->uuid('price_category_id')->nullable()->references('id')->on('price_categories');
             $table->decimal('credit_limit', 15, 2)->default(0);
             $table->decimal('opening_balance', 15, 2)->default(0);
             $table->decimal('current_balance', 15, 2)->default(0);
@@ -69,7 +78,9 @@ return new class extends Migration {
             $table->string('reference')->nullable();
             $table->text('notes')->nullable();
             $table->date('transaction_date');
+            $table->dateTime('due_date')->nullable();
             $table->timestamp('posted_at')->nullable();
+            $table->softDeletes();
             $table->timestamp('reversed_at')->nullable();
             $table->uuid('reversal_of')->nullable()->references('id')->on('vouchers');
             $table->timestamps();
@@ -95,6 +106,7 @@ return new class extends Migration {
         Schema::dropIfExists('ledger_accounts');
         Schema::dropIfExists('price_list_items');
         Schema::dropIfExists('price_list_versions');
+        Schema::dropIfExists('price_categories');
         Schema::dropIfExists('territories');
     }
 };

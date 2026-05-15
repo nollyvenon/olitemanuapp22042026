@@ -10,9 +10,11 @@ return new class extends Migration {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('role')->nullable()->default('user');
             $table->string('password_hash');
             $table->boolean('is_active')->default(true);
             $table->boolean('is_sub_admin')->default(false);
+            $table->boolean('is_god_admin')->default(false);
             $table->boolean('force_password_reset')->default(false);
             $table->uuid('created_by')->nullable()->references('id')->on('users');
             $table->timestamps();
@@ -37,9 +39,12 @@ return new class extends Migration {
 
         Schema::create('permissions', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('slug')->nullable()->unique();
             $table->string('name')->unique();
             $table->text('description')->nullable();
             $table->string('module');
+            $table->string('resource')->nullable();
+            $table->string('action')->nullable();
         });
 
         Schema::create('group_permissions', function (Blueprint $table) {

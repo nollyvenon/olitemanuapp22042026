@@ -60,6 +60,7 @@ return new class extends Migration {
             $table->string('reference_type')->nullable();
             $table->uuid('reference_id')->nullable();
             $table->text('notes')->nullable();
+            $table->date('journal_date')->nullable();
             $table->uuid('created_by')->references('id')->on('users');
             $table->timestamp('created_at')->useCurrent();
             $table->index(['item_id', 'created_at']);
