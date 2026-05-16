@@ -7,11 +7,16 @@ use App\Modules\Auth\Services\DeviceService;
 use App\Modules\Auth\Services\GroupService;
 use App\Modules\Auth\Services\IpGeolocationService;
 use App\Modules\Auth\Services\JwtService;
+use App\Modules\Auth\Services\RBACService;
 use App\Modules\Audit\Services\AuditService;
 use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider {
     public function register(): void {
+        // Register minimal auth manager to satisfy Laravel framework
+        $this->app->singleton('auth', function () {
+            return new \Illuminate\Auth\AuthManager($this->app);
+        });
         $this->app->singleton(JwtService::class, function () {
             return new JwtService();
         });
@@ -26,6 +31,10 @@ class AuthServiceProvider extends ServiceProvider {
 
         $this->app->singleton(IpGeolocationService::class, function () {
             return new IpGeolocationService();
+        });
+
+        $this->app->singleton(RBACService::class, function () {
+            return new RBACService();
         });
 
         $this->app->singleton(AuthService::class, function ($app) {
