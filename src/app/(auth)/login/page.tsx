@@ -17,6 +17,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [globalError, setGlobalError] = useState('');
   const [locationStatus, setLocationStatus] = useState<'pending' | 'granted' | 'denied'>('pending');
+  const [mounted, setMounted] = useState(false);
   const locationRef = useRef<{ latitude?: number; longitude?: number; gps_source: string }>({ gps_source: 'pending' });
   const fingerprintRef = useRef<string>('');
   const userAgentRef = useRef<string>('');
@@ -31,6 +32,7 @@ export default function LoginPage() {
 
     if (!navigator.geolocation) {
       setLocationStatus('denied');
+      setMounted(true);
       return;
     }
 
@@ -42,10 +44,12 @@ export default function LoginPage() {
           gps_source: 'gps',
         };
         setLocationStatus('granted');
+        setMounted(true);
       },
       () => {
         locationRef.current = { gps_source: 'denied' };
         setLocationStatus('denied');
+        setMounted(true);
       },
       { timeout: 10000, enableHighAccuracy: true }
     );
@@ -159,12 +163,13 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            disabled={isLoading || locationStatus === 'pending' || locationStatus === 'denied'}
+            disabled={isLoading || (mounted && (locationStatus === 'pending' || locationStatus === 'denied'))}
+            suppressHydrationWarning
             className="w-full h-10 bg-[#FF9900] hover:bg-[#e88b00] text-[#0f1111] font-bold rounded text-sm transition-colors disabled:opacity-60 cursor-pointer"
           >
             {isLoading
               ? 'Signing in...'
-              : locationStatus === 'pending'
+              : mounted && locationStatus === 'pending'
               ? 'Waiting for location...'
               : 'Sign in'}
           </button>
