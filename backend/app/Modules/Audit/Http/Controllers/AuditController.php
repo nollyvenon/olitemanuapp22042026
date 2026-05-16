@@ -12,7 +12,11 @@ class AuditController {
     public function __construct(private RBACService $rbac) {}
 
     private function checkAuditAccess(Request $request): ?JsonResponse {
-        $user = User::find($request->authUser->sub ?? null);
+        $authUser = $request->authUser;
+        if (!$authUser) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        $user = User::find($authUser->sub);
         if ($user && !$this->rbac->canAccessModule($user, 'audit')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }

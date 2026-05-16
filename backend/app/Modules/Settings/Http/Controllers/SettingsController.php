@@ -14,7 +14,11 @@ class SettingsController
 
     public function index(Request $request): JsonResponse
     {
-        $user = User::find($request->authUser->sub ?? null);
+        $authUser = $request->authUser;
+        if (!$authUser) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        $user = User::find($authUser->sub);
         if ($user && !$this->rbac->canAccessModule($user, 'admin')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
@@ -24,7 +28,11 @@ class SettingsController
 
     public function store(Request $request): JsonResponse
     {
-        $user = User::find($request->authUser->sub);
+        $authUser = $request->authUser;
+        if (!$authUser) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        $user = User::find($authUser->sub);
         if (!$this->rbac->hasPermission($user, 'admin.edit')) {
             return response()->json(['error' => 'Permission denied: admin.edit'], 403);
         }
@@ -39,7 +47,11 @@ class SettingsController
 
     public function update(Request $request): JsonResponse
     {
-        $user = User::find($request->authUser->sub);
+        $authUser = $request->authUser;
+        if (!$authUser) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        $user = User::find($authUser->sub);
         if (!$this->rbac->hasPermission($user, 'admin.edit')) {
             return response()->json(['error' => 'Permission denied: admin.edit'], 403);
         }
